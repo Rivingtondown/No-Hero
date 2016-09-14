@@ -1,0 +1,90 @@
+<quest1>
+ name:Foraging
+ level:1
+ difficulty:Easy
+ autoComplete:false
+ canAbandon:false
+ forceAccept:true
+ forceTurnin:true
+ qgiverName:Gus
+ location:Castle Gardens
+ <description>Clear all the bushes of berries and bring them back to Gus in the Castle Gardens.
+ <description>
+ <objectives>
+  {name:"Collect 4 Berries",item:["item",24], max:4, hidden:false }
+ <objectives>
+ exp:10
+ expScale:5
+ <rewards>
+  {type:"item", id:24, amount:2 }
+ <rewards>
+<quest1>
+
+<quest2>
+ name:Farming
+ level:1
+ difficulty:Easy
+ autoComplete:false
+ canAbandon:false
+ forceAccept:true
+ forceTurnin:true
+ qgiverName:Gus
+ location:Castle Gardens
+ <description>
+Plow and water all four crop plots and return to Gus in the Castle Gardens.
+ <description>
+ <objectives>
+  {name:"Plow Crop Plots", max:4, hidden:false }
+  {name:"Water Crop Plots", max:4, hidden:false }
+ <objectives>
+ gold:10
+ exp:30
+ <rewards>
+ <rewards>
+<quest2>
+
+<quest3>
+ name:Harvesting
+ level:1
+ difficulty:Easy
+ autoComplete:false
+ canAbandon:false
+ forceAccept:true
+ forceTurnin:true
+ qgiverName:Gus
+ location:Castle Gardens
+ <description>
+Harvest the wheat you just grew in the Castle Gardens and bring it to the Kitchen.
+ <description>
+ <objectives>
+  {name:"Harvest all the wheat",item:["item",5], max:4, hidden:false }
+  {name:"Bring the Wheat to the kitchen", max:1, hidden:false }
+ <objectives>
+ gold:10
+ exp:20
+ <rewards>
+ <rewards>
+<quest3>
+
+<quest4>
+ name:Cooking
+ level:1
+ difficulty:Easy
+ autoComplete:false
+ canAbandon:false
+ forceAccept:true
+ forceTurnin:true
+ qgiverName:Kit
+ location:Castle Kitchen
+ <description>
+Read the recipe book and make some bread for Kit.
+ <description>
+ <objectives>
+  {name:"Read the recipe book", max:1, hidden:false }
+  {name:"Make bread",item:["item",26], max:2, hidden:false }
+ <objectives>
+ gold:10
+ exp:20
+ <rewards>
+ <rewards>
+<quest4>

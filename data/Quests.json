@@ -1,0 +1,1 @@
+[["Main Story","Side Quests","Crafting"],{"id":1,"icon":244,"cat":0,"name":"Gather Bonemeal","desc":"Gather Bonemal from the skeletons East of Edge","steps":[["Collect Bonemeal",true,1,10,false,"default",true]],"rewards":[["xp",100,1,false]]},{"id":2,"icon":163,"name":"Clean the Streets","steps":[],"rewards":[],"cat":2,"desc":"<Description>"}]

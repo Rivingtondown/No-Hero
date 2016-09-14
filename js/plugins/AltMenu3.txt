@@ -1,0 +1,503 @@
+//=============================================================================
+// AltMenuScreen3.js
+//=============================================================================
+
+/*:
+ * @plugindesc Yet Another menu screen layout.
+ * @author Sasuke KANNAZUKI, Yoji Ojima
+ * 
+ * @default 
+ * @param bgBitmapMenu
+ * @desc background bitmap file at menu scene. put at img/pictures.
+ * @default 
+ * 
+ * @param bgBitmapItem
+ * @desc background bitmap file at item scene. put at img/pictures.
+ * @default 
+ * 
+ * @param bgBitmapSkill
+ * @desc background bitmap file at skill scene. put at img/pictures.
+ * @default 
+ * 
+ * @param bgBitmapEquip
+ * @desc background bitmap file at equip scene. put at img/pictures.
+ * @default 
+ * 
+ * @param bgBitmapStatus
+ * @desc background bitmap file at status scene. put at img/pictures.
+ * @default 
+ * 
+ * @param bgBitmapOptions
+ * @desc background bitmap file at option scene. put at img/pictures.
+ * @default 
+ * 
+ * @param bgBitmapFile
+ * @desc background bitmap file at save/load scene. put at img/pictures.
+ * @default 
+ * 
+ * @param bgBitmapGameEnd
+ * @desc background bitmap file at gameEnd scene. put at img/pictures.
+ * @default 
+ * 
+ * @param maxColsMenu
+ * @desc max column at menu window
+ * @default 4
+ * 
+ * @param commandRows
+ * @desc number of visible rows at command window
+ * @default 2
+ *
+ * @param isDisplayStatus
+ * @desc whether display status or not. (1 = yes, 0 = no)
+ * @default 1
+ *
+ * @param iconCoin
+ * @desc Icon ID to coin/gold/money in the main menu.
+ * @default 314
+ *
+ * @param textMapName
+ * @desc Text to precede the name of current map.
+ * @default Map Name:
+ *
+ * @param textPlaytime
+ * @desc Text to playtime.
+ * @default Playtime:
+ *
+ * @help This plugin does not provide plugin commands.
+ *  The differences with AltMenuscreen are follows:
+ *   - windows are transparent at all menu scene.
+ *   - it can set the background bitmap for each scenes at menu.
+ *   - picture is actors' original
+ *
+ * Actor' note:
+ * <stand_picture:filename> set actor's standing picture at menu.
+ *   put file at img/pictures.
+ *
+ * preferred size of actor's picture:
+ * width: 174px(maxColsMenu=4), 240px(maxColsMenu=3)
+ * height: 408px(commandRows=2), 444px(commandRows=1)
+ */
+
+/*:ja
+ * @plugindesc ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã®ç•°ãªã‚‹ãƒ¡ãƒ‹ãƒ¥ãƒ¼ç”»é¢
+ * @author ç¥žç„¡æœˆã‚µã‚¹ã‚±, Yoji Ojima
+ * 
+ * @param bgBitmapMenu
+ * @desc ãƒ¡ãƒ‹ãƒ¥ãƒ¼èƒŒæ™¯ã«ã™ã‚‹ãƒ“ãƒƒãƒˆãƒžãƒƒãƒ—ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
+ * img/pictures ã«ç½®ã„ã¦ãã ã•ã„ã€‚
+ * @default 
+ * 
+ * @param bgBitmapItem
+ * @desc ã‚¢ã‚¤ãƒ†ãƒ ç”»é¢èƒŒæ™¯ã«ã™ã‚‹ãƒ“ãƒƒãƒˆãƒžãƒƒãƒ—ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
+ * img/pictures ã«ç½®ã„ã¦ãã ã•ã„ã€‚
+ * @default 
+ * 
+ * @param bgBitmapSkill
+ * @desc ã‚¹ã‚­ãƒ«ç”»é¢èƒŒæ™¯ã«ã™ã‚‹ãƒ“ãƒƒãƒˆãƒžãƒƒãƒ—ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
+ * img/pictures ã«ç½®ã„ã¦ãã ã•ã„ã€‚
+ * @default 
+ * 
+ * @param bgBitmapEquip
+ * @desc è£…å‚™ç”»é¢èƒŒæ™¯ã«ã™ã‚‹ãƒ“ãƒƒãƒˆãƒžãƒƒãƒ—ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
+ * img/pictures ã«ç½®ã„ã¦ãã ã•ã„ã€‚
+ * @default 
+ * 
+ * @param bgBitmapStatus
+ * @desc ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ç”»é¢èƒŒæ™¯ã«ã™ã‚‹ãƒ“ãƒƒãƒˆãƒžãƒƒãƒ—ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
+ * img/pictures ã«ç½®ã„ã¦ãã ã•ã„ã€‚
+ * @default 
+ * 
+ * @param bgBitmapOptions
+ * @desc ã‚ªãƒ—ã‚·ãƒ§ãƒ³ç”»é¢èƒŒæ™¯ã«ã™ã‚‹ãƒ“ãƒƒãƒˆãƒžãƒƒãƒ—ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
+ * img/pictures ã«ç½®ã„ã¦ãã ã•ã„ã€‚
+ * @default 
+ * 
+ * @param bgBitmapFile
+ * @desc ã‚»ãƒ¼ãƒ–ï¼ãƒ­ãƒ¼ãƒ‰ç”»é¢èƒŒæ™¯ã«ã™ã‚‹ãƒ“ãƒƒãƒˆãƒžãƒƒãƒ—ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
+ * img/pictures ã«ç½®ã„ã¦ãã ã•ã„ã€‚
+ * @default 
+ * 
+ * @param bgBitmapGameEnd
+ * @desc ã‚²ãƒ¼ãƒ çµ‚äº†ç”»é¢èƒŒæ™¯ã«ã™ã‚‹ãƒ“ãƒƒãƒˆãƒžãƒƒãƒ—ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
+ * img/pictures ã«ç½®ã„ã¦ãã ã•ã„ã€‚
+ * @default 
+ * 
+ * @param maxColsMenu
+ * @desc ã‚¢ã‚¯ã‚¿ãƒ¼ã‚’è¡¨ç¤ºã™ã‚‹ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®1ç”»é¢ã®ç™»éŒ²æœ€å¤§æ•°ã§ã™ã€‚
+ * @default 4
+ * 
+ * @param commandRows
+ * @desc ã‚³ãƒžãƒ³ãƒ‰ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®è¡Œæ•°ã§ã™ã€‚
+ * @default 2
+ *
+ * @param isDisplayStatus
+ * @desc ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’è¡¨ç¤ºã™ã‚‹ã‹ã—ãªã„ã‹ã‚’é¸ã³ã¾ã™ã€‚(1 = yes, 0 = no)
+ * @default 1
+ * 
+ * @help ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã«ã¯ã€ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚³ãƒžãƒ³ãƒ‰ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚
+ *
+ *  AltMenuscreen ã¨ã®é•ã„ã¯ä»¥ä¸‹ã§ã™:
+ *  - ãƒ¡ãƒ‹ãƒ¥ãƒ¼ç”»é¢ã™ã¹ã¦ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãŒé€æ˜Žã§ã™
+ *  - ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãã‚Œãžã‚Œã®ã‚·ãƒ¼ãƒ³ã«èƒŒæ™¯ãƒ“ãƒƒãƒˆãƒžãƒƒãƒ—ã‚’ä»˜ã‘ã‚‹ã“ã¨ãŒå‡ºæ¥ã¾ã™ã€‚
+ *  - ã‚¢ã‚¯ã‚¿ãƒ¼ã«ç«‹ã¡çµµã‚’åˆ©ç”¨ã—ã¾ã™ã€‚
+ *
+ * ã‚¢ã‚¯ã‚¿ãƒ¼ã®ãƒ¡ãƒ¢ã«ä»¥ä¸‹ã®ã‚ˆã†ã«æ›¸ã„ã¦ãã ã•ã„:
+ * <stand_picture:ãƒ•ã‚¡ã‚¤ãƒ«å> ãƒ•ã‚¡ã‚¤ãƒ«åãŒã€ãã®ã‚¢ã‚¯ã‚¿ãƒ¼ã®ç«‹ã¡çµµã«ãªã‚Šã¾ã™ã€‚
+ *   ãƒ•ã‚¡ã‚¤ãƒ«ã¯ img/pictures ã«ç½®ã„ã¦ãã ã•ã„ã€‚
+ *
+ * æœ›ã¾ã—ã„ã‚¢ã‚¯ã‚¿ãƒ¼ç«‹ã¡çµµã®ã‚µã‚¤ã‚ºï¼š
+ * å¹…ï¼š3åˆ—:240px, 4åˆ—ï¼š174px
+ * é«˜ã•ï¼š ã‚³ãƒžãƒ³ãƒ‰ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ 1è¡Œ:444px 2è¡Œ:408px
+ *
+ */
+
+(function() {
+
+    // set parameters
+    var parameters = PluginManager.parameters('AltMenuScreen3');
+    var bgBitmapMenu = parameters['bgBitmapMenu'] || '';
+    var bgBitmapItem = parameters['bgBitmapItem'] || '';
+    var bgBitmapSkill = parameters['bgBitmapSkill'] || '';
+    var bgBitmapEquip = parameters['bgBitmapEquip'] || '';
+    var bgBitmapStatus = parameters['bgBitmapStatus'] || '';
+    var bgBitmapOptions = parameters['bgBitmapOptions'] || '';
+    var bgBitmapFile = parameters['bgBitmapFile'] || '';
+    var bgBitmapGameEnd = parameters['bgBitmapGameEnd'] || '';
+    var maxColsMenuWnd = Number(parameters['maxColsMenu'] || 4);
+    var rowsCommandWnd = Number(parameters['commandRows'] || 2);
+    var isDisplayStatus = !!Number(parameters['isDisplayStatus']);
+	
+	var iconCoin = Number(parameters['iconCoin'] || 314);
+	var textMapName = parameters['textMapName'] || "Map Name:";
+	var textPlaytime = parameters['textPlaytime'] || "Playtime";
+
+   //
+   // make transparent windows for each scenes in menu.
+   //
+    var _Scene_Menu_create = Scene_Menu.prototype.create;
+    Scene_Menu.prototype.create = function() {
+        _Scene_Menu_create.call(this);
+        this._statusWindow.x = 0;
+        this._statusWindow.y = this._commandWindow.height;
+        // make transparent for all windows at menu scene.
+        this._statusWindow.opacity = 0;
+        this._goldWindow.opacity = 0;
+        this._commandWindow.opacity = 0;
+    };
+
+    var _Scene_Item_create = Scene_Item.prototype.create;
+    Scene_Item.prototype.create = function() {
+        _Scene_Item_create.call(this);
+        this._helpWindow.opacity = 0;
+        this._categoryWindow.opacity = 0;
+        this._itemWindow.opacity = 0;
+        this._actorWindow.opacity = 0;
+    };
+
+    var _Scene_Skill_create = Scene_Skill.prototype.create;
+    Scene_Skill.prototype.create = function() {
+        _Scene_Skill_create.call(this);
+        this._helpWindow.opacity = 0;
+        this._skillTypeWindow.opacity = 0;
+        this._statusWindow.opacity = 0;
+        this._itemWindow.opacity = 0;
+        this._actorWindow.opacity = 0;
+    };
+
+    var _Scene_Equip_create = Scene_Equip.prototype.create;
+    Scene_Equip.prototype.create = function() {
+        _Scene_Equip_create.call(this);
+        this._helpWindow.opacity = 0;
+        this._statusWindow.opacity = 0;
+        this._commandWindow.opacity = 0;
+        this._slotWindow.opacity = 0;
+        this._itemWindow.opacity = 0;
+    };
+
+    var _Scene_Status_create = Scene_Status.prototype.create;
+    Scene_Status.prototype.create = function() {
+        _Scene_Status_create.call(this);
+        this._statusWindow.opacity = 0;
+    };
+
+    var _Scene_Options_create = Scene_Options.prototype.create;
+    Scene_Options.prototype.create = function() {
+        _Scene_Options_create.call(this);
+        this._optionsWindow.opacity = 0;
+    };
+
+    var _Scene_File_create = Scene_File.prototype.create;
+    Scene_File.prototype.create = function() {
+        _Scene_File_create.call(this);
+        this._helpWindow.opacity = 0;
+        this._listWindow.opacity = 0;
+    };
+
+    var _Scene_GameEnd_create = Scene_GameEnd.prototype.create;
+    Scene_GameEnd.prototype.create = function() {
+        _Scene_GameEnd_create.call(this);
+        this._commandWindow.opacity = 0;
+    };
+
+    //
+    // load bitmap that set in plugin parameter
+    //
+    var _Scene_Menu_createBackground = Scene_Menu.prototype.createBackground;
+    Scene_Menu.prototype.createBackground = function(){
+        if(bgBitmapMenu){
+            this._backgroundSprite = new Sprite();
+            this._backgroundSprite.bitmap =
+             ImageManager.loadPicture(bgBitmapMenu);
+            this.addChild(this._backgroundSprite);
+            return;
+        }
+        // if background file is invalid, it does original process.
+        _Scene_Menu_createBackground.call(this);
+    };
+
+    var _Scene_Item_createBackground = Scene_Item.prototype.createBackground;
+    Scene_Item.prototype.createBackground = function(){
+        if(bgBitmapItem){
+            this._backgroundSprite = new Sprite();
+            this._backgroundSprite.bitmap =
+             ImageManager.loadPicture(bgBitmapItem);
+            this.addChild(this._backgroundSprite);
+            return;
+        }
+        // if background file is invalid, it does original process.
+        _Scene_Item_createBackground.call(this);
+    };
+
+    var _Scene_Skill_createBackground = Scene_Skill.prototype.createBackground;
+    Scene_Skill.prototype.createBackground = function(){
+        if(bgBitmapSkill){
+            this._backgroundSprite = new Sprite();
+            this._backgroundSprite.bitmap =
+             ImageManager.loadPicture(bgBitmapSkill);
+            this.addChild(this._backgroundSprite);
+            return;
+        }
+        // if background file is invalid, it does original process.
+        _Scene_Skill_createBackground.call(this);
+    };
+
+    var _Scene_Equip_createBackground = Scene_Equip.prototype.createBackground;
+    Scene_Equip.prototype.createBackground = function(){
+        if(bgBitmapEquip){
+            this._backgroundSprite = new Sprite();
+            this._backgroundSprite.bitmap =
+             ImageManager.loadPicture(bgBitmapEquip);
+            this.addChild(this._backgroundSprite);
+            return;
+        }
+        // if background file is invalid, it does original process.
+        _Scene_Equip_createBackground.call(this);
+    };
+
+    var _Scene_Status_createBackground =
+     Scene_Status.prototype.createBackground;
+    Scene_Status.prototype.createBackground = function(){
+        if(bgBitmapStatus){
+            this._backgroundSprite = new Sprite();
+            this._backgroundSprite.bitmap =
+             ImageManager.loadPicture(bgBitmapStatus);
+            this.addChild(this._backgroundSprite);
+            return;
+        }
+        // if background file is invalid, it does original process.
+        _Scene_Status_createBackground.call(this);
+    };
+
+    var _Scene_Options_createBackground =
+     Scene_Options.prototype.createBackground;
+    Scene_Options.prototype.createBackground = function(){
+        if(bgBitmapOptions){
+            this._backgroundSprite = new Sprite();
+            this._backgroundSprite.bitmap =
+             ImageManager.loadPicture(bgBitmapOptions);
+            this.addChild(this._backgroundSprite);
+            return;
+        }
+        // if background file is invalid, it does original process.
+        _Scene_Options_createBackground.call(this);
+    };
+
+    var _Scene_File_createBackground = Scene_File.prototype.createBackground;
+    Scene_File.prototype.createBackground = function(){
+        if(bgBitmapFile){
+            this._backgroundSprite = new Sprite();
+            this._backgroundSprite.bitmap =
+             ImageManager.loadPicture(bgBitmapFile);
+            this.addChild(this._backgroundSprite);
+            return;
+        }
+        // if background file is invalid, it does original process.
+        _Scene_File_createBackground.call(this);
+    };
+
+    var _Scene_GameEnd_createBackground =
+     Scene_GameEnd.prototype.createBackground;
+    Scene_GameEnd.prototype.createBackground = function(){
+        if(bgBitmapGameEnd){
+            this._backgroundSprite = new Sprite();
+            this._backgroundSprite.bitmap =
+             ImageManager.loadPicture(bgBitmapGameEnd);
+            this.addChild(this._backgroundSprite);
+            return;
+        }
+        // if background file is invalid, it does original process.
+        _Scene_GameEnd_createBackground.call(this);
+    };
+
+    //
+    // alt menu screen processes
+    //
+    Window_MenuCommand.prototype.windowWidth = function() {
+        return Graphics.boxWidth;
+    };
+
+    Window_MenuCommand.prototype.maxCols = function() {
+        return maxColsMenuWnd;
+    };
+
+    Window_MenuCommand.prototype.numVisibleRows = function() {
+        return rowsCommandWnd;
+    };
+
+    Window_MenuStatus.prototype.windowWidth = function() {
+        return Graphics.boxWidth;
+    };
+
+    Window_MenuStatus.prototype.windowHeight = function() {
+        var h1 = this.fittingHeight(1);
+        var h2 = this.fittingHeight(rowsCommandWnd);
+        return Graphics.boxHeight - h1 - h2;
+    };
+
+    Window_MenuStatus.prototype.maxCols = function() {
+        return maxColsMenuWnd;
+    };
+
+    Window_MenuStatus.prototype.numVisibleRows = function() {
+        return 1;
+    };
+
+    Window_MenuStatus.prototype.drawItemImage = function(index) {
+        var actor = $gameParty.members()[index];
+        var rect = this.itemRectForText(index);
+        // load stand_picture
+        var bitmapName = $dataActors[actor.actorId()].meta.stand_picture;
+        var bitmap = bitmapName ? ImageManager.loadPicture(bitmapName) : null;
+        var w = Math.min(rect.width, (bitmapName ? bitmap.width : 144));
+        var h = Math.min(rect.height, (bitmapName ? bitmap.height : 144));
+        var lineHeight = this.lineHeight();
+        this.changePaintOpacity(actor.isBattleMember());
+        if(bitmap){
+            var sx = (bitmap.width > w) ? (bitmap.width - w) / 2 : 0;
+            var sy = (bitmap.height > h) ? (bitmap.height - h) / 2 : 0;
+            var dx = (bitmap.width > rect.width) ? rect.x :
+                rect.x + (rect.width - bitmap.width) / 2;
+            var dy = (bitmap.height > rect.height) ? rect.y :
+                rect.y + (rect.height - bitmap.height) / 2;
+            this.contents.blt(bitmap, sx, sy, w, h, dx, dy);
+        } else { // when bitmap is not set, do the original process.
+            this.drawActorFace(actor, rect.x, rect.y + lineHeight * 2.5, w, h);
+        }
+        this.changePaintOpacity(true);
+    };
+
+    Window_MenuStatus.prototype.drawItemStatus = function(index) {
+        if(!isDisplayStatus){
+            return;
+        }
+        var actor = $gameParty.members()[index];
+        var rect = this.itemRectForText(index);
+        var x = rect.x;
+        var y = rect.y;
+        var width = rect.width;
+        var bottom = y + rect.height;
+        var lineHeight = this.lineHeight();
+        this.drawActorName(actor, x, y + lineHeight * 0, width);
+        this.drawActorLevel(actor, x, y + lineHeight * 1, width);
+        this.drawActorClass(actor, x, bottom - lineHeight * 4, width);
+        this.drawActorHp(actor, x, bottom - lineHeight * 3, width);
+        this.drawActorMp(actor, x, bottom - lineHeight * 2, width);
+        this.drawActorIcons(actor, x, bottom - lineHeight * 1, width);
+    };
+
+    var _Window_MenuActor_initialize = Window_MenuActor.prototype.initialize;
+    Window_MenuActor.prototype.initialize = function() {
+        _Window_MenuActor_initialize.call(this);
+        this.y = this.fittingHeight(2);
+    };
+//=============================================================================
+// Scene_Menu (modification)
+//
+// This modification replace the creation of Window_Gold for Window_MenuData.
+//=============================================================================
+  Scene_Menu.prototype.createGoldWindow = function() {
+    this._goldWindow = new Window_MenuData(0, 0);
+    this._goldWindow.y = Graphics.boxHeight - this._goldWindow.height;
+    this.addWindow(this._goldWindow);
+  };
+
+  var Silenity_Scene_Menu_update = Scene_Menu.prototype.update;
+  Scene_Menu.prototype.update = function() {
+	// Alias
+    Silenity_Scene_Menu_update.call(this);
+    // AtualizaÃ§Ã£o na janela de tempo de jogo e dinheiro.
+	this._goldWindow.refresh();
+  };
+//=============================================================================
+// Window_MenuData (new)
+//
+// This window shows the game time, actual map and gold.
+//=============================================================================
+  function Window_MenuData() {
+    this.initialize.apply(this, arguments);
+  }
+
+  Window_MenuData.prototype = Object.create(Window_Base.prototype);
+  Window_MenuData.prototype.constructor = Window_MenuData;
+
+  Window_MenuData.prototype.initialize = function(x, y) {
+    var width = this.windowWidth();
+    var height = this.windowHeight();
+    Window_Base.prototype.initialize.call(this, x, y, width, height);
+    this.refresh();
+  };
+
+  Window_MenuData.prototype.windowWidth = function() {
+    return Graphics.boxWidth;
+  };
+
+  Window_MenuData.prototype.windowHeight = function() {
+    return this.fittingHeight(1);
+  };
+
+  Window_MenuData.prototype.refresh = function() {
+    this.contents.clear();
+	this.changeTextColor(this.systemColor());
+	this.drawText(textMapName, 20, 0, this.contents.width / 2, 'left');
+	this.drawText(textPlaytime, this.contents.width / 2 - 100, 0, this.contents.width / 2, 'left');
+	this.resetTextColor();
+	this.drawText($gameMap.displayName(), 120, 0, this.contents.width / 2, 'left');
+	this.drawText($gameSystem.playtimeText(), this.contents.width / 2 + 5, 0, this.contents.width - 36, 'left');
+	this.drawIcon(iconCoin, this.contents.width - 50, 0);
+	var gold = "";
+	gold += String(parseInt($gameParty.gold() / 1000));
+	if (gold == "0") {
+	  gold = "";
+	} else {
+      gold += ",";
+	};
+	gold += String($gameParty.gold() % 1000);
+    this.drawText(gold, this.contents.width - 135, 0, 74, 'right');
+  };
+
+  Window_MenuData.prototype.open = function() {
+    this.refresh();
+    Window_Base.prototype.open.call(this);
+  };
+  
+})();

@@ -1,0 +1,46 @@
+<quest1>
+name:Collect Bonemeal
+level:1
+category:
+difficulty:Easy
+autoComplete:false
+canAbandon:false
+forceAccept:true
+forceTurnin:false
+qgiverName:Unknown
+location:Unknown
+<description>
+Collect 10 Bonemeal
+<description>
+<objectives>
+{name:"Collect 10 Bonemeal", max:10, hidden:false, item:["item",12]}
+<objectives>
+gold:0
+exp:0
+expScale:0
+<rewards>
+<rewards>
+<quest1>
+<quest2>
+name:Unknown
+level:1
+category:
+difficulty:Easy
+autoComplete:false
+canAbandon:true
+forceAccept:false
+forceTurnin:false
+qgiverName:Unknown
+location:Unknown
+<description>
+Nothing.
+<description>
+<objectives>
+{name:"Unknown", max:1, hidden:false, item:["item",12]}
+<objectives>
+gold:0
+exp:0
+expScale:0
+<rewards>
+<rewards>
+<quest2>
