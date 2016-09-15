@@ -5,12 +5,92 @@
   {type:"item", id:11, amount:1}
  <materials>
  category:Cooking
+ craftLevel:1
  success:100
  successGain:1
- xp:35
+ xp:15
  xpDeprac:5
  known:false
 <recipe1>
+
+<recipe2>
+ result:{type:"item", id:27, amount:1}
+ <materials>
+  {type:"item", id:9, amount:2}
+  {type:"item", id:10, amount:1}
+  {type:"item", id:15, amount:1}
+ <materials>
+ category:Cooking
+ craftLevel:1
+ success:100
+ successGain:1
+ xp:25
+ xpDeprac:5
+ known:false
+<recipe2>
+
+<recipe3>
+ result:{type:"item", id:28, amount:1}
+ <materials>
+  {type:"item", id:1, amount:4}
+  {type:"item", id:8, amount:2}
+  {type:"item", id:16, amount:1}
+ <materials>
+ category:Cooking
+ craftLevel:1
+ success:100
+ successGain:1
+ xp:30
+ xpDeprac:5
+ known:false
+<recipe3>
+
+<recipe4>
+ result:{type:"item", id:29, amount:1}
+ <materials>
+  {type:"item", id:13, amount:4}
+  {type:"item", id:3, amount:1}
+  {type:"item", id:22, amount:2}
+ <materials>
+ category:Cooking
+ craftLevel:1
+ success:100
+ successGain:1
+ xp:30
+ xpDeprac:5
+ known:false
+<recipe4>
+
+<recipe5>
+ result:{type:"item", id:30, amount:1}
+ <materials>
+  {type:"item", id:2, amount:3}
+  {type:"item", id:5, amount:2}
+  {type:"item", id:11, amount:1}
+ <materials>
+ category:Cooking
+ craftLevel:1
+ success:100
+ successGain:1
+ xp:30
+ xpDeprac:5
+ known:false
+<recipe5>
+
+<recipe5>
+ result:{type:"item", id:31, amount:2}
+ <materials>
+  {type:"item", id:18, amount:4}
+  {type:"item", id:4, amount:1}
+ <materials>
+ category:Cooking
+ craftLevel:2
+ success:100
+ successGain:1
+ xp:60
+ xpDeprac:5
+ known:false
+<recipe5>
 
 /*<recipe2>
  result:{type:"item", id:2, amount:1}
