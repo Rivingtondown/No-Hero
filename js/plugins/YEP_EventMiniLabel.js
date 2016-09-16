@@ -11,7 +11,7 @@ Yanfly.EML = Yanfly.EML || {};
 
 //=============================================================================
  /*:
- * @plugindesc v1.05 Creates miniature-sized labels over events to allow
+ * @plugindesc v1.10 Creates miniature-sized labels over events to allow
  * you to insert whatever text you'd like in them.
  * @author Yanfly Engine Plugins
  *
@@ -82,6 +82,10 @@ Yanfly.EML = Yanfly.EML || {};
  *   The player will have to be within x tiles of this event in order for the
  *   mini label to appear visibly.
  *
+ *   <Mini Label Require Facing>
+ *   This will require the player to be facing the direction of the event in
+ *   order for the mini label to appear.
+ *
  * ============================================================================
  * Plugin Commands
  * ============================================================================
@@ -103,6 +107,26 @@ Yanfly.EML = Yanfly.EML || {};
  * ============================================================================
  * Changelog
  * ============================================================================
+ *
+ * Version 1.10:
+ * - Mini Windows will now readjust their size to show at normal scale if the
+ * map is zoomed in.
+ *
+ * Version 1.09:
+ * - Fixed a bug that caused Mini Labels that started off as hidden to remain
+ * hidden even after turning the Mini Labels on.
+ *
+ * Version 1.08:
+ * - Added <Mini Label Require Facing> comment tag.
+ * - Moved the priority of the Mini Labels to be later added to the spriteset
+ * so they can stay on top of more effects.
+ *
+ * Version 1.07:
+ * - Added more padding space so text doesn't get cut off.
+ *
+ * Version 1.06:
+ * - Fixed a bug that caused some mini labels to show if the event was loaded
+ * onto the map without any currently active pages.
  *
  * Version 1.05:
  * - Added 'X Buffer' plugin parameter and the <Mini Label X Buffer: +x> and
@@ -159,6 +183,7 @@ Game_System.prototype.isShowEventMiniLabel = function() {
 
 Game_System.prototype.setEventMiniLabel = function(value) {
     this._showEventMiniLabel = value;
+    Game_Interpreter.prototype.refreshEventMiniLabel.call(this);
 };
 
 //=============================================================================
@@ -201,6 +226,7 @@ Window_EventMiniLabel.prototype.initialize = function() {
     var width = Yanfly.Param.EMWMinWidth;
     var height = this.windowHeight();
     this._range = 500;
+    this._reqFacing = false;
     Window_Base.prototype.initialize.call(this, 0, 0, width, height);
     this.opacity = 0;
     this.contentsOpacity = 0;
@@ -247,8 +273,9 @@ Window_EventMiniLabel.prototype.gatherDisplayData = function() {
     this._bufferY = Yanfly.Param.EMWBufferY;
     this._fontSize = Yanfly.Param.EMWFontSize;
     this._alwaysShow = false;
+    this._reqFacing = false;
     if (!this._character.page()) {
-        return this.visible = false;
+      return this.visible = false;
     }
     var list = this._character.list();
     var max = list.length;
@@ -268,6 +295,7 @@ Window_EventMiniLabel.prototype.extractNotedata = function(comment) {
   var tag4 = /<(?:ALWAYS SHOW MINI WINDOW|ALWAYS SHOW MINI LABEL)>/i;
   var tag5 = /<(?:MINI WINDOW RANGE|MINI LABEL RANGE):[ ](\d+)>/i;
   var tag6 = /<(?:MINI WINDOW X BUFFER|MINI LABEL X BUFFER):[ ]([\+\-]\d+)>/i;
+  var tag7 = /<(?:MINI WINDOW REQUIRE FACING|MINI LABEL REQUIRE FACING)>/i;
   var notedata = comment.split(/[\r\n]+/);
   var text = '';
   for (var i = 0; i < notedata.length; ++i) {
@@ -284,10 +312,23 @@ Window_EventMiniLabel.prototype.extractNotedata = function(comment) {
       this._range = parseInt(RegExp.$1);
     } else if (line.match(tag6)) {
       this._bufferX = parseInt(RegExp.$1);
+    } else if (line.match(tag7)) {
+      this._reqFacing = true;
     }
   }
   this.setText(text);
-  this.contentsOpacity = this._text === '' ? 0 : 255;
+  if (this._text === '' || !$gameSystem.isShowEventMiniLabel()) {
+    this.visible = false;
+    this.contentsOpacity = 0;
+  } else {
+    this.visible = true;
+    if (this._reqFacing) {
+      this.contentsOpacity = 0;
+    } else {
+      this.contentsOpacity = 255;
+    }
+  }
+
 };
 
 Window_EventMiniLabel.prototype.setText = function(text) {
@@ -297,19 +338,26 @@ Window_EventMiniLabel.prototype.setText = function(text) {
 };
 
 Window_EventMiniLabel.prototype.refresh = function() {
+    if (Imported.YEP_SelfSwVar) {
+      $gameTemp.setSelfSwVarEvent(this._character._mapId, this._character._eventId);
+    }
     this.contents.clear();
     var txWidth = this.textWidthEx(this._text);
-    var width = txWidth + this.standardPadding() * 2;
+    txWidth += this.textPadding() * 2;
+    var width = txWidth;
     this.width = Math.max(width, Yanfly.Param.EMWMinWidth);
+    this.width += this.standardPadding() * 2;
     this.height = this.windowHeight();
     this.createContents();
     var wx = (this.contents.width - txWidth) / 2;
     var wy = 0;
-    this.drawTextEx(this._text, wx, wy);
+    this.drawTextEx(this._text, wx + this.textPadding(), wy);
+    if (Imported.YEP_SelfSwVar) $gameTemp.clearSelfSwVarEvent();
 };
 
 Window_EventMiniLabel.prototype.forceRefresh = function() {
     this.refresh();
+    this.updateOpacity();
 };
 
 Window_EventMiniLabel.prototype.textWidthEx = function(text) {
@@ -344,16 +392,21 @@ Window_EventMiniLabel.prototype.updateOpacity = function() {
 Window_EventMiniLabel.prototype.show = function() {
     if (this.contentsOpacity >= 255) return;
     this.contentsOpacity += 16;
+    this.visible = true;
 };
 
 Window_EventMiniLabel.prototype.hide = function() {
-    if (this.contentsOpacity <= 0) return;
+    if (this.contentsOpacity <= 0) {
+      if (this.visible) this.visible = false;
+      return;
+    }
     this.contentsOpacity -= 16;
 };
 
 Window_EventMiniLabel.prototype.showMiniLabel = function() {
     if (this._alwaysShow) return true;
     if (!this.withinRange()) return false;
+    if (!this.meetsFacingRequirements()) return false;
     return $gameSystem.isShowEventMiniLabel();
 };
 
@@ -369,6 +422,45 @@ Window_EventMiniLabel.prototype.withinRange = function() {
     return false;
 };
 
+Window_EventMiniLabel.prototype.meetsFacingRequirements = function() {
+  if (!this._character) return true;
+  if (!this._reqFacing) return true;
+  var direction = $gamePlayer.direction();
+  var playerX = $gamePlayer.x;
+  var playerY = $gamePlayer.y;
+  var eventX = this._character.x;
+  var eventY = this._character.y;
+  switch (direction) {
+  case 1:
+    return playerX >= eventX && playerY <= eventY;
+    break;
+  case 2:
+    return playerY <= eventY;
+    break;
+  case 3:
+    return playerX <= eventX && playerY <= eventY;
+    break;
+  case 4:
+    return playerX >= eventX;
+    break;
+  case 6:
+    return playerX <= eventX;
+    break;
+  case 7:
+    return playerX >= eventX && playerY >= eventY;
+    break;
+  case 8:
+    return playerY >= eventY;
+    break;
+  case 9:
+    return playerX <= eventX && playerY >= eventY;
+    break;
+  default:
+    return true;
+    break;
+  }
+};
+
 //=============================================================================
 // Sprite_Character
 //=============================================================================
@@ -377,6 +469,7 @@ Yanfly.EML.Sprite_Character_update = Sprite_Character.prototype.update;
 Sprite_Character.prototype.update = function() {
     Yanfly.EML.Sprite_Character_update.call(this);
     this.updateMiniLabel();
+    this.updateMiniLabelZoom();
 };
 
 Sprite_Character.prototype.updateMiniLabel = function() {
@@ -387,15 +480,27 @@ Sprite_Character.prototype.updateMiniLabel = function() {
 
 Sprite_Character.prototype.setupMiniLabel = function() {
     if (this._miniLabel) return;
+    if (!SceneManager._scene._spriteset) return;
     this._miniLabel = new Window_EventMiniLabel();
     this._miniLabel.setCharacter(this._character);
-    this.parent.parent.addChild(this._miniLabel);
+    //this.parent.parent.addChild(this._miniLabel);
+    SceneManager._scene._spriteset.addChild(this._miniLabel);
 };
 
 Sprite_Character.prototype.positionMiniLabel = function() {
     var win = this._miniLabel;
-    win.x = this.x + win.width / -2 + win.bufferX();
-    win.y = this.y + (this.height * -1) - win.height + win.bufferY();
+    var width = win.width * win.scale.x;
+    win.x = this.x + width / -2 + win.bufferX();
+    var height = win.height * win.scale.y;
+    var buffer = win.bufferY() * win.scale.y;
+    win.y = this.y + (this.height * -1) - height + buffer;
+};
+
+Sprite_Character.prototype.updateMiniLabelZoom = function() {
+  if (!this._miniLabel) return;
+  var spriteset = SceneManager._scene._spriteset;
+  this._miniLabel.scale.x = 1 / spriteset.scale.x;
+  this._miniLabel.scale.y = 1 / spriteset.scale.y;
 };
 
 Sprite_Character.prototype.refreshMiniLabel = function() {
