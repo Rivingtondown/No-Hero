@@ -57,7 +57,7 @@ Game_System.prototype.createHarvestable = function (value, eventID, mapID) {
   }
   if (HarvestType == "Crop") {
     //if you're farming
-    ProfType = "Homesteader"; //string for messages
+    ProfType = $gameVariables.value(15); //string for messages
     ProfXPVar = ProfBuild.parameters.HomesteaderXP; //in-game Homesteader xp variable number
     ProfLvlVar = ProfBuild.parameters.HomesteaderLVL; //in-game Homesteader lvl variable number
   }
@@ -138,7 +138,7 @@ Game_System.prototype.plowPlot = function (value, eventID, mapID) {
   if (HarvestLvl > ProfLvl) {
     //if the crop is too high level for you to harvest
     $gameMessage.add( //create a message
-    "Homesteader level too low to harvest "+$gameMap.event(eventID).event().name.toLowerCase()+"\n" + "Required level: " + HarvestLvl + "\n" + "Current level: " + ProfLvl + "\n");
+    $gameVariables.value(15) + " level too low to harvest "+$gameMap.event(eventID).event().name.toLowerCase()+"\n" + "Required level: " + HarvestLvl + "\n" + "Current level: " + ProfLvl + "\n");
     $gameMessage.add("Clear the plot?"); //generate an option to plow anyways or clear the plot
     $gameMessage.setChoices(['Clear the plot', 'Cancel'], 0, -1);
     $gameMessage.setChoiceCallback(function (choice) {

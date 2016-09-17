@@ -110,6 +110,7 @@ var ProfBuild = ProfBuild || {};
 (function() {
 ProfBuild.parameters = PluginManager.parameters('ProfBuild');
 
+ProfBuild.parameters.ProfessionNames = String(ProfBuild.parameters['ProfessionNames']);
 ProfBuild.parameters.HomesteaderXP = Number(ProfBuild.parameters['HomesteaderXP'] || '0');
 ProfBuild.parameters.HomesteaderLVL = Number(ProfBuild.parameters['HomesteaderLVL'] || '0');
 ProfBuild.parameters.HomesteaderSKL = Number(ProfBuild.parameters['HomesteaderSKL'] || '0');
@@ -129,10 +130,13 @@ ProfBuild.parameters.HunterXP = Number(ProfBuild.parameters['HunterXP'] || '0');
 ProfBuild.parameters.HunterLVL = Number(ProfBuild.parameters['HunterLVL'] || '0');
 ProfBuild.parameters.HunterSKL = Number(ProfBuild.parameters['HunterSKL'] || '0');
 
-function Profession(xpVar, lvlVar, sklVar) {
+
+
+function Profession(xpVar, lvlVar, sklVar, helpText) {
   this.xpVar = xpVar;
   this.lvlVar = lvlVar;
   this.sklVar = sklVar;
+  this.helpText = helpText
 }
 
 var Homesteader = new Profession(ProfBuild.parameters.HomesteaderXP, ProfBuild.parameters.HomesteaderLVL, ProfBuild.parameters.HomesteaderSKL);
@@ -146,5 +150,19 @@ var Hunter = new Profession(ProfBuild.parameters.HunterXP, ProfBuild.parameters.
 ProfBuild.GameSystem_initialize = Game_System.prototype.initialize;
 Game_System.prototype.initialize = function () {
   ProfBuild.GameSystem_initialize.call(this);
+
+  //Build Profession Name string variables
+  var ProfessionNames = ProfBuild.parameters.ProfessionNames.split(" ");
+  setTimeout(function(){
+    for(var i = 0; i < 6; i++) {
+      var thisGameVar = i+15;
+      $gameVariables.setValue(thisGameVar, ProfessionNames[i]);
+    }
+  },1000)
 };
+Game_System.prototype.ProfHelp = function (helpType, profession) {
+  if (helpType == "tutorial") {
+
+  }
+}
 })();
