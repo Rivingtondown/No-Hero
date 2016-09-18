@@ -16,8 +16,7 @@
 <recipe2>
  result:{type:"item", id:27, amount:1}
  <materials>
-  {type:"item", id:9, amount:2}
-  {type:"item", id:10, amount:1}
+  {type:"item", id:24, amount:4}
   {type:"item", id:15, amount:1}
  <materials>
  category:Cooking
@@ -106,3 +105,51 @@
  xpDeprac:5
  known:false
 <recipe7>
+
+<recipe8>
+ result:{type:"item", id:27, amount:1}
+ <materials>
+  {type:"item", id:9, amount:2}
+  {type:"item", id:10, amount:1}
+  {type:"item", id:15, amount:1}
+ <materials>
+ category:Cooking
+ craftLevel:2
+ success:100
+ successGain:1
+ xp:25
+ xpDeprac:5
+ known:false
+<recipe8>
+
+<recipe9>
+ result:{type:"item", id:33, amount:1}
+ <materials>
+  {type:"item", id:14, amount:2}
+  {type:"item", id:19, amount:1}
+  {type:"item", id:26, amount:1}
+ <materials>
+ category:Cooking
+ craftLevel:2
+ success:100
+ successGain:1
+ xp:75
+ xpDeprac:5
+ known:false
+<recipe9>
+
+<recipe10>
+ result:{type:"item", id:32, amount:2}
+ <materials>
+  {type:"item", id:22, amount:4}
+  {type:"item", id:6, amount:2}
+  {type:"item", id:7, amount:1}
+ <materials>
+ category:Cooking
+ craftLevel:2
+ success:100
+ successGain:1
+ xp:60
+ xpDeprac:5
+ known:false
+<recipe10>
