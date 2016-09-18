@@ -1,9 +1,9 @@
 [
 null,
 {"id":1,"battlerName":"Jalen","characterIndex":0,"characterName":"Custom1","classId":2,"equips":[0,0,0,3,0],"faceIndex":0,"faceName":"Jalen","traits":[{"code":43,"dataId":2,"value":1}],"initialLevel":1,"maxLevel":99,"name":"Darakas","nickname":"Darakas","note":"","profile":""},
-{"id":2,"battlerName":"Custom1_1","characterIndex":1,"characterName":"Custom1","classId":1,"equips":[5,0,0,5,0],"faceIndex":0,"faceName":"Custom1","traits":[{"code":33,"dataId":0,"value":2},{"code":43,"dataId":3,"value":1}],"initialLevel":2,"maxLevel":99,"name":"Kitara","nickname":"Kit","note":"","profile":""},
+{"id":2,"battlerName":"Custom1_1","characterIndex":1,"characterName":"Custom1","classId":1,"equips":[25,0,0,5,0],"faceIndex":0,"faceName":"Custom1","traits":[{"code":33,"dataId":0,"value":2},{"code":43,"dataId":3,"value":1}],"initialLevel":2,"maxLevel":99,"name":"Kitara","nickname":"Kit","note":"","profile":""},
 {"id":3,"battlerName":"Actor1_7","characterIndex":6,"characterName":"Actor1","classId":2,"equips":[0,0,0,0,0],"faceIndex":6,"faceName":"Actor1","traits":[],"initialLevel":1,"maxLevel":99,"name":"Hero","nickname":"","note":"","profile":""},
-{"id":4,"battlerName":"Gus","characterIndex":6,"characterName":"People1","classId":4,"equips":[3,0,0,7,0],"faceIndex":6,"faceName":"People1","traits":[{"code":43,"dataId":13,"value":1}],"initialLevel":2,"maxLevel":99,"name":"Gus","nickname":"","note":"","profile":""},
+{"id":4,"battlerName":"Gus","characterIndex":6,"characterName":"People1","classId":4,"equips":[13,0,0,7,0],"faceIndex":6,"faceName":"People1","traits":[{"code":43,"dataId":13,"value":1}],"initialLevel":2,"maxLevel":99,"name":"Gus","nickname":"","note":"","profile":""},
 {"id":5,"battlerName":"Actor1_3","characterIndex":2,"characterName":"Actor1","classId":5,"equips":[4,0,0,0,0],"faceIndex":2,"faceName":"Actor1","traits":[],"initialLevel":1,"maxLevel":99,"name":"Hunter","nickname":"","note":"","profile":""},
 {"id":6,"battlerName":"","characterIndex":0,"characterName":"","classId":1,"equips":[0,0,0,0,0],"faceIndex":0,"faceName":"","traits":[],"initialLevel":1,"maxLevel":99,"name":"","nickname":"","note":"","profile":""}
 ]
