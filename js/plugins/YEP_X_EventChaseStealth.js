@@ -133,7 +133,7 @@ Yanfly.ECS = Yanfly.ECS || {};
  * ============================================================================
  * Instructions - Stealth Mode
  * ============================================================================
- * 
+ *
  * To enter Stealth Mode, you'll have to utilize the plugin commands found in
  * the plugin commands section a bit lower. While in Stealth Mode, if enabled,
  * the Stealth Gauge will appear to alert the player how much longer the player
@@ -217,7 +217,7 @@ Yanfly.Param.ECSMoveSpeed = Number(Yanfly.Parameters['Move Speed']);
 Yanfly.Param.ECSRegions = String(Yanfly.Parameters['Stealth Regions']);
 Yanfly.Param.ECSRegions = Yanfly.Param.ECSRegions.split(' ');
 for (Yanfly.i = 0; Yanfly.i < Yanfly.Param.ECSRegions.length; ++Yanfly.i) {
-  Yanfly.Param.ECSRegions[Yanfly.i] = 
+  Yanfly.Param.ECSRegions[Yanfly.i] =
     parseInt(Yanfly.Param.ECSRegions[Yanfly.i]);
 };
 
@@ -412,7 +412,7 @@ Game_Player.prototype.getMaxChaseStealthTimer = function() {
 Yanfly.ECS.Game_Player_triggerAction = Game_Player.prototype.triggerAction;
 Game_Player.prototype.triggerAction = function() {
     var value = Yanfly.ECS.Game_Player_triggerAction.call(this);
-    if (value) this.setStealthMode(false);
+    //if (value) this.setStealthMode(false);
     return value;
 };
 
@@ -420,7 +420,7 @@ Yanfly.ECS.Game_Player_triggerButtonAction =
     Game_Player.prototype.triggerButtonAction;
 Game_Player.prototype.triggerButtonAction = function() {
     var value = Yanfly.ECS.Game_Player_triggerButtonAction.call(this);
-    if (value) this.setStealthMode(false);
+    //if (value) this.setStealthMode(false);
     return value;
 };
 
