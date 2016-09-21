@@ -1,0 +1,45 @@
+//Daggers
+Knife
+Shiv
+Dirk
+Dagger
+Poniard
+Stiletto
+Kris
+
+//Swords
+Short Sword
+Sabre
+Longsword
+Rapier
+Cutlass
+Falchion
+Broadsword
+Claymore
+
+//Axes and Maces
+Hatchet
+Blackjack
+Hand Axe
+Cudgel
+Broadaxe
+Flanged Mace
+Battle Axe
+Morning Star
+
+//Staves
+Cane
+Rod
+Staff
+Crosier
+Battlestaff
+
+//Bows and Crossbows
+Short bow
+Longbow
+Recurve bow
+Reflex bow
+Composite bow
+Crossbow
+Recurve crossbow
+Repeating crossbow

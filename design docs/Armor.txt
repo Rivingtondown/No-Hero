@@ -1,0 +1,42 @@
+//General Armor
+--Body
+Woven Shirt
+Fur Vest
+--Head
+Brimmed Hat
+Cloth Hood
+
+//Light Armor
+--Body
+Hide Armor
+Leather Jerkin
+Studded Vest
+Light Mail
+--Head
+Skull Cap
+Leather Helm
+Hachi Helmet
+Kabuto
+
+
+//Heavy Armor
+Chain Mail
+Scale Mail
+Splint Mail
+Plate Mail
+--Head
+Chain Hood
+Kettle Helm
+War Helmet
+Great Helm
+
+
+//Magic Armor
+--Body
+Shawl
+Robes
+--Head
+Phrygian Cap
+Tiara
+Crown
+Mask
