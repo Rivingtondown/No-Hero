@@ -3,6 +3,7 @@ icon/*
 movies/*
 audio/*
 fonts/*
+!img/pictures
 
 #############
 ## Windows detritus

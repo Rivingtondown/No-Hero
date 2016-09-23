@@ -157,21 +157,43 @@ Game_System.prototype.plowPlot = function (value, eventID, mapID) {
   }
 
 };
-Game_System.prototype.plantPlots = function (value, eventID, mapID) {
+Game_System.prototype.plantPlots = function (value, plantRegion, eventID, mapID) {
   $gameMessage.add("What will you plant?");
   $gameMessage.setChoices([value[0], value[1], value[2], value[3], "Cancel"], 0, 1, 2, 3, -1);
   $gameMessage.setChoiceCallback(function (choice) {
     if (choice == 0) {
-      $gameMap.spawnMapEventFrom(19, 1, 11, false);
+      if ($gameVariables.value(ProfBuild.parameters.HomesteaderLVL) > choice) {
+        $gameMap.spawnMapEventFrom(19, 1, plantRegion, false);
+      } else {
+        $gameMessage.add($gameVariables.value(15)+" level too low to plant "+value[choice]+"\n"+"Requires: "+$gameVariables.value(15)+" "+parseInt(choice+1));
+      }
     }
     if (choice == 1) {
-      $gameMap.spawnMapEventFrom(19, 2, 11, false);
+      if ($gameVariables.value(ProfBuild.parameters.HomesteaderLVL) > choice) {
+        $gameMap.spawnMapEventFrom(19, 2, plantRegion, false);
+      } else {
+        setTimeout(function(){
+          $gameMessage.add($gameVariables.value(15)+" level too low to plant "+value[choice]+"\n"+"Requires: "+$gameVariables.value(15)+" "+parseInt(choice+1));
+        }, 200)
+      }
     }
     if (choice == 2) {
-      $gameMap.spawnMapEventFrom(19, 3, 11, false);
+      if ($gameVariables.value(ProfBuild.parameters.HomesteaderLVL) > choice) {
+        $gameMap.spawnMapEventFrom(19, 3, plantRegion, false);
+      } else {
+        setTimeout(function(){
+          $gameMessage.add($gameVariables.value(15)+" level too low to plant "+value[choice]+"\n"+"Requires: "+$gameVariables.value(15)+" "+parseInt(choice+1));
+        }, 200)
+      }
     }
     if (choice == 3) {
-      $gameMap.spawnMapEventFrom(19, 4, 11, false);
+      if ($gameVariables.value(ProfBuild.parameters.HomesteaderLVL) > choice) {
+        $gameMap.spawnMapEventFrom(19, 4, plantRegion, false);
+      } else {
+        setTimeout(function(){
+          $gameMessage.add($gameVariables.value(15)+" level too low to plant "+value[choice]+"\n"+"Requires: "+$gameVariables.value(15)+" "+parseInt(choice+1));
+        }, 200)
+      }
     }
     if (choice == -1) {
       return;
