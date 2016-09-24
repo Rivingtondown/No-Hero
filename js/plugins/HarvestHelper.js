@@ -48,65 +48,76 @@ Game_System.prototype.createHarvestable = function (value, eventID, mapID) {
   HarvestLvl = parseInt(value[0]); //level of the plant you're harvesting
   HarvestItem = parseInt(value[1]); //item code of the plant you're harvesting
 
-  if (HarvestType == "Forage") {
-    //if you're foraging
-    ProfType = "Foraging"; //string for messages
-    ProfXPVar = 6; //in-game forage xp variable number
-    ProfLvlVar = 7; //in-game forage lvl variable number
-    ;
+  switch(HarvestType) {
+    case "Crop":
+      ProfType = $gameVariables.value(15); //string for messages
+      ProfXPVar = ProfBuild.parameters.HomesteaderXP; //in-game Homesteader xp variable number
+      ProfLvlVar = ProfBuild.parameters.HomesteaderLVL; //in-game Homesteader lvl variable number
+      break;
+    case "Wood":
+      ProfType = $gameVariables.value(19);
+      ProfXPVar = ProfBuild.parameters.EngineerXP;
+      ProfLvlVar = ProfBuild.parameters.EngineerLVL;
+      break;
+    case "Forage":
+      ProfType = "Foraging"; //string for messages
+      ProfXPVar = 6;
+      ProfLvlVar = 7;
   }
-  if (HarvestType == "Crop") {
-    //if you're farming
-    ProfType = $gameVariables.value(15); //string for messages
-    ProfXPVar = ProfBuild.parameters.HomesteaderXP; //in-game Homesteader xp variable number
-    ProfLvlVar = ProfBuild.parameters.HomesteaderLVL; //in-game Homesteader lvl variable number
-  }
+
   ProfXP = $gameVariables.value(ProfXPVar); //in-game profession xp quick value
   ProfLvl = $gameVariables.value(ProfLvlVar); //in-game profession lvl quick value
 
   console.log("Trying to harvest... " + ProfType + " Lvl:" + ProfLvl + " / Harvest Lvl:" + HarvestLvl);
 
-  if (HarvestType == "Forage" && HarvestLvl > ProfLvl) {
-    //if you're foraging AND the plant is higher level than your foraging lvl
-    $gameMessage.add( //create a message
-    ProfType + " level too low to forage "+$gameMap.event(eventID).event().name.toLowerCase()+"\n" + "Required level: " + HarvestLvl + "\n" + "Current level: " + ProfLvl + "\n");
-    return; //cancel out of the script
-  } else {
-    //otherwise, assuming your are either farming or you're foraging but the plant is not higher level
-    calculateItems(ProfLvl, HarvestItem); //generate the items and give them to the player
-    calculateExp(HarvestLvl, ProfLvl); //calculate experience and level ups for the player's profession
-    if (HarvestType == "Forage") {
-      //if you're foraging
-      $gameSelfSwitches.setValue([mapID, eventID, "A"], true); //switch plant to self switch A, which should delete the event
+  if (HarvestType == "Forage" || HarvestType == "Crop") {
+    if (HarvestType == "Forage" && HarvestLvl > ProfLvl) {
+      //if you're foraging AND the plant is higher level than your foraging lvl
+      $gameMessage.add( //create a message
+      ProfType + " level too low to forage "+$gameMap.event(eventID).event().name.toLowerCase()+"\n" + "Required level: " + HarvestLvl + "\n" + "Current level: " + ProfLvl + "\n");
+      return; //cancel out of the script
+    } else {
+      //otherwise, assuming your are either farming or you're foraging but the plant is not higher level
+      calculateItems(ProfLvl, HarvestItem); //generate the items and give them to the player
+      calculateExp(HarvestLvl, ProfLvl); //calculate experience and level ups for the player's profession
+      if (HarvestType == "Forage") {
+        //if you're foraging
+        $gameSelfSwitches.setValue([mapID, eventID, "A"], true); //switch plant to self switch A, which should delete the event
+      }
     }
   }
 
   function calculateItems(level, item) {
     var bonusSuccess = 0; //base chance for bonus success
-    if (HarvestType == "Forage") {
-      //if you are foraging
-      HarvestYield = Math.floor(Math.random() * Math.min(4, level)) + 1; //calculate yield based on item level
-      if (ProfLvl > HarvestLvl) {
-        //if you have a higher forage lvl than the harvest lvl
-        var random = Math.random();
-        bonusSuccess = (ProfLvl - HarvestLvl) * 10; //generate percentage chance based on level difference
-        if (random < bonusSuccess) {
-          //if you suceed at that chance
-          AudioManager.playSe({ name: "Item3", volume: 100, pitch: 100, pan: 0, pos: 0 }); //play bonus gain sfx
-          $gameParty.gainItem($dataItems[3], 1); //gain bonus item
-          console.log("Gained 1 bonus item with a " + bonusSuccess + "% chance");
+    switch (HarvestType) {
+      case "Forage":
+        //if you are foraging
+        HarvestYield = Math.floor(Math.random() * Math.min(4, level)) + 1; //calculate yield based on item level
+        if (ProfLvl > HarvestLvl) {
+          //if you have a higher forage lvl than the harvest lvl
+          var random = Math.random();
+          bonusSuccess = (ProfLvl - HarvestLvl) * 10; //generate percentage chance based on level difference
+          if (random < bonusSuccess) {
+            //if you suceed at that chance
+            AudioManager.playSe({ name: "Item3", volume: 100, pitch: 100, pan: 0, pos: 0 }); //play bonus gain sfx
+            $gameParty.gainItem($dataItems[3], 1); //gain bonus item
+            console.log("Gained 1 bonus item with a " + bonusSuccess + "% chance");
+          }
         }
-      }
+        break;
+      case "Crop":
+        //if you are harvesting a crop
+        if (ProfLvl - HarvestLvl == 0) {
+          //if profession level is only one and you try to harvest a level one crop
+          HarvestYield = 1; //set the yield to one so it isn't zero
+        } else {
+          HarvestYield = Math.min(4, ProfLvl - HarvestLvl + 1); //otherwise yield is the level difference to a maximum of 4
+        }
+        break;
+      case "Wood":
+        break;
     }
-    if (HarvestType == "Crop") {
-      //if you are harvesting a crop
-      if (ProfLvl - HarvestLvl == 0) {
-        //if profession level is only one and you try to harvest a level one crop
-        HarvestYield = 1; //set the yield to one so it isn't zero
-      } else {
-        HarvestYield = Math.min(4, ProfLvl - HarvestLvl + 1); //otherwise yield is the level difference to a maximum of 4
-      }
-    }
+
     $gameParty.gainItem($dataItems[HarvestItem], HarvestYield); //gain the items you were foraging or harvesting in the correct yield
     console.log("Gained " + HarvestYield + " regular item with id:" + HarvestItem);
   }
