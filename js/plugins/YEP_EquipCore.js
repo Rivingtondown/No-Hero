@@ -11,7 +11,7 @@ Yanfly.Equip = Yanfly.Equip || {};
 
 //=============================================================================
  /*:
- * @plugindesc v1.11 Allows for the equipment system to be more flexible to
+ * @plugindesc v1.15 Allows for the equipment system to be more flexible to
  * allow for unique equipment slots per class.
  * @author Yanfly Engine Plugins
  *
@@ -25,6 +25,7 @@ Yanfly.Equip = Yanfly.Equip || {};
  *
  * @param Finish Command
  * @desc The command text used for exiting the equip scene.
+ * Leave empty to not include this command.
  * @default Finish
  *
  * @param Remove Text
@@ -158,6 +159,21 @@ Yanfly.Equip = Yanfly.Equip || {};
  * ============================================================================
  * Changelog
  * ============================================================================
+ *
+ * Version 1.15:
+ * - Optimization update.
+ *
+ * Version 1.14:
+ * - Added an actor refresh upon listing the various equip slots to ensure that
+ * all slots are updated in case any cache'd instances may have been missed.
+ *
+ * Version 1.13:
+ * - Fixed a bug that caused a crash for those who weren't using the Item Core
+ * in addition to this plugin.
+ *
+ * Version 1.12:
+ * - Added optional functionality. Leaving 'Finish Command' empty will remove
+ * it from being added to the command list.
  *
  * Version 1.11:
  * - Updated for RPG Maker MV version 1.1.0.
@@ -578,6 +594,7 @@ Window_EquipCommand.prototype.addCustomCommand = function() {
 };
 
 Window_EquipCommand.prototype.addFinishCommand = function() {
+    if (Yanfly.Param.EquipFinishCmd === '') return;
     this.addCommand(Yanfly.Param.EquipFinishCmd, 'cancel');
 };
 
@@ -589,6 +606,11 @@ Yanfly.Equip.Window_EquipSlot_setActor = Window_EquipSlot.prototype.setActor;
 Window_EquipSlot.prototype.setActor = function(actor) {
     this.setSlotNameWidth(actor);
     Yanfly.Equip.Window_EquipSlot_setActor.call(this, actor);
+};
+
+Window_EquipSlot.prototype.refresh = function() {
+    if (this._actor) this._actor.refresh();
+    Window_Selectable.prototype.refresh.call(this);
 };
 
 Window_EquipSlot.prototype.isEnabled = function(index) {
@@ -1000,12 +1022,13 @@ Scene_Equip.prototype.onItemOk = function() {
 Yanfly.Equip.Scene_Equip_onItemCancel = Scene_Equip.prototype.onItemCancel;
 Scene_Equip.prototype.onItemCancel = function() {
     Yanfly.Equip.Scene_Equip_onItemCancel.call(this);
+    this._compareWindow.setTempActor(null);
     this._itemWindow.hide();
 };
 
 Scene_Equip.prototype.update = function() {
     Scene_MenuBase.prototype.update.call(this);
-    this.updateLowerRightWindowTriggers()
+    if (this.isActive()) this.updateLowerRightWindowTriggers();
 };
 
 Scene_Equip.prototype.updateLowerRightWindowTriggers = function() {
@@ -1059,6 +1082,13 @@ Scene_Equip.prototype.unshiftLowerRightWindows = function() {
 Scene_Equip.prototype.playLowerRightWindowSound = function() {
     if (this._lowerRightWindows.length <= 1) return;
     SoundManager.playCursor();
+};
+
+Yanfly.Equip.Scene_Equip_onActorChange = Scene_Equip.prototype.onActorChange;
+Scene_Equip.prototype.onActorChange = function() {
+    Yanfly.Equip.Scene_Equip_onActorChange.call(this);
+    this._compareWindow.setTempActor(null);
+    if (this._infoWindow) this._infoWindow.setItem(null);
 };
 
 //=============================================================================

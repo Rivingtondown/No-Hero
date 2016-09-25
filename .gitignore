@@ -4,6 +4,7 @@ movies/*
 audio/*
 fonts/*
 !img/pictures
+data/Test_*.json
 
 #############
 ## Windows detritus

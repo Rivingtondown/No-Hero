@@ -11,7 +11,7 @@ Yanfly.EqReq = Yanfly.EqReq || {};
 
 //=============================================================================
  /*:
- * @plugindesc v1.01 (Requires YEP_EquipCore.js) Place requirements on
+ * @plugindesc v1.05a (Requires YEP_EquipCore.js) Place requirements on
  * pieces of equipment before actors can use them!
  * @author Yanfly Engine Plugins
  *
@@ -207,6 +207,19 @@ Yanfly.EqReq = Yanfly.EqReq || {};
  * Changelog
  * ============================================================================
  *
+ * Version 1.05a:
+ * - Fixed a bug that caused unremovable items to be removed.
+ * - Added anti-crash for non-existent actors.
+ *
+ * Version 1.04:
+ * - Fixed a bug that caused stat comparisons to remain after cancel.
+ *
+ * Version 1.03:
+ * - Notetags now allows spaces (whitespace) to be before the requirements.
+ *
+ * Version 1.02:
+ * - Fixed a bug where Optimize was able to bypass equip requirements.
+ *
  * Version 1.01:
  * - Updated for RPG Maker MV version 1.1.0.
  *
@@ -379,6 +392,7 @@ DataManager.makeEquipRequirement = function(obj, line) {
 };
 
 DataManager.getEquipRequirementStatIndex = function(stat) {
+  stat = stat.trim();
   if (['MAX HP', 'MAXHP', 'HP'].contains(stat)) {
     return 0;
   } else if (['MAX MP', 'MAXMP', 'MP', 'MAX SP', 'MAXSP',
@@ -417,8 +431,10 @@ Game_BattlerBase.prototype.canEquip = function(item) {
     var value = Yanfly.EqReq.Game_BattlerBase_canEquip.call(this, item);
     if (!value) return false;
     if (BattleManager.isBattleTest() && Yanfly.Param.EqReqBTest) return value;
-    if (SceneManager._scene instanceof Scene_Equip) return value;
-    if (this._equipReq !== undefined) return this._equipReq;
+    if (!$gameTemp._optimizing) {
+      if (SceneManager._scene instanceof Scene_Equip) return value;
+      if (this._equipReq !== undefined) return this._equipReq;
+    }
     this._equipReq = this.meetAllEquipRequirements(item)
     return this._equipReq;
 };
@@ -544,12 +560,12 @@ Window_EquipSlot.prototype.updateHelp = function() {
 // Window_EquipItem
 //=============================================================================
 
-Yanfly.EqReqWindow_EquipItem_isEnabled = Window_EquipItem.prototype.isEnabled;
+Yanfly.EqReq.Window_EquipItem_isEnabled = Window_EquipItem.prototype.isEnabled;
 Window_EquipItem.prototype.isEnabled = function(item) {
     if (item !== null && this._actor) {
       if (!this._actor.meetAllEquipRequirements(item)) return false;
     }
-    return Yanfly.EqReqWindow_EquipItem_isEnabled.call(this);;
+    return Yanfly.EqReq.Window_EquipItem_isEnabled.call(this, item);
 };
 
 Window_EquipItem.prototype.setRequirementWindow = function(target) {
@@ -613,6 +629,8 @@ Window_EquipRequirement.prototype.drawDarkRect = function(dx, dy, dw, dh) {
 
 Window_EquipRequirement.prototype.refresh = function() {
     this.contents.clear();
+    this.checkActor();
+    if (!this._actor) return;
     var length = Math.ceil(this.contents.height / this.lineHeight());
     for (var i = 0; i < length; ++i) {
       this.drawItem(i);
@@ -620,6 +638,11 @@ Window_EquipRequirement.prototype.refresh = function() {
     if (!this._item) return;
     var dy = this.drawRequirementTitle();
     if (this.drawRequirements(dy) === dy) this.drawNoRequirements(dy);
+};
+
+Window_EquipRequirement.prototype.checkActor = function() {
+    if (this._actor) return;
+    this.setActor(SceneManager._scene._actor);
 };
 
 Window_EquipRequirement.prototype.drawItem = function(index) {
@@ -889,7 +912,9 @@ Scene_Equip.prototype.refreshActor = function() {
 Yanfly.EqReq.Scene_Equip_commandOptimize =
     Scene_Equip.prototype.commandOptimize;
 Scene_Equip.prototype.commandOptimize = function() {
+    $gameTemp._optimizing = true;
     Yanfly.EqReq.Scene_Equip_commandOptimize.call(this);
+    $gameTemp._optimizing = false;
     if (this._requirementWindow) this._requirementWindow.refresh();
 };
 
@@ -913,7 +938,7 @@ Scene_Equip.prototype.createRequirementWindow = function() {
 
 Yanfly.EqReq.Scene_Equip_onSlotCancel = Scene_Equip.prototype.onSlotCancel;
 Scene_Equip.prototype.onSlotCancel = function() {
-    Yanfly.Equip.Scene_Equip_onSlotCancel.call(this);
+    Yanfly.EqReq.Scene_Equip_onSlotCancel.call(this);
     if (this._requirementWindow) this._requirementWindow.setItem(null);
 };
 
