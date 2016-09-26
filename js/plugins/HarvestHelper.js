@@ -37,6 +37,8 @@ var ProfLvlVar = null;
 var ProfType = null;
 var mapID = null;
 var eventID = null;
+var verb = null;
+var numOfItems = null;
 
 Harvest.HD.GameSystem_initialize = Game_System.prototype.initialize;
 Game_System.prototype.initialize = function () {
@@ -47,20 +49,24 @@ Game_System.prototype.createHarvestable = function (value, eventID, mapID) {
   HarvestType = value.shift(); //set harvest type (crop or forage) while shifting value array
   HarvestLvl = parseInt(value[0]); //level of the plant you're harvesting
   HarvestItem = parseInt(value[1]); //item code of the plant you're harvesting
+  numOfItems = parseInt(value[2]) || null;
 
   switch(HarvestType) {
     case "Crop":
       ProfType = $gameVariables.value(15); //string for messages
+      verb = "harvest";
       ProfXPVar = ProfBuild.parameters.HomesteaderXP; //in-game Homesteader xp variable number
       ProfLvlVar = ProfBuild.parameters.HomesteaderLVL; //in-game Homesteader lvl variable number
       break;
     case "Wood":
-      ProfType = $gameVariables.value(19);
-      ProfXPVar = ProfBuild.parameters.EngineerXP;
-      ProfLvlVar = ProfBuild.parameters.EngineerLVL;
+      ProfType = "Forage";
+      verb = "chop";
+      ProfXPVar = 6;
+      ProfLvlVar = 7;
       break;
     case "Forage":
-      ProfType = "Forage"; //string for messages
+      ProfType = "Forage";
+      verb = "forage";
       ProfXPVar = 6;
       ProfLvlVar = 7;
   }
@@ -70,22 +76,20 @@ Game_System.prototype.createHarvestable = function (value, eventID, mapID) {
 
   console.log("Trying to harvest... " + ProfType + " Lvl:" + ProfLvl + " / Harvest Lvl:" + HarvestLvl);
 
-  if (HarvestType == "Forage" || HarvestType == "Crop") {
-    if (HarvestType == "Forage" && HarvestLvl > ProfLvl) {
+    if (HarvestLvl > ProfLvl) {
       //if you're foraging AND the plant is higher level than your foraging lvl
       $gameMessage.add( //create a message
-      ProfType + " level too low to forage "+$gameMap.event(eventID).event().name.toLowerCase()+"\n" + "Required level: " + HarvestLvl + "\n" + "Current level: " + ProfLvl + "\n");
+      ProfType + " level too low to "+verb+" "+$gameMap.event(eventID).event().name.toLowerCase()+"\n" + "Required level: " + HarvestLvl + "\n" + "Current level: " + ProfLvl + "\n");
       return; //cancel out of the script
     } else {
-      //otherwise, assuming your are either farming or you're foraging but the plant is not higher level
-      calculateItems(ProfLvl, HarvestItem); //generate the items and give them to the player
+      //otherwise, the plant is not higher level
+      calculateItems(ProfLvl, HarvestItem, numOfItems); //generate the items and give them to the player
       $gameSystem.gainHarvestXP(ProfType, HarvestLvl, ProfLvl); //calculate experience and level ups for the player's profession
       if (HarvestType == "Forage") {
         //if you're foraging
         $gameSelfSwitches.setValue([mapID, eventID, "A"], true); //switch plant to self switch A, which should delete the event
       }
     }
-  }
 
   function calculateItems(level, item) {
     var bonusSuccess = 0; //base chance for bonus success
@@ -115,6 +119,9 @@ Game_System.prototype.createHarvestable = function (value, eventID, mapID) {
         }
         break;
       case "Wood":
+
+        HarvestYield = numOfItems;
+
         break;
     }
     $gameParty.gainItem($dataItems[HarvestItem], HarvestYield); //gain the items you were foraging or harvesting in the correct yield
