@@ -23,7 +23,7 @@
  craftLevel:1
  success:100
  successGain:1
- xp:25
+ xp:20
  xpDeprac:5
  known:false
 <recipe2>

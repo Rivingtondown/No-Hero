@@ -30,77 +30,87 @@ var ProfBuild = ProfBuild || {};
 * @default 0
 *
 * @param ThiefXP
-* @desc The variable used to store Homesteader level
+* @desc The variable used to store Thief experience
 * Default 0
 * @default 0
 *
 * @param ThiefLVL
-* @desc The variable used to store Homesteader level
+* @desc The variable used to store Thief level
 * Default 0
 * @default 0
 *
 * @param ThiefSKL
-* @desc The variable used to store Homesteader level
+* @desc The variable used to store Thief skill
 * Default 0
 * @default 0
 *
 * @param AristocratXP
-* @desc The variable used to store Homesteader level
+* @desc The variable used to store Aristocrat experience
 * Default 0
 * @default 0
 *
 * @param AristocratLVL
-* @desc The variable used to store Homesteader level
+* @desc The variable used to store Aristocrat level
 * Default 0
 * @default 0
 *
 * @param AristocratSKL
-* @desc The variable used to store Homesteader level
+* @desc The variable used to store Aristocrat skill
 * Default 0
 * @default 0
 *
 * @param MagicianXP
-* @desc The variable used to store Homesteader experience
+* @desc The variable used to store Magician experience
 * Default 0
 * @default 0
 *
 * @param MagicianLVL
-* @desc The variable used to store Homesteader level
+* @desc The variable used to store Magician level
 * Default 0
 * @default 0
 *
 * @param MagicianSKL
-* @desc The variable used to store Homesteader level
+* @desc The variable used to store Magician skill
 * Default 0
 * @default 0
 *
 * @param EngineerXP
-* @desc The variable used to store Homesteader level
+* @desc The variable used to store Engineer experience
 * Default 0
 * @default 0
 *
 * @param EngineerLVL
-* @desc The variable used to store Homesteader level
+* @desc The variable used to store Engineer level
 * Default 0
 * @default 0
 *
 * @param EngineerSKL
-* @desc The variable used to store Homesteader level
+* @desc The variable used to store Engineer skill
 * Default 0
 * @default 0
 *
 * @param HunterXP
-* @desc The variable used to store Homesteader level
+* @desc The variable used to store Hunter experience
 * Default 0
 * @default 0
 *
 * @param HunterLVL
-* @desc The variable used to store Homesteader level
+* @desc The variable used to store Hunter level
 * Default 0
 * @default 0
 *
 * @param HunterSKL
-* @desc The variable used to store Homesteader level
+* @desc The variable used to store Hunter skill
+* Default 0
+* @default 0
+*
+* @param ForageXP
+* @desc The variable used to store Foraging experience
+* Default 0
+* @default 0
+*
+* @param ForageLVL
+* @desc The variable used to store Foraging level
 * Default 0
 * @default 0
 *
@@ -130,7 +140,8 @@ ProfBuild.parameters.HunterXP = Number(ProfBuild.parameters['HunterXP'] || '0');
 ProfBuild.parameters.HunterLVL = Number(ProfBuild.parameters['HunterLVL'] || '0');
 ProfBuild.parameters.HunterSKL = Number(ProfBuild.parameters['HunterSKL'] || '0');
 
-
+ProfBuild.parameters.ForageXP = Number(ProfBuild.parameters['ForageXP'] || '0');
+ProfBuild.parameters.ForageLVL = Number(ProfBuild.parameters['ForageLVL'] || '0');
 
 function Profession(xpVar, lvlVar, sklVar, helpText) {
   this.xpVar = xpVar;
@@ -158,7 +169,9 @@ Game_System.prototype.initialize = function () {
       var thisGameVar = i+15;
       $gameVariables.setValue(thisGameVar, ProfessionNames[i]);
     }
+    $gameVariables.setValue(39, $gameParty.getCraftLevel("Cooking"));
   },1000)
+
 };
 Game_System.prototype.ProfHelp = function (helpType, profession) {
   if (helpType == "tutorial") {

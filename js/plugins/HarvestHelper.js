@@ -60,7 +60,7 @@ Game_System.prototype.createHarvestable = function (value, eventID, mapID) {
       ProfLvlVar = ProfBuild.parameters.EngineerLVL;
       break;
     case "Forage":
-      ProfType = "Foraging"; //string for messages
+      ProfType = "Forage"; //string for messages
       ProfXPVar = 6;
       ProfLvlVar = 7;
   }
@@ -79,7 +79,7 @@ Game_System.prototype.createHarvestable = function (value, eventID, mapID) {
     } else {
       //otherwise, assuming your are either farming or you're foraging but the plant is not higher level
       calculateItems(ProfLvl, HarvestItem); //generate the items and give them to the player
-      calculateExp(HarvestLvl, ProfLvl); //calculate experience and level ups for the player's profession
+      $gameSystem.gainHarvestXP(ProfType, HarvestLvl, ProfLvl); //calculate experience and level ups for the player's profession
       if (HarvestType == "Forage") {
         //if you're foraging
         $gameSelfSwitches.setValue([mapID, eventID, "A"], true); //switch plant to self switch A, which should delete the event
@@ -117,29 +117,28 @@ Game_System.prototype.createHarvestable = function (value, eventID, mapID) {
       case "Wood":
         break;
     }
-
     $gameParty.gainItem($dataItems[HarvestItem], HarvestYield); //gain the items you were foraging or harvesting in the correct yield
     console.log("Gained " + HarvestYield + " regular item with id:" + HarvestItem);
   }
-
-  function calculateExp(experience, level) {
-    var toNextLvl = Math.pow(level + 1, 2) * 2; //Formula that generates xp to next profession level
-
-    ProfXP = $gameVariables.value(ProfXPVar) + experience; //add harvest level to profession xp
-    $gameVariables.setValue(ProfXPVar, ProfXP); //set that xp to in-game profession xp variable
-
-    if (ProfXP >= toNextLvl) {
-      //if you've gained enough profession xp level up profession lvl
-      ProfXP = toNextLvl - ProfXP; //reset profession xp, allowing carry over of extra xp into next level
-      $gameVariables.setValue(ProfXPVar, ProfXP); //set that profession xp variable in-game
-      ProfLvl = level + 1; //add 1 to profession lvl
-      $gameVariables.setValue(ProfLvlVar, ProfLvl); //set that level to in-game variable
-      $gameMessage.setPositionType(2); //set message to screen middle
-      AudioManager.playSe({ name: "Saint5", volume: 100, pitch: 100, pan: 0, pos: 0 }); //play profession level up sfx
-      $gameMessage.add(ProfType + " Level Increased to " + $gameVariables.value(ProfLvlVar) + "!"); //generate profession level up message
-    }
-  }
 };
+Game_System.prototype.gainHarvestXP = function(profession, experience, level) {
+  var toNextLvl = Math.pow(level + 1, 2) * 2; //Formula that generates xp to next profession level
+  var ProfXPVar = ProfBuild.parameters[profession+'XP'];
+  var ProfLvlVar = ProfBuild.parameters[profession+'LVL'];
+  var ProfXP =  $gameVariables.value(ProfXPVar) + experience; //add harvest level to profession xp
+  var ProfLvL =  $gameVariables.value(ProfLvlVar);
+  $gameVariables.setValue(ProfXPVar, ProfXP); //set that xp to in-game profession xp variable
+  if (ProfXP >= toNextLvl) {
+    //if you've gained enough profession xp level up profession lvl
+    ProfXP = toNextLvl - ProfXP; //reset profession xp, allowing carry over of extra xp into next level
+    $gameVariables.setValue(ProfXPVar, ProfXP); //set that profession xp variable in-game
+    ProfLvl = level + 1; //add 1 to profession lvl
+    $gameVariables.setValue(ProfLvlVar, ProfLvl); //set that level to in-game variable
+    $gameMessage.setPositionType(2); //set message to screen middle
+    AudioManager.playSe({ name: "Saint5", volume: 100, pitch: 100, pan: 0, pos: 0 }); //play profession level up sfx
+    $gameMessage.add(profession + " level increased to " + $gameVariables.value(ProfLvlVar) + "!"); //generate profession level up message
+  }
+}
 Game_System.prototype.plowPlot = function (value, eventID, mapID) {
   HarvestType = value.shift(); //shift value array over
   HarvestLvl = parseInt(value[0]); //level of the crop you're harvesting

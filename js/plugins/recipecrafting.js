@@ -45,7 +45,7 @@
  * @param Menu Craft Options
  * @desc Whether to allow crafting from menu (off, view, craft)
  * @default craft
- * 
+ *
  * @param Display Parameters
  * @desc Include/exclude various details from the recipe window
  * @default gold:true, chance:true, plevel:true, clevel:true, exp:true
@@ -61,7 +61,7 @@
  * @param Required Material Text
  * @desc Change Required Materials text. (default - Required materials:)
  * @default Required materials:
- * 
+ *
  * @param Returned Material Text
  * @desc Change Returned Materials text. Reverse crafting (default - Returned materials:)
  * @default Returned materials:
@@ -92,7 +92,7 @@
  *
  * @param Crafting Failed
  * @desc Change Crafting Failed Text. (default - Crafting failed!)
- * @default Crafting failed! 
+ * @default Crafting failed!
  *
  * @param Dismantle Text
  * @desc Change Dismantle Text. (default - Dismantle)
@@ -169,13 +169,13 @@
  *  Recipes are to be created in a text file named Recipes.txt and placed in the
  *  /data folder of your project. If you notice there's no recipes you might have
  *  it in the wrong spot or not named right!
- * 
+ *
  *  <recipe#>
  *   name:recipeNameOverride
- *   result:{type:"itemtype", id:itemId, amount:numberCrafted}   
+ *   result:{type:"itemtype", id:itemId, amount:numberCrafted}
  *   <materials>                                 (itemtype is one of: "item","weapon",or "armor")
  *    {type:"itemtype", id:itemId, amount:numberRequired, cons:consumed?, rate:0-100, bonus:true/false}
- *    { + as many as you need }                          
+ *    { + as many as you need }
  *   <materials>
  *   category:CategoryOfCraft                           (Name i.e. Blacksmith)
  *   goldCost:costInGold                                (Number)
@@ -196,7 +196,7 @@
  *  Reverse recipes switch the result and materials value (costing results and returning materials)
  *   In reverse recipes the chance of receiveing a material is it's rate value.
  *  Bonus materials are materials that are obtained from dismantling (they are not included in crafting).
- * 
+ *
  *  Simplest recipe (example):
  *   <recipe1>
  *    recipe:{type:"armor", id:3, amount:1}
@@ -229,13 +229,13 @@
  */
 
 var $gameRecipes = null;
- 
+
 function Scene_Crafting() {
 		this.initialize.apply(this, arguments);
 	}
 Scene_Crafting.prototype = Object.create(Scene_MenuBase.prototype);
 Scene_Crafting.prototype.constructor = Scene_Crafting;
- 
+
 (function() {
 
 	var parameters = PluginManager.parameters('RecipeCrafting');
@@ -275,10 +275,10 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
     var colorCPV3 = Number(parameters['Success 40-60 Color'] || 21);
     var colorCPV4 = Number(parameters['Success 60-80 Color'] || 17);
     var colorCPV5 = Number(parameters['Success 80-100 Color'] || 29);
-	
+
 	var categoryEventName = "";
 	var craftingFromMenu = false;
-	
+
 	TextManager.getErrorDetails = function() {
 		if($gameMap) {
 			return "[Map: " + $gameMap._mapId + "] [Event: " + $gameMap._interpreter._eventId + "] : \n"
@@ -316,7 +316,7 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 		$gameRecipes = recipes;
 	}
 	DataManager.createRecipeStruct = function(id, recipeData) {
-		if(!recipeData[1].match(/result:/)) { 
+		if(!recipeData[1].match(/result:/)) {
 			throw new Error("Recipe List: Recipe ID# " + id + " does not have a result.")
 		}
 		if(recipeData[1].match(/result:/g).length > 1) {
@@ -347,7 +347,7 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 		recipeStruct.returnRate = recipeData[1].match(/returnRate:(.+)/);
 		return recipeStruct;
 	}
-	
+
 	function Recipe() {
 		this.initialize.apply(this, arguments);
 	}
@@ -380,14 +380,14 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 		this._known = (recipe.known ? recipe.known[1] : "true").toLowerCase() == "true";
 		this._reverse = (recipe.reverse ? recipe.reverse[1] : "true").toLowerCase() == "true";
 	}
-	Recipe.prototype.name = function(reverse) { 
-		return reverse ? reversePrefix + this._result.name() : this._name ? this._name : this._result.name(); 
+	Recipe.prototype.name = function(reverse) {
+		return reverse ? reversePrefix + this._result.name() : this._name ? this._name : this._result.name();
 	}
 	Recipe.prototype.hasMaterials = function(reverse) {
 		if(reverse) {
 			if($gameParty.numItemsCrafting(this._result._item) < 1) { return false; }
 		} else {
-			for(var i = 0;i < this._materials.length;i++) { 
+			for(var i = 0;i < this._materials.length;i++) {
 				var material = this._materials[i];
 				if(material._bonus) { continue; }
 				if($gameParty.numItemsCrafting(material._item) < material._amount) {return false;}
@@ -399,7 +399,7 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 	Recipe.prototype.hasCraftLevel = function() { return this._craftLevel <= $gameParty.craftLevel(this.categoryId());}
 	Recipe.prototype.hasLevel = function() { return this._level <= $gameParty.highestLevel() && this.hasCraftLevel();}
 	Recipe.prototype.craftable = function(reverse) { return this.hasGold() && this.hasMaterials(reverse) && this.hasLevel();}
-	Recipe.prototype.amountCraftable = function(reverse) { 
+	Recipe.prototype.amountCraftable = function(reverse) {
 		var amount = null;
 		if(reverse) {
 			return amount = $gameParty.numItemsCrafting(this._result._item);
@@ -413,7 +413,7 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 				} else {
 					amountNext = $gameParty.numItemsCrafting(material._item) >= material._amount ? 99 : 0
 				}
-				if(amount) { 
+				if(amount) {
 					if(amountNext < amount) {amount = amountNext;}
 				} else {
 					amount = amountNext;
@@ -452,8 +452,8 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 		if(reverse) {
 			for(var i = 0;i < this._materials.length;i++) {
 				var material = this._materials[i];
-				if(Math.random() < material._rate / 100) { 
-					$gameParty.gainItem(material._item, material.returnAmount()); 
+				if(Math.random() < material._rate / 100) {
+					$gameParty.gainItem(material._item, material.returnAmount());
 					newItem.push(material);
 				}
 			}
@@ -480,8 +480,8 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 	Recipe.prototype.known = function() {
 		return $gameParty.recipeKnown(this._id);
 	}
-	
-	function Material() { 
+
+	function Material() {
 		this.initialize.apply(this, arguments);
 	}
 	Material.prototype.initialize = function(material, rate) {
@@ -500,7 +500,7 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 	Material.prototype.returnAmount = function() {
 		return this._bonus ? this._amount : Math.round(Math.max(1,this._amount * (this._returnRate / 100)));
 	}
-	
+
 	var crafting_game_party_initialize = Game_Party.prototype.initialize;
 	Game_Party.prototype.initialize = function() {
 		crafting_game_party_initialize.call(this);
@@ -555,12 +555,17 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 	Game_Party.prototype.craftExpNext = function(id) {
 		var string = xpFormula.replace(/\lvl/g, this.craftLevel(id));
 		return eval(string);
-	} 
+	}
 	Game_Party.prototype.gainCraftExp = function(id, value) {
 		this._craftingExp[id] += value;
 		while(this.craftExp(id) >= this.craftExpNext(id)) {
 			this._craftingExp[id] -= this.craftExpNext(id);
 			this._craftingLevel[id]++;
+      $gameVariables.setValue(39, $gameParty.getCraftLevel("Cooking"));
+      $gameSystem.gainHarvestXP($gameVariables.value(15), this._craftingLevel[id]*3, $gameVariables.value(ProfBuild.parameters.HomesteaderLVL));
+      $gameMessage.add(
+        'Cooking leveled up! \n'+
+        $gameVariables.value(15)+': '+this._craftingLevel[id]*3+' experience gained toward profession');
 		}
 	}
 	Game_Party.prototype.gainCraftingExp = function(string, value) {
@@ -573,7 +578,7 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 			return this.numItems(item);
 		}
 	}
-	
+
 		var vlue_base_window_Window_Base_update = Window_Base.prototype.update;
 	Window_Base.prototype.update = function() {
 		vlue_base_window_Window_Base_update.call(this);
@@ -617,7 +622,7 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 	Window_Base.prototype.isScrollWindow = function() {
 		return false;
 	}
-	
+
 	function Window_RecipeList() {
 		this.initialize.apply(this, arguments);
 	}
@@ -641,7 +646,7 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 		if(!item.known()) { return false; }
 		if(!item.hasCraftLevel()) { return false; }
 		if(this._category == "all") {return true;}
-		if(this._category == dismantleText && item._reverse) { 
+		if(this._category == dismantleText && item._reverse) {
 			return item.craftable(true); }
 		return this._category == item._category;
 	}
@@ -718,7 +723,7 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 			this.drawText(string, x + iconBoxWidth, y, width - iconBoxWidth);
 		}
 	};
-	
+
 	function Window_RecipeDetail() {
 		this.initialize.apply(this, arguments);
 	}
@@ -858,7 +863,7 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 	Window_RecipeDetail.prototype.getRecipeGoldCost = function() {
 		return this._recipe._goldCost * this._confirmWindow._amount;
 	}
-	
+
 	function Window_RecipeConfirm() {
 		this.initialize.apply(this, arguments);
 	}
@@ -909,7 +914,7 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 		this._amountChanged = true;
 	}
 	Window_RecipeConfirm.prototype.amountChanged = function() {
-		if(this._amountChanged) { 
+		if(this._amountChanged) {
 			this._amountChanged = false;
 			return true;
 		}
@@ -920,7 +925,7 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 			this.processOk();
 		}
 	};
-	
+
 	Scene_Crafting.prototype.initialize = function() {
 		Scene_MenuBase.prototype.initialize.call(this);
 	}
@@ -928,7 +933,7 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 		Scene_MenuBase.prototype.create.call(this);
 		this._helpWindow = new Window_Help();
 		var width = Graphics.width / 2;
-		var height = Graphics.height - this._helpWindow.height; 
+		var height = Graphics.height - this._helpWindow.height;
 		this._listWindow = new Window_RecipeList(0,this._helpWindow.height+72,width,height-72*2);
 		this._listWindow.setHandler('ok',this.listSuccess.bind(this));
 		this._listWindow.setHandler('cancel',this.cancel.bind(this));
@@ -944,7 +949,7 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 		if(displayParam.gold) {
 			this._goldWindow = new Window_Gold();
 			this._goldWindow.width = width;
-			this._goldWindow.y = Graphics.height - 72; 
+			this._goldWindow.y = Graphics.height - 72;
 			this._goldWindow.x = width;
 		}
 		this._popupWindow = new Window_RecPopup();
@@ -1030,7 +1035,7 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 		this._listWindow.select(0);
 		this._listWindow.activate();
 	}
-	
+
 	function Scene_CraftingSpecific() {
 		this.initialize.apply(this, arguments);
 	}
@@ -1054,8 +1059,8 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 		this._listWindow.activate();
 	}
 	Scene_CraftingSpecific.prototype.cancel = function() { this.popScene(); }
-	
-	
+
+
 	function Window_RecCategory() {
 		this.initialize.apply(this, arguments);
 	}
@@ -1080,22 +1085,22 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 	}
 	Window_RecCategory.prototype.itemRectForText = function(index) {
 		var rect = this.itemRect(index);
-		rect.x += Window_Base._iconWidth;		
+		rect.x += Window_Base._iconWidth;
 		rect.width -= Window_Base._iconWidth;
 		return rect;
 	}
-	
+
 	function Window_RecPopup() {
 		this.initialize.apply(this, arguments);
 	}
 	Window_RecPopup.prototype = Object.create(Window_Selectable.prototype);
 	Window_RecPopup.prototype.constructor = Window_RecPopup;
 	Window_RecPopup.prototype.initialize = function() {
-		Window_Selectable.prototype.initialize.call(this, Graphics.width/2-this.windowWidth()/2,Graphics.height/2-this.windowHeight()/2,120,this.fittingHeight(1)); 
+		Window_Selectable.prototype.initialize.call(this, Graphics.width/2-this.windowWidth()/2,Graphics.height/2-this.windowHeight()/2,120,this.fittingHeight(1));
 		this.openness = 0;
 		this.deactivate();
 	}
-	Window_RecPopup.prototype.windowWidth = function() {return 120;} 
+	Window_RecPopup.prototype.windowWidth = function() {return 120;}
 	Window_RecPopup.prototype.windowHeight = function() {return this.fittingHeight(1);}
 	Window_RecPopup.prototype.setText = function(results, amount, reverse) {
 		this.contents.clear();
@@ -1117,7 +1122,7 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 				var item = containers[i][j];
 				var widthNew = 0;
 				if(item) {
-					var string = String(item[1]) + "x " + item[0].name + " " 
+					var string = String(item[1]) + "x " + item[0].name + " "
 					string += reverse ? dismantledText : craftedText;
 					texts.push([string,item[0].iconIndex]);
 					widthNew = this.textWidth(string) + Window_Base._iconWidth;
@@ -1157,7 +1162,7 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 			this.playBuzzerSound();
 		}
 	}
-	
+
 	function Window_RecGauge() {
 		this.initialize.apply(this, arguments);
 	}
@@ -1192,13 +1197,13 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 	Window_RecGauge.prototype.catIndex = function() {
 		return categoryNames.indexOf(this._category);
 	}
-	
+
 	var crafting_window_menucommand_addoriginalcommands = Window_MenuCommand.prototype.addOriginalCommands;
 	Window_MenuCommand.prototype.addOriginalCommands = function() {
 		crafting_window_menucommand_addoriginalcommands.call(this);
 		if(craftFromMenu != "off") { this.addCommand(craftingMenuString,"crafting"); }
 	}
-	
+
 	var crafting_scene_menu_createcommandwindow = Scene_Menu.prototype.createCommandWindow;
 	Scene_Menu.prototype.createCommandWindow = function() {
 		crafting_scene_menu_createcommandwindow.call(this);
@@ -1208,15 +1213,15 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 		craftingFromMenu = true;
 		SceneManager.push(Scene_Crafting);
 	}
-	
+
 	var RecipeCrafting_Game_Interpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
 	Game_Interpreter.prototype.pluginCommand = function(command, args) {
 		RecipeCrafting_Game_Interpreter_pluginCommand.call(this, command, args);
 		if(command === 'crafting') {
 			if(args[0] === 'call') {
 				categoryEventName = args[1]
-				if(categoryNames.indexOf(categoryEventName) >= 0) { 
-					SceneManager.push(Scene_CraftingSpecific); 
+				if(categoryNames.indexOf(categoryEventName) >= 0) {
+					SceneManager.push(Scene_CraftingSpecific);
 				} else {
 					throw new Error(TextManager.getErrorDetails() + "Incorrect category name");
 				}
@@ -1229,29 +1234,29 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 			}
 		}
 	}
-	
+
 	var recipe_game_party_gainItem = Game_Party.prototype.gainItem;
 	Game_Party.prototype.gainItem = function(item, amount, includeEquip) {
 		recipe_game_party_gainItem.call(this, item, amount, includeEquip);
 		if(item) {
 			var recipe = item.note.match(/<learn recipe (\d+)>/);
-			if(recipe) { 
+			if(recipe) {
 				if(amount > 0) {
 					console.log(recipe);
 					$gameParty.learnRecipe(Number(recipe[1]));
-				} else if (amount < 0) { 
+				} else if (amount < 0) {
 					$gameParty.forgetRecipe(Number(recipe[1]));
 				}
 			}
 		}
 	};
-	
+
 	var recipe_scene_load_onloadsuccess = Scene_Load.prototype.onLoadSuccess;
 	Scene_Load.prototype.onLoadSuccess = function() {
 		recipe_scene_load_onloadsuccess.call(this);
 		$gameParty.checkRecipeVariables();
 	};
-		
+
 	//YEP-ITEMCORE
 	Game_Party.prototype.numIndependentItems = function(item) {
 		if(!item) return null;
@@ -1274,8 +1279,8 @@ Scene_Crafting.prototype.constructor = Scene_Crafting;
 			return this.numItems(item);
 		}
 	}
-	
 
-	
-	
+
+
+
 })();
