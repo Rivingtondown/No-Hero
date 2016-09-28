@@ -89,6 +89,10 @@ Game_System.prototype.createHarvestable = function (value, eventID, mapID) {
         //if you're foraging
         $gameSelfSwitches.setValue([mapID, eventID, "A"], true); //switch plant to self switch A, which should delete the event
       }
+      if (HarvestType == "Crop") {
+        //if you're farming
+        $gameSelfSwitches.setValue([mapID, eventID, "D"], true); //switch plant to self switch D, which should delete the event
+      }
     }
 
   function calculateItems(level, item) {
