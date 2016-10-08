@@ -1072,7 +1072,27 @@
   null,
   null,
   null,
-  null,
+  [
+    {
+      "folder": "Light/",
+      "bitmap": "Floor Light A",
+      "hue": 0,
+      "x": 648,
+      "y": 625,
+      "z": 8,
+      "iconIndex": 0,
+      "anchorX": 0.5,
+      "anchorY": 1,
+      "scaleX": 100,
+      "scaleY": 200,
+      "blend": 1,
+      "opacity": 153,
+      "xFrames": 1,
+      "yFrames": 1,
+      "frameUpdate": 20,
+      "smooth": false
+    }
+  ],
   null,
   null,
   null,
