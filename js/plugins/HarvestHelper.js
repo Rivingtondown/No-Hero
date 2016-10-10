@@ -83,8 +83,6 @@ Game_System.prototype.createHarvestable = function (value, eventID, mapID) {
       return; //cancel out of the script
     } else {
       //otherwise, the plant is not higher level
-      calculateItems(ProfLvl, HarvestItem, numOfItems); //generate the items and give them to the player
-      $gameSystem.gainHarvestXP(ProfType, HarvestLvl, ProfLvl); //calculate experience and level ups for the player's profession
       if (HarvestType == "Forage") {
         //if you're foraging
         $gameSelfSwitches.setValue([mapID, eventID, "A"], true); //switch plant to self switch A, which should delete the event
@@ -93,40 +91,43 @@ Game_System.prototype.createHarvestable = function (value, eventID, mapID) {
         //if you're farming
         $gameSelfSwitches.setValue([mapID, eventID, "D"], true); //switch plant to self switch D, which should delete the event
       }
+      calculateItems(ProfLvl, HarvestItem, numOfItems); //generate the items and give them to the player
+      $gameSystem.gainHarvestXP(ProfType, HarvestLvl, ProfLvl); //calculate experience and level ups for the player's profession
+    }
+
+    function RandomInc(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
   function calculateItems(level, item) {
     var bonusSuccess = 0; //base chance for bonus success
-    switch (HarvestType) {
-      case "Forage":
-        //if you are foraging
-        HarvestYield = Math.floor(Math.random() * Math.min(4, level)) + 1; //calculate yield based on item level
-        if (ProfLvl > HarvestLvl) {
-          //if you have a higher forage lvl than the harvest lvl
-          var random = Math.random();
-          bonusSuccess = (ProfLvl - HarvestLvl) * 10; //generate percentage chance based on level difference
-          if (random < bonusSuccess) {
-            //if you suceed at that chance
-            AudioManager.playSe({ name: "Item3", volume: 100, pitch: 100, pan: 0, pos: 0 }); //play bonus gain sfx
-            $gameParty.gainItem($dataItems[3], 1); //gain bonus item
-            console.log("Gained 1 bonus item with a " + bonusSuccess + "% chance");
-          }
+    if (HarvestType == "Forage") {
+      HarvestYield = Math.floor(Math.random() * Math.min(4, level)) + 1; //calculate yield based on item level
+      if (ProfLvl > HarvestLvl) {
+        //if you have a higher forage lvl than the harvest lvl
+        var random = RandomInc(1,100); //generate percentage chance based on level difference
+        bonusSuccess = (ProfLvl - HarvestLvl)*10;
+        if (random <= bonusSuccess) {
+          //if you suceed at that chance
+          AudioManager.playSe({ name: "Item3", volume: 100, pitch: 100, pan: 0, pos: 0 }); //play bonus gain sfx
+          $gameParty.gainItem($dataItems[3], 1); //gain bonus item
+          console.log("Gained 1 bonus item with " + random+"/"+bonusSuccess);
         }
-        break;
-      case "Crop":
-        //if you are harvesting a crop
-        if (ProfLvl - HarvestLvl == 0) {
-          //if profession level is only one and you try to harvest a level one crop
-          HarvestYield = 1; //set the yield to one so it isn't zero
-        } else {
-          HarvestYield = Math.min(4, ProfLvl - HarvestLvl + 1); //otherwise yield is the level difference to a maximum of 4
-        }
-        break;
-      case "Wood":
-
-        HarvestYield = numOfItems;
-
-        break;
+      }
+    }
+    if (HarvestType == "Crop") {
+      //if you are harvesting a crop
+      if (ProfLvl - HarvestLvl == 0) {
+        //if profession level is only one and you try to harvest a level one crop
+        HarvestYield = 1; //set the yield to one so it isn't zero
+      } else {
+        HarvestYield = Math.min(4, ProfLvl - HarvestLvl + 1); //otherwise yield is the level difference to a maximum of 4
+      }
+    }
+    if (HarvestType == "Wood") {
+      HarvestYield = numOfItems;
     }
     $gameParty.gainItem($dataItems[HarvestItem], HarvestYield); //gain the items you were foraging or harvesting in the correct yield
     console.log("Gained " + HarvestYield + " regular item with id:" + HarvestItem);

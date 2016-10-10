@@ -88,3 +88,27 @@ Read the recipe book and make some bread for Kit.
  <rewards>
  <rewards>
 <quest4>
+
+
+<quest5>
+ name:Homeward Bound
+ level:1
+ difficulty:Easy
+ autoComplete:false
+ canAbandon:true
+ forceAccept:false
+ forceTurnin:false
+ qgiverName:Kit
+ location:Castle Kitchen
+ <description>
+Help Simon find his missing dogs, Cheeky and Squeaky.
+ <description>
+ <objectives>
+  {name:"Search for nearby clues", max:3, hidden:false }
+  {name:"Find the dogs in the NW Forest",max:1, hidden:true }
+ <objectives>
+ gold:150
+ exp:80
+ <rewards>
+ <rewards>
+<quest5>
