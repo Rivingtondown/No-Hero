@@ -19,7 +19,7 @@ null,
 {"id":17,"expanded":true,"name":"North West Forest","order":7,"parentId":0,"scrollX":816,"scrollY":757},
 {"id":18,"expanded":true,"name":"Castle","order":10,"parentId":0,"scrollX":817,"scrollY":453},
 {"id":19,"expanded":false,"name":"EVENTS","order":18,"parentId":0,"scrollX":817,"scrollY":461},
-{"id":20,"expanded":true,"name":"Castle Garden","order":15,"parentId":18,"scrollX":809,"scrollY":461},
+{"id":20,"expanded":true,"name":"Castle Garden","order":15,"parentId":18,"scrollX":809,"scrollY":499},
 {"id":21,"expanded":false,"name":"Castle Kitchen","order":11,"parentId":18,"scrollX":817,"scrollY":461},
 null,
 null,
@@ -34,5 +34,5 @@ null,
 {"id":32,"expanded":false,"name":"Fanfare","order":16,"parentId":18,"scrollX":817,"scrollY":461},
 {"id":33,"expanded":false,"name":"Farm Cabin","order":23,"parentId":14,"scrollX":819,"scrollY":461},
 {"id":34,"expanded":false,"name":"Overworld","order":19,"parentId":0,"scrollX":819,"scrollY":461},
-{"id":35,"expanded":false,"name":"Dungeon","order":17,"parentId":18,"scrollX":811,"scrollY":501}
+{"id":35,"expanded":false,"name":"Dungeon","order":17,"parentId":18,"scrollX":811,"scrollY":461}
 ]

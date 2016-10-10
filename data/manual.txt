@@ -1,0 +1,130 @@
+<main entries> Compendium; Time; Cooking; Items; Equipment;
+
+<name> Compendium
+<icon> 229
+<title> Compendium
+<picture> compendium
+<text>
+The compendium displays detailed instructions for every
+aspect of gameplay. Some entries may be expanded by clicking
+the action button on them.
+<end entry>
+
+<name> Time
+<icon> 244
+<title> Time
+# <picture>
+# <subentries>
+<text>
+There are four primary time periods: morning, daytime,
+nighttime, and midnight. Fertile plots are typically only
+available during the morning hours (7 - 11 AM).
+
+Crops take time to grow, the abundance of plants and fauna
+for foraging may change based on the time of day, and
+resources like well water may only be drawn every other
+day or two.
+<end entry>
+
+<name> Cooking
+<icon> 245
+<title> Cooking
+# <picture>
+# <subentries>
+<text>
+Cooking is how you turn your ingredients into something
+useful; whether it be a boon in combat or a friend's
+favorite meal. You need recipes to prepare meals though, so
+find them in \i[243] recipe books.
+<end entry>
+
+<name> Items
+<icon> 209
+<title> Items
+# <picture>
+<subentries> Prefixes; Suffixes;
+<text>
+Over the course of your travels you will collect hundreds of
+items. Various ingredients for cooking and alchemy, keys,
+equipment, and tools like the \i[217] gardening tools and
+\i[241] watering can make up only a fraction of the items
+you will find.
+
+Items may contain various tags and details so read their
+descriptions. A large majority of items can be used in
+combat but some are only accessible when you're in a safe
+location.
+
+Items, most often equipment, is often imbued with a suffix
+and a prefix. Learn more by expanding this entry.
+<end entry>
+
+<name> Equipment
+<icon> 132
+<title> Equipment
+# <picture>
+<subentries> Prefixes; Suffixes;
+<text>
+You can outfit your characters in various pieces of
+equipment to aid them in battle. Equip your gear by going to
+the menu and opening the Equip screen.
+
+Armor is divided into four categories; light, heavy, magic,
+and general. Each class can wear different armor from these
+categories. Warriors, for example, can wear heavy armor
+while Rogues may only be able to equip light armor. General
+armor is equipable by any class.
+
+Similarly, each class can only equip a subset of weapons.
+Generally a Rouge will be the one to equip daggers and
+blackjacks while your Warrior will be wielding an axe or
+sword. Ranged weapons and staves can only be equipped by
+those with the proper ability.
+
+Equipment is often imbued with a suffix and a prefix. Learn
+more about the various possibilities by expanding this
+entry.
+<end entry>
+
+<name> Prefixes
+<title> Item Prefixes
+<text>
+Some items, most commonly weapons and armor, are randomly
+generated with a set of prefixes that imbue special
+properties onto the item that may not necessarily be
+portrayed in the stats.
+
+\C[3]Crimson\C[0]: Bonus health.
+\C[3]Burning\C[0]: Hits with the element of fire.
+\C[3]Frozen\C[0]: Hits with the element of ice.
+\C[3]Static\C[0]: Hits with the element of lightning.
+\C[3]Viper\C[0]: Small chance to inflict Poison.
+\C[3]Vorpal\C[0]: Chance to debuff armor on hit.
+\C[3]Reliable\C[0]: Increased chance to hit.
+\C[3]Deflecting\C[0]: Increased chance to evade damage.
+
+\C[3]Sturdy\C[0]: Increased physical defense.
+\C[3]Cracked\C[0]: Decreased physical defense.
+\C[3]Reflective\C[0]: Increased magic defense.
+\C[3]Cursed\C[0]: Decreased magic attack and magic defense.
+<end entry>
+
+<name> Suffixes
+<title> Item Suffixes
+<text>
+Some items, most commonly weapons and armor are randomly
+generated with a suffixes. These suffixes imbue the
+item with additional stats that mirror the aspects of the
+animal.
+
+\C[3]Monkey\C[0]: Slight increase to agility.
+\C[3]Wolf\C[0]: Slight increase to physical attack.
+\C[3]Eagle\C[0]: Slight increase to magic attack.
+\C[3]Fox\C[0]: Slight increase to luck.
+\C[3]Owl\C[0]: Major increase to magic attack, major
+decrease to agility.
+\C[3]Badger\C[0]: Major increase to agility, major decrease
+to luck.
+\C[3]Ox\C[0]: Major increase to physical attack, major
+decrease to agility.
+<end entry>
