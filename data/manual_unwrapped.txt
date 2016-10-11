@@ -1,0 +1,149 @@
+<main entries> Compendium; Time; Professions; Items; Equipment;
+
+<name> Compendium
+<icon> 229
+<title> Compendium
+<picture> compendium
+<text>
+The compendium displays detailed instructions for every aspect of gameplay. Some entries may be expanded by clicking the action button on them.
+<end entry>
+
+<name> Time
+<icon> 244
+<title> Time
+# <subentries> Morning; Daytime; Nighttime; Midnight;
+<text>
+Time plays a large role in the world of \V[50]. Not only does the changing of time effect the lighting, various elements are tied to the passage of time.
+
+There are four primary time periods: morning, daytime, nighttime, and midnight. Each time period consists of six hours. Expand this entry to learn more about each period.
+
+\C[3]Morning\C[0]: Between the hours of 6 and 12.
+\C[3]Daytime\C[0]: Between the hours of 12 and 18.
+\C[3]Nighttime\C[0]: Between the hours of 18 and 24.
+\C[3]Midnight\C[0]: Between the hours of 24 and 6.
+
+The world will react to the dawning of these various time periods. Not only will the lighting change but NPCs will go about their schedule, going inside or out; crops will grow; fauna, plants, and other resources for foraging will appear and disappear, and resources like well water may replenish.
+
+When midnight strikes darkness will consume \V[50]. Being outside in the wild at those midnight hours is exceedingly dangerous so take caution and watch the clock on your HUD.
+<end entry>
+
+<name> Professions
+<icon> 79
+<title> Professions
+<subentries> Homesteader
+<text>
+Every citizens of \V[50] has a job whether it be as a lowly \V[15], a mischievous \V[16], or dashing \V[17]. All of your characters are assigned a profession that grants them skills
+and abilities that only they may execute. Professions are different from a character's class, which determine how they conduct themselves in combat. Professions mainly shine as you move about the world outside of combat.
+
+There are five professions to master in the world of \V[50]. Expand this entry to learn about each profession's abilities.
+
+\C[3]\V[15]\C[0]: Farming, Cooking, and Animal Husbandry.
+\C[3]\V[16]\C[0]: Sneaking, Stealing, and Quick Wits.
+\C[3]\V[21]\C[0]: Taming Animals, Beast Tongue, and Nature Sense.
+\C[3]\V[20]\C[0]: Masonry, Carpentry, and Blacksmithing.
+\C[3]\V[17]\C[0]: Nobility, Golden Tongue, and Merchandiser.
+
+As you obtain new party members you will gain access to these various professions and, in turn, their abilities. Using these abilities will grant you experience in that profession and eventual advancement in their respective guilds.
+
+Visiting these guilds and advancing through them will give you access to new quests, items, and even skills that may prove useful, even in combat.
+<end entry>
+
+<name> Homesteader
+<icon> 244
+<title> Homesteader
+# <picture>
+# <subentries>
+<text>
+\C[3]Farming\C[0]:
+Farming is how you generate ingredients from the land. Farming may only be performed on designated farm plots usually located within your home area. Different crops are available to plant at each different farm location and each crop requires a different level in your \V[15] profession.
+
+Once a crop is planted it may only be plowed in the \C[5]Morning\C[0], after which is must be watered. Plowing and watering crops require the \i[217] gardening tools and \i[241] watering can respectively, these tools will slowly degrade over time, either by literally breaking or running out of water. Using an anvil the player can spend one iron ingot to restore his \i[217] gardening tools and, using a well, the player can refill their \i[241] watering can. After a crop is watered it will begin growing.
+
+Reference the "Crops" page in your Adventurer's Guide Book from your game menu to learn about the various crops and their respective levels, yields, and grow times.
+
+\C[3]Cooking\C[0]:
+Cooking is how you turn your ingredients into something useful; whether it be a boon in combat or a friend's favorite meal. You need recipes to prepare meals though, so find them in \i[243] recipe books, obtain them through quests, or learn them through the \V[15] guild.
+
+\C[3]Animal Husbandry\C[0]:
+<end entry>
+
+<name> Items
+<icon> 209
+<title> Items
+# <picture>
+<subentries> Prefixes; Suffixes;
+<text>
+Over the course of your travels you will collect hundreds of items. Various ingredients for cooking and alchemy, keys, equipment, and tools like the \i[217] gardening tools and \i[241] watering can make up only a fraction of the items you will find.
+
+Items may contain various tags and details so read their descriptions. A large majority of items can be used in combat but some are only accessible when you're in a safe position.
+
+Items, most often equipment, is often imbued with a suffix and a prefix. Learn more about the suffix and prefix system by expanding this entry.
+<end entry>
+
+<name> Equipment
+<icon> 132
+<title> Equipment
+# <picture>
+<subentries> Prefixes; Suffixes;
+<text>
+You can outfit your characters in various pieces of equipment to aid them in battle. Equip your gear by going to the menu and opening the Equip screen.
+
+Armor is divided into four categories; light, heavy, magic, and general. Each class can wear different armor from these categories. Warriors, for example, can wear heavy armor while Rogues may only be able to equip light armor. General armor is equipable by any class.
+
+Similarly, each class can only equip a subset of weapons. Generally a Rouge will be the one to equip daggers and blackjacks while your Warrior will be wielding an axe or sword. Ranged weapons and staves can only be equipped by those with the proper ability.
+
+Equipment is often imbued with a suffix and a prefix. Learn more about the various possibilities by expanding this entry.
+<end entry>
+
+<name> Prefixes
+<title> Item Prefixes
+<text>
+Some items, most commonly weapons and armor, are randomly generated with a set of prefixes that imbue special properties onto the item that may not necessarily be portrayed in the stats.
+
+\C[3]Crimson\C[0]: Bonus health.
+\C[3]Burning\C[0]: Hits with the element of fire.
+\C[3]Frozen\C[0]: Hits with the element of ice.
+\C[3]Static\C[0]: Hits with the element of lightning.
+\C[3]Viper\C[0]: Small chance to inflict Poison.
+\C[3]Vorpal\C[0]: Chance to debuff armor on hit.
+\C[3]Reliable\C[0]: Increased chance to hit.
+\C[3]Deflecting\C[0]: Increased chance to evade damage.
+
+\C[3]Sturdy\C[0]: Increased physical defense.
+\C[3]Cracked\C[0]: Decreased physical defense.
+\C[3]Reflective\C[0]: Increased magic defense.
+\C[3]Cursed\C[0]: Decreased magic attack and magic defense.
+<end entry>
+
+<name> Suffixes
+<title> Item Suffixes
+<text>
+Some items, most commonly weapons and armor are randomly generated with a suffixes. These suffixes imbue the item with additional stats that mirror the aspects of the animal.
+
+\C[3]Monkey\C[0]: Slight increase to agility.
+\C[3]Wolf\C[0]: Slight increase to physical attack.
+\C[3]Eagle\C[0]: Slight increase to magic attack.
+\C[3]Fox\C[0]: Slight increase to luck.
+\C[3]Owl\C[0]: Major increase to magic attack, major decrease to agility.
+\C[3]Badger\C[0]: Major increase to agility, major decrease to luck.
+\C[3]Ox\C[0]: Major increase to physical attack, major decrease to agility.
+<end entry>
+
+<name> Light and Darkness Encounters
+<title> Light and Darkness Encounters
+<text>
+Random encounters with dangerous creatures await in the shadows. When wandering dangerous locations be wary of venturing into the darkness unless you're ready for a fight.
+
+\C[8]Dangerous Locations:\C[0]
+The world of \V[50] is made up of two types of locations, safe locations and dangerous locations. Dangerous locations are typically dungeons, caves, and other dark zones. These dangerous locations are covered in areas of darkness where random encounters can happen at any moment. Safe locations consist of every other map where random encounters are rare
+or more commonly non-existent. The game will prompt you when you are traversing between these two types of locations.
+
+\C[8]Darkness:\C[0]
+When in a dangerous location any area of the map not lit up by a light source is considered to be in "darkness". Areas in darkness are primed to initiate random encounters on the unsuspecting characters. Areas considered to be lit are the spaces adjacent to or on top of a light source, most typically torches and braziers. These lit areas are safe from random encounters.
+
+\C[8]The Lantern:\C[0]
+When walking in darkness your HUD will display the words "Darkness", this means that a random encounter could happen at any moment. To avoid random encounters while traversing the darkness you have access to a \i[100] lantern, which you can toggle with the L key. The lantern will need \i[100] Lantern Fuel to work but that fuel will slowly drain with every single step you take in the darkness, indicated by a gauge on your HUD. Walking within lit up areas will pause the consumption of fuel, while leaving a dangerous location will shut off your lantern entirely.
+
+\C[8]Wandering Enemies:\C[0]
+In addition to random encounters in the darkness there will also be more brazen enemies who wander dangerous locations in plain sight. These enemies are territorial in nature or on patrol, as they will chase and engage player characters they see who get too close. These enemies aren't afraid of the light and will engage the characters regardless of if they have their lantern on or are standing in a lit area. Being territorial, however, they usually won't give chase too far and can sometimes be outran or outmaneuvered.
+<end entry>
