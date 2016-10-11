@@ -153,3 +153,18 @@
  xpDeprac:5
  known:false
 <recipe10>
+
+<recipe11>
+ result:{type:"item", id:101, amount:1}
+ <materials>
+  {type:"item", id:1, amount:4}
+  {type:"item", id:24, amount:4}
+ <materials>
+ category:Cooking
+ craftLevel:1
+ success:100
+ successGain:1
+ xp:25
+ xpDeprac:5
+ known:false
+<recipe11>

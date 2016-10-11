@@ -89,7 +89,10 @@ Game_System.prototype.createHarvestable = function (value, eventID, mapID) {
       }
       if (HarvestType == "Crop") {
         //if you're farming
-        $gameSelfSwitches.setValue([mapID, eventID, "D"], true); //switch plant to self switch D, which should delete the event
+        $gameSelfSwitches.setValue([mapID, eventID, "A"], false);
+        $gameSelfSwitches.setValue([mapID, eventID, "B"], false);
+        $gameSelfSwitches.setValue([mapID, eventID, "C"], false);
+        $gameSelfSwitches.setValue([mapID, eventID, "D"], false); //Turn all self switches off so it returns to a fertile plot
       }
       calculateItems(ProfLvl, HarvestItem, numOfItems); //generate the items and give them to the player
       $gameSystem.gainHarvestXP(ProfType, HarvestLvl, ProfLvl); //calculate experience and level ups for the player's profession
