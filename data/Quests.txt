@@ -166,7 +166,7 @@ Help Simon find his missing dogs, Cheeky and Squeaky.
 <quest8>
  name:Goblin and the Bear
  level:5
- difficulty:Medium
+ difficulty:Easy
  autoComplete:false
  canAbandon:true
  forceAccept:false
@@ -174,8 +174,8 @@ Help Simon find his missing dogs, Cheeky and Squeaky.
  qgiverName:Injured Goblin, Ingerok
  location:Edge
  <description>
-Assist the injured goblin, maybe he will give you information
-about the others.
+Assist the injured goblin. He's agreed to give you info
+about the goblin attack.
  <description>
  <objectives>
   {name:"Craft a poultice",item:["item",101], max:1, hidden:false }
@@ -186,3 +186,29 @@ about the others.
  <rewards>
  <rewards>
 <quest8>
+
+<quest9>
+ name:Goblin and the Bear 2
+ level:7
+ difficulty:Medium
+ autoComplete:false
+ canAbandon:true
+ forceAccept:true
+ forceTurnin:false
+ qgiverName:Injured Goblin, Ingerok
+ location:Edge
+ <description>
+Ingerok has asked you to help him avenge his friend.
+ <description>
+ <objectives>
+  {name:"Find the bear's lair", max:1, hidden:false }
+  {name:"Set a trap for the bear, while it's out hunting for food",max:1, hidden:true }
+  {name:"Explore the cave while the bear is away",max:1, hidden:true }
+  {name:"Kill the bear",max:1, hidden:false }
+  {name:"Return to the goblin and confront him",max:1, hidden:true }
+ <objectives>
+ gold:250
+ exp:80
+ <rewards>
+ <rewards>
+<quest9>
