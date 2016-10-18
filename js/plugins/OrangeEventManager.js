@@ -102,6 +102,7 @@ var OrangeEventManager = OrangeEventManager || {};
             usedData[i] = selfSwitchData[i];
           }
         }
+        console.log(usedData);
 
         var mapId = parseInt(usedData[0].substr(2), 10);
         var eventId = parseInt(usedData[1], 10);
