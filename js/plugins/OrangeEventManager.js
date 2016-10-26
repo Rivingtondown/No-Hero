@@ -14,10 +14,10 @@
  * ============================================================================
  * Latest Version
  * ============================================================================
- * 
+ *
  * Get the latest version of this script on
  * http://link.hudell.com/event-manager
- * 
+ *
  *=============================================================================*/
 var Imported = Imported || {};
 var OrangeEventManager = OrangeEventManager || {};
@@ -102,7 +102,6 @@ var OrangeEventManager = OrangeEventManager || {};
             usedData[i] = selfSwitchData[i];
           }
         }
-        console.log(usedData);
 
         var mapId = parseInt(usedData[0].substr(2), 10);
         var eventId = parseInt(usedData[1], 10);
@@ -155,7 +154,7 @@ var OrangeEventManager = OrangeEventManager || {};
 
       return eval(callback);
     }
-    
+
     console.error("Unknown callback type: ", callback);
     return undefined;
   };
