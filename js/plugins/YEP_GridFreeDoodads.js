@@ -8,10 +8,11 @@ Imported.YEP_GridFreeDoodads = true;
 
 var Yanfly = Yanfly || {};
 Yanfly.GFD = Yanfly.GFD || {};
+Yanfly.GFD.version = 1.04;
 
 //=============================================================================
  /*:
- * @plugindesc v1.00 Place Grid-Free Doodads into your game using an
+ * @plugindesc v1.04 Place Grid-Free Doodads into your game using an
  * in-game editor. Static and animated doodads can be used!
  * @author Yanfly Engine Plugins
  *
@@ -25,6 +26,11 @@ Yanfly.GFD = Yanfly.GFD || {};
  * @param Doodads Smoothing
  * @desc Default smooth out doodad edges or give them hard edges?
  * SMOOTH - true     HARD - false
+ * @default false
+ *
+ * @param Alphabetical Settings
+ * @desc List doodad settings in alphabetical order?
+ * YES - true     NO - false
  * @default false
  *
  * @param ---Grid Snap---
@@ -286,6 +292,33 @@ Yanfly.GFD = Yanfly.GFD || {};
  *
  * And that's how you would go about the creation of an animated doodad. If
  * this is confusing, look at some of the examples provided from Yanfly.moe.
+ *
+ * ============================================================================
+ * Changelog
+ * ============================================================================
+ *
+ * Version 1.04:
+ * - Calculations made for previous version are now rounded upward instead of
+ * rounding down to accomodate for smoother screen scrolling.
+ *
+ * Version 1.03:
+ * - Adjusted calculations for grid-snapping when graphic resolutions aren't
+ * divisible by tile width or height.
+ *
+ * Version 1.02:
+ * - Made the height for certain setting options default to the height of the
+ * screen if the screen is too small to hold all the options.
+ * - Rearranged some settings in the settings menu to make it more optimal for
+ * the addition of new doodad settings options.
+ * - Added 'Alphabetical Settings' option to plugin parameters. This will turn
+ * the settings list for the doodads to flow in alphabetical order.
+ *
+ * Version 1.01:
+ * - Fixed a bug that caused doodads to overlap onto the other border of the
+ * map if it was clipped off.
+ *
+ * Version 1.00:
+ * - Finished Plugin!
  */
 //=============================================================================
 
@@ -300,6 +333,8 @@ Yanfly.Param = Yanfly.Param || {};
 
 Yanfly.Param.GFDFolder = String(Yanfly.Parameters['Doodads Folder']);
 Yanfly.Param.GFDSmooth = eval(String(Yanfly.Parameters['Doodads Smoothing']));
+Yanfly.Param.GFDAlphabet = String(Yanfly.Parameters['Alphabetical Settings']);
+Yanfly.Param.GFDAlphabet = eval(Yanfly.Param.GFDAlphabet);
 
 Yanfly.Param.GFDGridSnap = eval(String(Yanfly.Parameters['Default Grid Snap']));
 Yanfly.Param.GFDGridWidth = Number(Yanfly.Parameters['Grid Snap Width']);
@@ -339,7 +374,19 @@ Tilemap.prototype._compareChildOrder = function(a, b) {
 
 ImageManager.loadDoodad = function(filename, hue, smooth) {
   if (filename === 'IconSet') return ImageManager.loadSystem('IconSet');
-  return this.loadBitmap(Yanfly.Param.GFDFolder, filename, hue, smooth);
+  return this.loadDoodadBitmap(Yanfly.Param.GFDFolder, filename, hue, smooth);
+};
+
+ImageManager.loadDoodadBitmap = function(folder, filename, hue, smooth) {
+  if (filename) {
+    var path = folder + encodeURIComponent(filename) + '.png';
+    path = path.replace(/%2F/g, '/');
+    var bitmap = this.loadNormalBitmap(path, hue || 0);
+    bitmap.smooth = smooth;
+    return bitmap;
+  } else {
+    return this.loadEmptyBitmap();
+  }
 };
 
 if (Utils.RPGMAKER_VERSION && Utils.RPGMAKER_VERSION >= '1.3.0') {
@@ -478,16 +525,20 @@ Sprite_Doodad.prototype.screenX = function() {
   var value = this._data.x;
   var display = $gameMap._displayX;
   value -= display * this._tileWidth;
-  if (value + this.width < 0) value += this._mapWidth;
-  return Math.round(value);
+  if (value + this.width < 0 && $gameMap.isLoopHorizontal()) {
+    value += this._mapWidth;
+  }
+  return Math.ceil(value);
 };
 
 Sprite_Doodad.prototype.screenY = function() {
   var value = this._data.y;
   var display = $gameMap._displayY;
   value -= display * this._tileHeight;
-  if (value + this.height < 0) value += this._mapHeight;
-  return Math.round(value);
+  if (value + this.height < 0 && $gameMap.isLoopVertical()) {
+    value += this._mapHeight;
+  }
+  return Math.ceil(value);
 };
 
 Sprite_Doodad.prototype.clear = function() {
@@ -555,6 +606,20 @@ Spriteset_Map.prototype.addMapDoodads = function() {
     this._doodads.push(new Sprite_Doodad(doodadData));
     this._tilemap.addChild(this._doodads[i]);
   }
+};
+
+Spriteset_Map.prototype.clearDoodads = function() {
+  this.removeCurrentDoodads();
+};
+
+//=============================================================================
+// Scene_Map
+//=============================================================================
+
+Yanfly.GFD.Scene_Map_terminate = Scene_Map.prototype.terminate;
+Scene_Map.prototype.terminate = function() {
+  Yanfly.GFD.Scene_Map_terminate.call(this);
+  this._spriteset.clearDoodads();
 };
 
 //=============================================================================
@@ -669,11 +734,6 @@ DoodadManager.toggle = function() {
   if (!SceneManager._scene.isMap()) return;
   if ($gameTemp._modeGFD) return;
   if (SceneManager._scene._debugActive) return;
-  /*
-  if ($gameMap.isLoopHorizontal() || $gameMap.isLoopVertical()) {
-    return console.log('Doodad support for looping maps is not yet included.');
-  }
-  */
   $gameTemp._modeGFD = !$gameTemp._modeGFD;
   SceneManager._scene.toggleGFDWindows()
 };
@@ -780,6 +840,7 @@ Graphics._onKeyDown = function(event) {
 };
 
 DoodadManager.keyDown = function(code) {
+  if (!$gameTemp) return;
   if (code === 121) { // F10
     this.toggle();
   } else if ($gameTemp._modeGFD && code === 82) { // R
@@ -844,6 +905,7 @@ Yanfly.GFD.Sprite_Doodad_update = Sprite_Doodad.prototype.update;
 Sprite_Doodad.prototype.update = function() {
   Yanfly.GFD.Sprite_Doodad_update.call(this);
   if (!this._loadedData) return;
+  if (!$gameTemp._modeGFD) return;
   this.updateSettingsOpacity();
 };
 
@@ -1436,8 +1498,9 @@ Window_GFD_Canvas.prototype.rawDoodadX = function() {
     var w = DoodadManager._gridLockX;
     value = Math.floor(value / w) * w;
     value += Math.floor(this._tileWidth * DoodadManager.current().anchorX);
-    value -= Math.floor(this._tileWidth * ($gameMap._displayX -
-      Math.floor($gameMap._displayX)));
+    var offset = Math.round(this._tileWidth * ($gameMap._displayX -
+      Math.ceil($gameMap._displayX)));
+    value -= offset;
   }
   return Math.floor(value);
 };
@@ -1461,8 +1524,9 @@ Window_GFD_Canvas.prototype.rawDoodadY = function() {
     var h = DoodadManager._gridLockY;
     value = Math.floor(value / h) * h;
     value += Math.floor(this._tileHeight * DoodadManager.current().anchorY);
-    value -= Math.floor(this._tileHeight * ($gameMap._displayY -
-      Math.floor($gameMap._displayY)));
+    var offset = Math.round(this._tileHeight * ($gameMap._displayY -
+      Math.ceil($gameMap._displayY)));
+    value -= offset;
   }
   return Math.floor(value);
 };
@@ -1643,8 +1707,34 @@ Window_GFD_Settings.prototype.setDoodad = function(doodad) {
 };
 
 Window_GFD_Settings.prototype.makeCommandList = function() {
+  this.addAcceptCommands();
+  this.addPositionCommands();
+  this.addMainCommands();
+  this.addCustomCommands();
+};
+
+Window_GFD_Settings.prototype.addLineCommand = function() {
+  if (this._list[this._list.length - 1].name !== '---line---') {
+    this.addCommand('---line---', 'none', false);
+  }
+};
+
+Window_GFD_Settings.prototype.addAcceptCommands = function() {
+  this.addCommand('Accept Settings', 'accept');
+  this.addCommand('Revert Settings', 'revert');
+  this.addCommand('Delete Doodad', 'delete', !DoodadManager._canvasMode);
+  this.addLineCommand();
+};
+
+Window_GFD_Settings.prototype.addPositionCommands = function() {
+  this.addLineCommand();
   this.addCommand('Change Position', 'position', !DoodadManager._canvasMode);
-  this.addCommand('', 'none', false);
+  this.addLineCommand();
+};
+
+Window_GFD_Settings.prototype.addMainCommands = function() {
+  if (Yanfly.Param.GFDAlphabet) return;
+  this.addLineCommand();
   this.addCommand('Layer', 'layer');
   this.addCommand('Hue', 'hue', this._doodad && this._doodad.iconIndex <= 0);
   this.addCommand('Opacity', 'opacity');
@@ -1655,11 +1745,139 @@ Window_GFD_Settings.prototype.makeCommandList = function() {
   this.addCommand('Frame Speed', 'frameSpeed', this.isAnimated());
   this.addCommand('Blend', 'blend');
   this.addCommand('Smooth', 'smooth');
-  this.addCustomCommands();
-  this.addCommand('', 'none', false);
-  this.addCommand('Delete Doodad', 'delete', !DoodadManager._canvasMode);
-  this.addCommand('Revert Settings', 'revert');
-  this.addCommand('Accept Settings', 'accept');
+};
+
+Window_GFD_Settings.prototype.addCustomCommands = function() {
+  if (Yanfly.Param.GFDAlphabet) this.addLineCommand();
+  this.addCustomCommandsFirst();
+  this.addCustomCommandsA();
+  this.addCustomCommandsB();
+  this.addCustomCommandsC();
+  this.addCustomCommandsD();
+  this.addCustomCommandsE();
+  this.addCustomCommandsF();
+  this.addCustomCommandsG();
+  this.addCustomCommandsH();
+  this.addCustomCommandsI();
+  this.addCustomCommandsJ();
+  this.addCustomCommandsK();
+  this.addCustomCommandsL();
+  this.addCustomCommandsM();
+  this.addCustomCommandsN();
+  this.addCustomCommandsO();
+  this.addCustomCommandsP();
+  this.addCustomCommandsQ();
+  this.addCustomCommandsR();
+  this.addCustomCommandsS();
+  this.addCustomCommandsT();
+  this.addCustomCommandsU();
+  this.addCustomCommandsV();
+  this.addCustomCommandsW();
+  this.addCustomCommandsX();
+  this.addCustomCommandsY();
+  this.addCustomCommandsZ();
+  this.addCustomCommandsLast();
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsFirst = function() {
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsA = function() {
+  if (!Yanfly.Param.GFDAlphabet) return;
+  this.addCommand('Anchor X', 'anchorX');
+  this.addCommand('Anchor Y', 'anchorY');  
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsB = function() {
+  if (!Yanfly.Param.GFDAlphabet) return;
+  this.addCommand('Blend', 'blend');
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsC = function() {
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsD = function() {
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsE = function() {
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsF = function() {
+  if (!Yanfly.Param.GFDAlphabet) return;
+  this.addCommand('Frame Speed', 'frameSpeed', this.isAnimated());
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsG = function() {
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsH = function() {
+  if (!Yanfly.Param.GFDAlphabet) return;
+  this.addCommand('Hue', 'hue', this._doodad && this._doodad.iconIndex <= 0);
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsI = function() {
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsJ = function() {
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsK = function() {
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsL = function() {
+  if (!Yanfly.Param.GFDAlphabet) return;
+  this.addCommand('Layer', 'layer');
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsM = function() {
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsN = function() {
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsO = function() {
+  if (!Yanfly.Param.GFDAlphabet) return;
+  this.addCommand('Opacity', 'opacity');
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsP = function() {
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsQ = function() {
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsR = function() {
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsS = function() {
+  if (!Yanfly.Param.GFDAlphabet) return;
+  this.addCommand('Scale X', 'scaleX');
+  this.addCommand('Scale Y', 'scaleY');
+  this.addCommand('Smooth', 'smooth');
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsT = function() {
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsU = function() {
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsV = function() {
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsW = function() {
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsX = function() {
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsY = function() {
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsZ = function() {
+};
+
+Window_GFD_Settings.prototype.addCustomCommandsLast = function() {
 };
 
 Window_GFD_Settings.prototype.isAnimated = function() {
@@ -1670,6 +1888,10 @@ Window_GFD_Settings.prototype.isAnimated = function() {
 };
 
 Window_GFD_Settings.prototype.drawItem = function(index) {
+  if (this.commandName(index) === '---line---') {
+    this.drawHorzLine(this.itemRectForText(index).y);
+    return;
+  }
   Window_Command.prototype.drawItem.call(this, index);
   if (!this._doodad) return;
   var symbol = this.commandSymbol(index);
@@ -1724,6 +1946,17 @@ Window_GFD_Settings.prototype.drawItem = function(index) {
     break;
   }
   this.drawText(text, rect.x, rect.y, rect.width, 'right');
+};
+
+Window_GFD_Settings.prototype.drawHorzLine = function(y) {
+  var lineY = y + this.lineHeight() / 2 - 1;
+  this.contents.paintOpacity = 128;
+  this.contents.fillRect(0, lineY, this.contentsWidth(), 2, this.lineColor());
+  this.contents.paintOpacity = 255;
+};
+
+Window_GFD_Settings.prototype.lineColor = function() {
+  return this.normalColor();
 };
 
 Window_GFD_Settings.prototype.layerText = function() {
@@ -1874,9 +2107,6 @@ DoodadManager.updateSettingsMode = function(code) {
   SoundManager.playCursor();
   win.refresh();
   this.updateNewSettings();
-};
-
-Window_GFD_Settings.prototype.addCustomCommands = function() {
 };
 
 DoodadManager.inputLeft = function(doodad, symbol, value) {
@@ -2043,6 +2273,11 @@ Window_GFD_SettingsScale.prototype.constructor = Window_GFD_SettingsScale;
 Window_GFD_SettingsScale.prototype.initialize = function() {
   Window_Command.prototype.initialize.call(this, 400, 0);
   this.setGFD();
+};
+
+Window_GFD_SettingsScale.prototype.windowHeight = function() {
+  var winHeight = this.fittingHeight(this.numVisibleRows());
+  return Math.min(Graphics.boxHeight, winHeight);
 };
 
 Window_GFD_SettingsScale.prototype.makeCommandList = function() {
@@ -2601,14 +2836,14 @@ Window_GFD_RegionOverlay.prototype.screenX = function() {
   var value = this._pX;
   var display = $gameMap._displayX;
   value -= display * this._tileWidth;
-  return Math.round(value);
+  return Math.floor(value);
 };
 
 Window_GFD_RegionOverlay.prototype.screenY = function() {
   var value = this._pY;
   var display = $gameMap._displayY;
   value -= display * this._tileHeight;
-  return Math.round(value);
+  return Math.floor(value);
 };
 
 //=============================================================================
@@ -3364,4 +3599,16 @@ Yanfly.Util.toGroup = function(inVal) {
 //=============================================================================
 // End of File
 //=============================================================================
-}; // (Utils.RPGMAKER_VERSION && Utils.RPGMAKER_VERSION >= "1.3.0")
+} else { // (Utils.RPGMAKER_VERSION && Utils.RPGMAKER_VERSION >= "1.3.0")
+
+var text = '';
+text += 'You are getting this error because you are trying to run Grid-Free ';
+text += 'Doodads while your project files are lower than version 1.3.0. \n\n';
+text += 'Please visit this thread for instructions on how to update your ';
+text += 'project files to 1.3.0 or higher: \n\n';
+text += 'http://forums.rpgmakerweb.com/index.php?/topic/';
+text += '66712-rpg-maker-mv-v131-fixes/';
+console.log(text);
+require('nw.gui').Window.get().showDevTools();
+
+};

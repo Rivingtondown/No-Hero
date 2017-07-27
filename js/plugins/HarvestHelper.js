@@ -4,7 +4,26 @@
 * @plugindesc Helps with the creation of Foraging and Farming Event Creation.
 * @author RivingtonDown
 *
-
+* @param ForagerActor
+* @desc Actor ID of the character with the Forager Job
+* Default 0
+* @default 0
+*
+* @param FarmerActor
+* @desc Actor ID of the character with the Farmer Job
+* Default 0
+* @default 0
+*
+* @param CookActor
+* @desc Actor ID of the character with the Cook Job
+* Default 0
+* @default 0
+*
+* @param CarpenterActor
+* @desc Actor ID of the character with the Carpenter Job
+* Default 0
+* @default 0
+*
 @help
 
 Harvest_Manager
@@ -22,7 +41,9 @@ var Imported = Imported || {};
 Imported.Harvest_Manager = true;
 
 var Harvest = Harvest || {};
-Harvest.HD = Harvest.HD || {};
+Harvest = Harvest || {};
+
+Harvest.parameters = PluginManager.parameters('Harvest');
 
 var HarvestType = null;
 var HarvestLvl = null;
@@ -40,9 +61,9 @@ var eventID = null;
 var verb = null;
 var numOfItems = null;
 
-Harvest.HD.GameSystem_initialize = Game_System.prototype.initialize;
+Harvest.GameSystem_initialize = Game_System.prototype.initialize;
 Game_System.prototype.initialize = function () {
-  Harvest.HD.GameSystem_initialize.call(this);
+  Harvest.GameSystem_initialize.call(this);
 };
 
 Game_System.prototype.createHarvestable = function (value, eventID, mapID) {
@@ -61,18 +82,23 @@ Game_System.prototype.createHarvestable = function (value, eventID, mapID) {
     case "Wood":
       ProfType = "Forage";
       verb = "chop";
-      ProfXPVar = 6;
+      ProfXPVar = 6;0
       ProfLvlVar = 7;
+      actorId = Harvest.parameters['ForagerActor'];
+      jobClassId = 7; //Scavenger
       break;
     case "Forage":
       ProfType = "Forage";
       verb = "forage";
       ProfXPVar = 6;
       ProfLvlVar = 7;
+      actorId = Harvest.parameters['ForagerActor'];
+      jobClassId = 7; //Scavenger
   }
 
-  ProfXP = $gameVariables.value(ProfXPVar); //in-game profession xp quick value
-  ProfLvl = $gameVariables.value(ProfLvlVar); //in-game profession lvl quick value
+  // ProfXP = $gameActors.actor(actorId).jp(jobClassId); //the number of unspent JP
+  // ProfXPTotal = $gameActors.actor(actorId).jpTotal(jobClassId); //the number of lifetime earned JP spent and unspent
+  // ProfLvl = $gameActors.actor(actorId).jpLevel(jobClassId); //the level of the job based on the total JP earned
 
   console.log("Trying to harvest... " + ProfType + " Lvl:" + ProfLvl + " / Harvest Lvl:" + HarvestLvl);
 

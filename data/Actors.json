@@ -1,9 +1,9 @@
 [
 null,
-{"id":1,"battlerName":"Darakas2","characterIndex":0,"characterName":"Custom2","classId":2,"equips":[80,0,0,3,0],"faceIndex":0,"faceName":"Jalen","traits":[],"initialLevel":1,"maxLevel":99,"name":"Darakas","nickname":"Darakas","note":"","profile":""},
-{"id":2,"battlerName":"Kitara","characterIndex":1,"characterName":"Custom1","classId":1,"equips":[79,0,0,5,0],"faceIndex":0,"faceName":"Custom1","traits":[],"initialLevel":2,"maxLevel":99,"name":"Kitara","nickname":"Kit","note":"","profile":""},
+{"id":1,"battlerName":"Darakas2","characterIndex":0,"characterName":"Custom2","classId":2,"equips":[80,0,0,3,0],"faceIndex":0,"faceName":"Jalen","traits":[],"initialLevel":1,"maxLevel":99,"name":"Darakas","nickname":"Darakas","note":"<Subclass: 8>\n<Restrict Subclass: 9 to 10>","profile":""},
+{"id":2,"battlerName":"Kitara","characterIndex":1,"characterName":"Custom1","classId":1,"equips":[79,0,0,5,0],"faceIndex":0,"faceName":"Custom1","traits":[],"initialLevel":2,"maxLevel":99,"name":"Kitara","nickname":"Kit","note":"<Subclass: 10>\n<Restrict Subclass: 7 to 9>","profile":""},
 {"id":3,"battlerName":"Actor1_7","characterIndex":6,"characterName":"Actor1","classId":2,"equips":[0,0,0,0,0],"faceIndex":6,"faceName":"Actor1","traits":[],"initialLevel":1,"maxLevel":99,"name":"Hero","nickname":"","note":"","profile":""},
-{"id":4,"battlerName":"Gus","characterIndex":6,"characterName":"People1","classId":4,"equips":[78,0,0,7,0],"faceIndex":6,"faceName":"People1","traits":[{"code":43,"dataId":13,"value":1}],"initialLevel":4,"maxLevel":99,"name":"Gus","nickname":"","note":"","profile":""},
+{"id":4,"battlerName":"Gus","characterIndex":6,"characterName":"People1","classId":4,"equips":[78,0,0,7,0],"faceIndex":6,"faceName":"People1","traits":[{"code":43,"dataId":13,"value":1}],"initialLevel":4,"maxLevel":99,"name":"Gus","nickname":"","note":"<Subclass: 9>\n<Restrict Subclass: 7,8,10>","profile":""},
 {"id":5,"battlerName":"Izabeth","characterIndex":2,"characterName":"Custom1","classId":4,"equips":[4,0,0,0,0],"faceIndex":1,"faceName":"Custom1","traits":[],"initialLevel":1,"maxLevel":99,"name":"Izabeth","nickname":"","note":"","profile":""},
-{"id":6,"battlerName":"Carina","characterIndex":5,"characterName":"Custom1","classId":5,"equips":[52,0,0,25,0],"faceIndex":3,"faceName":"Custom1","traits":[{"code":43,"dataId":12,"value":1}],"initialLevel":5,"maxLevel":99,"name":"Carina","nickname":"","note":"","profile":""}
+{"id":6,"battlerName":"Carina","characterIndex":5,"characterName":"Custom1","classId":5,"equips":[52,0,0,25,0],"faceIndex":3,"faceName":"Custom1","traits":[{"code":43,"dataId":12,"value":1}],"initialLevel":5,"maxLevel":99,"name":"Carina","nickname":"","note":"<Subclass: 7>\n<Class 7 Starting JP: 5>","profile":""}
 ]
