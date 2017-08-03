@@ -105,6 +105,5 @@ var $plugins =
 {"name":"FoxJPLevels","status":true,"description":"v1.0.4 Adds levels to the JP system, just like Final Fantasy Tactics had","parameters":{"JPTotalLevels":"[10, 25, 45, 70, 100, 135, 180]","UsingColoredLevelString":"true","JobLevelString":"Yanfly.Param.Jp + \" Lv \""}},
 {"name":"Rivington","status":true,"description":"Helps with the creation of Foraging and Farming Event Creation.","parameters":{"---Scavenger---":"","ScavengerActor":"6","ScavengerId":"7","---Farmer---":"","FarmerActor":"4","FarmerId":"9","---Cook---":"","CookActor":"2","CookId":"10","---Carpenter---":"","CarpenterActor":"1","CarpenterId":"8"}},
 {"name":"---------","status":false,"description":"---------------------------------","parameters":{}},
-{"name":"GALV_VisualNovelChoices","status":true,"description":"Changes how the \"Choice\" message boxes display to appear more like visual novels.","parameters":{"Command Width":"700","Command Height":"48","Always Middle":"true","Message Gap":"0","Disabled Button":"3"}},
 {"name":"GALV_ActionIndicators","status":true,"description":"Display an icon when the player is able to interact with an event. View help for comment tag.","parameters":{"Y Offset":"0","Z Position":"5","Auto Hide":"true","Icon Opacity":"200"}}
 ];
