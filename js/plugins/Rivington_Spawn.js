@@ -39,29 +39,15 @@ by: RivingtonDown
   Rivington.Param.hvEventMap = Number(Rivington.Parameters['EventMap ID']);
   Rivington.Param.hvSpawnVar = Number(Rivington.Parameters['Spawn Tracking Variable']);
 
-  var hvSpawns = [];
+  if (Galv.SPAWN.spawnMapId) {
+    Rivington.Param.hvEventMap = Galv.SPAWN.spawnMapId;
+  }
+
   var spawnedTile = false;
   var hvEvents = [];
 
-  Game_Map.prototype.copyEventFromMapToRegionA = function (mapIdOrigin, eventIdOrigin, regionId, amount, temporary, newIndex, callback) {
-    for (var i = 0; i < amount; i++) {
-      var tile = this.getRandomRegionTile(regionId);
-      if (tile !== undefined) {
-        if (spawnedTile && spawnedTile.x == tile.x && spawnedTile.y == tile.y) {
-          console.log('Can\'t spawn ' + eventIdOrigin + ' at X:' + tile.x + ' Y:' + tile.y);
-        } else {
-          console.log('Spawned ' + eventIdOrigin + ' at X:' + tile.x + ' Y:' + tile.y);
-          this.copyEventFrom(mapIdOrigin, eventIdOrigin, tile.x, tile.y, temporary, newIndex, callback);
-          spawnedTile = tile;
-        }
-      }
-    }
-    spawnedTile = false;
-  };
-
   Rivington.Spawn.DataManager_isDatabaseLoaded = DataManager.isDatabaseLoaded;
   DataManager.isDatabaseLoaded = function () {
-
     if (!Rivington.Spawn.DataManager_isDatabaseLoaded.call(this)) return false;
     if (!Rivington.Spawn._loaded_RivingtonItemTags) {
       this.setDatabaseLengths();
@@ -100,54 +86,77 @@ by: RivingtonDown
       }
       Rivington.Spawn._loaded_RivingtonItemTags = true;
     }
+
     return true;
+  };
+
+  Array.prototype.insert = function (index, item) {
+    this.splice(index, 0, item);
   };
 
   Rivington.Spawn.Scene_Map_start = Scene_Map.prototype.start;
   Scene_Map.prototype.start = function () {
     Rivington.Spawn.Scene_Map_start.call(this);
-    hvSpawns = $gameVariables.value(Rivington.Param.hvSpawnVar) || [];
-    if (!hvSpawns || hvSpawns == "" || hvSpawns.length == 0) {
-      _.forEach(_.compact($dataMapInfos), function (o) {
-        var MapObj = {};
-        MapObj.id = o.id;
-        MapObj.name = o.name;
-        MapObj.hvEvents = hvEvents;
-        _.forEach(MapObj.hvEvents, function (o) {
+    var hvSpawns = $gameVariables.value(Rivington.Param.hvSpawnVar);
+    if (hvSpawns == 0) {
+      hvSpawns = [];
+    }
+    var spawnMapQ = _.find(hvSpawns, function (o) {
+      return o.mapId == $gameMap.mapId();
+    }) || false;
+    if (!spawnMapQ || hvSpawns.length < 1) {
+      var hvSpecial = _.filter(hvEvents, function (hvS) {
+        if ($dataMap.meta.forage) {
+          spawnMapQ = true;
+          var metaForage = $dataMap.meta.forage;
+          metaForage = metaForage.trim().split(',');
+          return metaForage.indexOf(hvS.name) != -1;
+        } else {
+          return false;
+        }
+      });
+      if (hvSpecial.length > 0) {
+        _.forEach(hvSpecial, function (o) {
           o.spawned = false;
         });
-        hvSpawns[o.id] = MapObj;
-      });
+        var mapObj = {
+          "hvEvents": hvSpecial,
+          "mapId": $gameMap.mapId()
+        };
+        hvSpawns.push(mapObj);
+      }
     }
-    hvSpawns[$gameMap.mapId()].forage = $dataMap.meta.forage ? $dataMap.meta.forage.trim().split(',') : null;
-    if (Rivington.Param.hvSpawn) {
-      Rivington.Spawn.spawnHarvest(hvSpawns);
+    $gameVariables.setValue(Rivington.Param.hvSpawnVar, hvSpawns);
+
+    if (Rivington.Param.hvSpawn && spawnMapQ) {
+      Rivington.Spawn.spawnHarvest();
     }
   };
 
-  Rivington.Spawn.spawnHarvest = function (hvSpawns) {
-    var hvMap = hvSpawns[$gameMap.mapId()];
-    //Clear Common Events
-    for (var i = 0; i < $gameMap._events.length; i++) {
-      if (!!$gameMap._events[i] && $gameMap._events[i]._erased) {
-        $gameMap._events[i] = undefined;
-      }
-    }
+  Rivington.Spawn.spawnHarvest = function () {
+    var hvSpawns = $gameVariables.value(Rivington.Param.hvSpawnVar);
+    var thisMapId = $gameMap.mapId();
+    var hvSpawnMap = _.find(hvSpawns, function (o) {
+      return o.mapId == thisMapId;
+    });
 
-    if (hvMap.forage) {
-      console.log(hvMap);
-      _.forEach(hvMap.hvEvents, function (hvE, index) {
-        if (hvMap.forage.indexOf(hvE.name) != -1 && hvE.spawned === false) {
-          console.log(hvE.name + ' ' + ($gameSwitches.value(hvE.spawnTime[0]) === true || $gameSwitches.value(hvE.spawnTime[1]) === true));
-          if ($gameSwitches.value(hvE.spawnTime[0]) === true || $gameSwitches.value(hvE.spawnTime[1]) === true) {
-            var spawnAmount = Math.min($gameMap.getRegionTileList(parseInt(hvE.spawnRegion)).length, 2);
-            $gameMap.copyEventFromMapToRegionA(Rivington.Param.hvEventMap, parseInt(hvE.eventId), parseInt(hvE.spawnRegion), spawnAmount, false);
-            console.log('spawned ' + hvE.name);
-            hvSpawns[$gameMap.mapId()].hvEvents[index].spawned = true;
+    _.forEach(hvSpawnMap.hvEvents, function (hvE) {
+      if (!hvE.spawned) {
+        if ($gameSwitches.value(hvE.spawnTime[0]) == true || $gameSwitches.value(hvE.spawnTime[1]) == true) {
+          var spawnAmount = Math.min($gameMap.getRegionTileList(parseInt(hvE.spawnRegion)).length, 2);
+          Galv.SPAWN.overlap = 'terrain';
+          for (var i = 0; i < spawnAmount; i++) {
+            Galv.SPAWN.event(parseInt(hvE.eventId), parseInt(hvE.spawnRegion), true);
           }
+          console.log('spawned ' + hvE.name);
+          hvE.spawned = true;
         }
-      });
-      $gameVariables.setValue(Rivington.Param.hvSpawnVar, hvSpawns);
-    }
+      }
+    });
+    hvSpawns = _.filter(hvSpawns, function (l) {
+      return l.mapId != thisMapId;
+    });
+    hvSpawns.push(hvSpawnMap);
+    $gameVariables.setValue(Rivington.Param.hvSpawnVar, hvSpawns);
   };
 })();
