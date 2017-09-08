@@ -23,11 +23,11 @@
  *
  * @param ScriptValue
  * @desc A script to run to get the current value of the gauge.
- * @default 
+ * @default
  *
  * @param ScriptMaxValue
  * @desc A script to run to get the max value of the gauge.
- * @default 
+ * @default
  *
  * @param SwitchId
  * @desc Set this to a switch number to use it to control the visibility of this line
@@ -35,11 +35,11 @@
  *
  * @param X
  * @desc The X position of the gauge inside the HUD
- * @default 
+ * @default
  *
  * @param Y
  * @desc The Y position of the gauge inside the HUD
- * @default 
+ * @default
  *
  * @param Width
  * @desc The width of the Gauge
@@ -94,7 +94,7 @@ var OrangeHudGauge = OrangeHudGauge || {};
 if (Imported["OrangeHudGauge"] === undefined) {
   OrangeHudGauge.validateParams = function(paramsLine) {
     paramsLine.GroupName = paramsLine.GroupName || "main";
-    
+
     paramsLine.ValueVariableId = Number(paramsLine.ValueVariableId || 0);
     paramsLine.MaxValueVariableId = Number(paramsLine.MaxValueVariableId || 0);
 
@@ -189,7 +189,7 @@ if (Imported["OrangeHudGauge"] === undefined) {
     var color1 = this.getRealColor(hudWindow, variableData.GaugeColor1);
     var color2 = this.getRealColor(hudWindow, variableData.GaugeColor2);
     var value = this.getCurrentValue(variableData);
-    var maxValue = this.getMaxValue(variableData);
+    var maxValue = 120;
     var rate;
     var width = variableData.Width;
     var height = variableData.Height;
@@ -243,7 +243,7 @@ if (Imported["OrangeHudGauge"] === undefined) {
       return 0;
     }
   };
-  
+
   OrangeHudGauge.getCurrentValue = function(variableData) {
     if (variableData.ScriptValue !== undefined) {
       if (typeof(variableData.ScriptValue) == "function") {
