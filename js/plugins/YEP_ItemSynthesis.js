@@ -8,10 +8,11 @@ Imported.YEP_ItemSynthesis = true;
 
 var Yanfly = Yanfly || {};
 Yanfly.IS = Yanfly.IS || {};
+Yanfly.IS.version = 1.09;
 
 //=============================================================================
  /*:
- * @plugindesc v1.06 Players can now craft their own items in-game
+ * @plugindesc v1.09 Players can now craft their own items in-game
  * through an item synthesis system.
  * @author Yanfly Engine Plugins
  *
@@ -19,20 +20,33 @@ Yanfly.IS = Yanfly.IS || {};
  * @default
  *
  * @param Synthesis Command
+ * @parent ---General---
  * @desc This is the text used for going to the item synthesis menu.
  * @default Synthesis
  *
  * @param Show Command
+ * @parent ---General---
+ * @type boolean
+ * @on Show
+ * @off Hide
  * @desc Show the Synthesis command in the main menu by default?
  * NO - false     YES - true
  * @default true
  *
  * @param Enable Command
+ * @parent ---General---
+ * @type boolean
+ * @on Enable
+ * @off Disable
  * @desc Enable the Synthesis command in the main menu by default?
  * NO - false     YES - true
  * @default true
  *
  * @param Auto Place Command
+ * @parent ---General---
+ * @type boolean
+ * @on YES
+ * @off NO
  * @desc Allow this plugin to decide the menu placement position?
  * NO - false     YES - true
  * @default true
@@ -41,22 +55,31 @@ Yanfly.IS = Yanfly.IS || {};
  * @default
  *
  * @param Item Command
+ * @parent ---Command Window---
  * @desc The command text used for synthesizing items.
  * @default Craft Item
  *
  * @param Weapon Command
+ * @parent ---Command Window---
  * @desc The command text used for synthesizing weapons.
  * @default Craft Weapon
  *
  * @param Armor Command
+ * @parent ---Command Window---
  * @desc The command text used for synthesizing armors.
  * @default Craft Armor
  *
  * @param Finish Command
+ * @parent ---Command Window---
  * @desc The command text used for exiting the synthesis scene.
  * @default Finish
  *
  * @param Text Alignment
+ * @parent ---Command Window---
+ * @type combo
+ * @option left
+ * @option center
+ * @option right
  * @desc How to align the text for the command window.
  * left     center     right
  * @default center
@@ -65,21 +88,25 @@ Yanfly.IS = Yanfly.IS || {};
  * @default
  *
  * @param Collected Recipes
+ * @parent ---Status Window---
  * @desc Text used to represent total recipes collected.
  * Leave this blank if you don't wish to show this.
  * @default Collected Recipes
  *
  * @param Crafted Items
+ * @parent ---Status Window---
  * @desc Text used to represent total items crafted.
  * Leave this blank if you don't wish to show this.
  * @default Crafted Items
  *
  * @param Crafted Weapons
+ * @parent ---Status Window---
  * @desc Text used to represent total weapons crafted.
  * Leave this blank if you don't wish to show this.
  * @default Crafted Weapons
  *
  * @param Crafted Armors
+ * @parent ---Status Window---
  * @desc Text used to represent total armors crafted.
  * Leave this blank if you don't wish to show this.
  * @default Crafted Armors
@@ -88,38 +115,57 @@ Yanfly.IS = Yanfly.IS || {};
  * @default
  *
  * @param Equipped Recipes
+ * @parent ---List Window---
+ * @type boolean
+ * @on YES
+ * @off NO
  * @desc Check recipes from equipped items?
  * NO - false     YES - true
  * @default true
  *
  * @param Mask Unknown
+ * @parent ---List Window---
+ * @type boolean
+ * @on YES
+ * @off NO
  * @desc Mask the names of items that haven't been created yet?
  * NO - false     YES - true
  * @default true
  *
  * @param Mask Text
+ * @parent ---List Window---
  * @desc This will be used to mask over each letter for unknown item
  * names that are to be synthesized.
  * @default ?
  *
  * @param Mask Italic
+ * @parent ---List Window---
+ * @type boolean
+ * @on YES
+ * @off NO
  * @desc Causes the name for unknown items to appear in italic.
  * @default true
  *
  * @param Mask Help Text
+ * @parent ---List Window---
  * @desc This is the text that will be displayed in the help window
  * if the item is masked.
  * @default This item has not been synthesized yet.
  *
  * @param Ingredients Text
+ * @parent ---List Window---
  * @desc This is the text used to describe the Ingredients list.
  * @default Ingredients
  *
  * @param Amount Text
+ * @parent ---List Window---
  * @desc This is the text used for the amount to synthesize.
  * @default Quantity
  *
  * @param Quantity Text Size
+ * @parent ---List Window---
+ * @type number
+ * @min 1
  * @desc This is the text size used for the item quantity.
  * Default: 28
  * @default 20
@@ -128,19 +174,30 @@ Yanfly.IS = Yanfly.IS || {};
  * @default
  *
  * @param Default SE
+ * @parent ---Sound---
+ * @type file
+ * @dir audio/se/
+ * @require 1
  * @desc This is the default SE played when synthesizing an item.
  * This is case sensitive. Do not include the extension.
  * @default Twine
  *
  * @param Default Volume
+ * @parent ---Sound---
+ * @type number
+ * @min 0
  * @desc This is the default volume when synthesizing an item.
  * @default 100
  *
  * @param Default Pitch
+ * @parent ---Sound---
+ * @type number
  * @desc This is the default pitch when synthesizing an item.
  * @default 100
  *
  * @param Default Pan
+ * @parent ---Sound---
+ * @type number
  * @desc This is the default pan when synthesizing an item.
  * @default 0
  *
@@ -225,6 +282,30 @@ Yanfly.IS = Yanfly.IS || {};
  *   such as "Strange Liquid" or "Weird Crystal".
  *
  * ============================================================================
+ * Lunatic Mode - Custom Synthesis Effects
+ * ============================================================================
+ *
+ * For those with a JavaScript experience, you can use these notetags to make
+ * a custom effect that will occur when a specific item is synthesized. For
+ * example, when a Potion is made, you can give the player an empty bottle as a
+ * side product of the synthesis.
+ *
+ * ---
+ *
+ * Item, Weapon, and Armor Notetags:
+ * 
+ *   <Custom Synthesis Effect>
+ *    var bottle = $dataItems[123];
+ *    $gameParty.gainItem(bottle, 2);
+ *   </Custom Synthesis Effect>
+ *
+ *   For this notetag, the 'item' variable will refer to the item being
+ *   synthesized. Changing it will do nothing but it will be used as a
+ *   convenience variable to refer to it.
+ *
+ * ---
+ *
+ * ============================================================================
  * Plugin Commands
  * ============================================================================
  *
@@ -253,6 +334,15 @@ Yanfly.IS = Yanfly.IS || {};
  * ============================================================================
  * Changelog
  * ============================================================================
+ *
+ * Version 1.09:
+ * - Updated for RPG Maker MV version 1.5.0.
+ *
+ * Version 1.08:
+ * - Lunatic Mode fail safes added.
+ *
+ * Version 1.07:
+ * - Added <Custom Synthesis Effect> Lunatic Mode notetag.
  *
  * Version 1.06:
  * - Fixed an error with the calculation of total recipes.
@@ -293,7 +383,9 @@ Yanfly.Param = Yanfly.Param || {};
 
 Yanfly.Param.ISSynthCmd = String(Yanfly.Parameters['Synthesis Command']);
 Yanfly.Param.ISShowSynth = String(Yanfly.Parameters['Show Command']);
+Yanfly.Param.ISShowSynth = eval(Yanfly.Param.ISShowSynth);
 Yanfly.Param.ISEnableSynth = String(Yanfly.Parameters['Enable Command']);
+Yanfly.Param.ISEnableSynth = eval(Yanfly.Param.ISEnableSynth);
 Yanfly.Param.ISAutoPlaceCmd = String(Yanfly.Parameters['Auto Place Command']);
 
 Yanfly.Param.ISItemCmd = String(Yanfly.Parameters['Item Command']);
@@ -309,8 +401,9 @@ Yanfly.Param.ISCraftedArmors = String(Yanfly.Parameters['Crafted Armors']);
 
 Yanfly.Param.ISEquRecipes = eval(String(Yanfly.Parameters['Equipped Recipes']));
 Yanfly.Param.ISMaskUnknown = String(Yanfly.Parameters['Mask Unknown']);
-Yanfly.Param.ISMaskText    = String(Yanfly.Parameters['Mask Text']);
-Yanfly.Param.ISMaskItalic  = String(Yanfly.Parameters['Mask Italic']);
+Yanfly.Param.ISMaskText = String(Yanfly.Parameters['Mask Text']);
+Yanfly.Param.ISMaskItalic = String(Yanfly.Parameters['Mask Italic']);
+Yanfly.Param.ISMaskItalic = eval(Yanfly.Param.ISMaskItalic);
 Yanfly.Param.ISMaskHelpText = String(Yanfly.Parameters['Mask Help Text']);
 Yanfly.Param.ISIngredientsList = String(Yanfly.Parameters['Ingredients Text']);
 Yanfly.Param.ISAmountText = String(Yanfly.Parameters['Amount Text']);
@@ -384,6 +477,8 @@ DataManager.processISNotetags1 = function(group, type) {
   var note7 = /<(?:SYNTHESIS INGREDIENTS)>/i;
   var note8 = /<\/(?:SYNTHESIS INGREDIENTS)>/i;
   var note9 = /<(?:MASK NAME):[ ](.*)>/i;
+  var note10a = /<(?:CUSTOM SYNTHESIS EFFECT)>/i;
+  var note10b = /<\/(?:CUSTOM SYNTHESIS EFFECT)>/i;
   for (var n = 1; n < group.length; n++) {
     var obj = group[n];
     var notedata = obj.note.split(/[\r\n]+/);
@@ -400,6 +495,8 @@ DataManager.processISNotetags1 = function(group, type) {
     obj.synthSeVol = Yanfly.Param.ISDefVol;
     obj.synthSePitch = Yanfly.Param.ISDefPitch;
     obj.synthSePan = Yanfly.Param.ISDefPan;
+    obj.customSynthEval = '';
+    var evalMode = 'none';
 
     for (var i = 0; i < notedata.length; i++) {
       var line = notedata[i];
@@ -440,6 +537,12 @@ DataManager.processISNotetags1 = function(group, type) {
         obj.synthSePitch = parseInt(RegExp.$1);
       } else if (line.match(/<(?:SYNTHESIS PAN):[ ](\d+)>/i)) {
         obj.synthSePan = parseInt(RegExp.$1);
+      } else if (line.match(note10a)) {
+        evalMode = 'custom synthesis effect';
+      } else if (line.match(note10b)) {
+        evalMode = 'none';
+      } else if (evalMode === 'custom synthesis effect') {
+        obj.customSynthEval += line + '\n';
       }
     }
     this.processRecipeCounts(obj);
@@ -561,8 +664,8 @@ Game_System.prototype.initialize = function() {
 };
 
 Game_System.prototype.initSynthesis = function() {
-    this._showSynthesis = eval(Yanfly.Param.ISShowSynth);
-    this._enableSynthesis = eval(Yanfly.Param.ISEnableSynth);
+    this._showSynthesis = Yanfly.Param.ISShowSynth;
+    this._enableSynthesis = Yanfly.Param.ISEnableSynth;
     this._synthedItems = [];
     this._synthedWeapons = [];
     this._synthedArmors = [];
@@ -996,7 +1099,7 @@ Window_SynthesisList.prototype.drawItemName = function(item, x, y, width) {
     this.drawIcon(item.iconIndex, x + 2, y + 2);
     var text = item.name;
     if (eval(Yanfly.Param.ISMaskUnknown)) {
-      this.contents.fontItalic = eval(Yanfly.Param.ISMaskItalic);
+      this.contents.fontItalic = Yanfly.Param.ISMaskItalic;
       if (item.maskName !== '') {
         text = item.maskName;
       } else {
@@ -1591,7 +1694,9 @@ Scene_Synthesis.prototype.onListOk = function() {
 
 Scene_Synthesis.prototype.onNumberOk = function() {
     this.playSynthesisSound();
-    this.doBuy(this._numberWindow.number());
+    var number = this._numberWindow.number();
+    this.doBuy(number);
+    this.customSynthEffect(number);
     this.endNumberInput();
     this.refreshWindows();
 };
@@ -1618,6 +1723,22 @@ Scene_Synthesis.prototype.doBuy = function(number) {
     }
     $gameParty.gainItem(this._item, number);
     $gameSystem.addSynth(this._item);
+};
+
+Scene_Synthesis.prototype.customSynthEffect = function(number) {
+  if (!this._item.customSynthEval) return;
+  if (this._item.customSynthEval <= 0) return;
+  var item = this._item;
+  var s = $gameSwitches._data;
+  var v = $gameVariables._data;
+  var code = this._item.customSynthEval;
+  try {
+    while (number--) {
+      eval(code);
+    }
+  } catch (e) {
+    Yanfly.Util.displayError(e, code, 'CUSTOM SYNTH EFFECT ERROR');
+  }
 };
 
 Scene_Synthesis.prototype.endNumberInput = function() {
@@ -1670,6 +1791,18 @@ if (!Yanfly.Util.toGroup) {
         return inVal;
     }
 };
+
+Yanfly.Util.displayError = function(e, code, message) {
+  console.log(message);
+  console.log(code || 'NON-EXISTENT');
+  console.error(e);
+  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
+    if (!require('nw.gui').Window.get().isDevToolsOpen()) {
+      require('nw.gui').Window.get().showDevTools();
+    }
+  }
+};
+
 
 //=============================================================================
 // End of File

@@ -8,11 +8,11 @@ Imported.YEP_X_ExtMesPack1 = true;
 
 var Yanfly = Yanfly || {};
 Yanfly.EMP1 = Yanfly.EMP1 || {};
-Yanfly.EMP1.version = 1.10;
+Yanfly.EMP1.version = 1.11;
 
 //=============================================================================
  /*:
- * @plugindesc v1.10a (Requires YEP_MessageCore.js) Letter Sounds, NameBox
+ * @plugindesc v1.11 (Requires YEP_MessageCore.js) Letter Sounds, NameBox
  * Background Types, Choice Control, and more!
  * @author Yanfly Engine Plugins
  *
@@ -20,40 +20,64 @@ Yanfly.EMP1.version = 1.10;
  * @default
  *
  * @param Enable Sound
+ * @parent ---Letter Sounds---
+ * @type boolean
+ * @on Enable
+ * @off Disable
  * @desc Enable letter by letter sounds by default?
  * NO - false     YES - true
  * @default true
  *
  * @param Sound Name
+ * @parent ---Letter Sounds---
+ * @type file
+ * @dir audio/se/
+ * @require 1
  * @desc The filename of the SE file. This is case sensitive.
  * Do not include file extension.
  * @default Cursor1
  *
  * @param Sound Volume
+ * @parent ---Letter Sounds---
+ * @type number
+ * @min 0
  * @desc The sound volume of the sound effect.
  * @default 50
  *
  * @param Sound Pitch
+ * @parent ---Letter Sounds---
  * @desc The pitch of the sound effect.
  * @default 100
  *
  * @param Pitch Variance
+ * @parent ---Letter Sounds---
  * @desc The amount of pitch variance the sound will have.
  * @default 10
  *
  * @param Sound Pan
+ * @parent ---Letter Sounds---
  * @desc The pan of the sound effect.
  * @default 0
  *
  * @param Pan Variance
+ * @parent ---Letter Sounds---
+ * @type number
+ * @min 0
  * @desc The amount of pan variance the sound will have.
  * @default 10
  *
  * @param Sound Interval
+ * @parent ---Letter Sounds---
+ * @type number
+ * @min 0
  * @desc How many letters should be skipped in between sounds?
  * @default 2
  *
  * @param Reset Sounds
+ * @parent ---Letter Sounds---
+ * @type boolean
+ * @on Reset
+ * @off Don't Reset
  * @desc Reset the letter sound at the start of each message?
  * NO - false     YES - true
  * @default false
@@ -62,16 +86,30 @@ Yanfly.EMP1.version = 1.10;
  * @default
  *
  * @param Default X
+ * @parent ---Message Anchor---
+ * @type combo
+ * @option left
+ * @option center
+ * @option right
  * @desc When using the Message Position X mods, anchor X to
  * left     center     right
  * @default center
  *
  * @param Default Y
+ * @parent ---Message Anchor---
+ * @type combo
+ * @option top
+ * @option center
+ * @option bottom
  * @desc When using the Message Position Y mods, anchor Y to
  * top     center     bottom
  * @default bottom
  *
  * @param Auto Row Full Face
+ * @parent ---Message Anchor---
+ * @type boolean
+ * @on Show
+ * @off Hide
  * @desc If using auto rows, show the full face art?
  * NO - false     YES - true
  * @default false
@@ -80,206 +118,289 @@ Yanfly.EMP1.version = 1.10;
  * @default
  *
  * @param Max Rows
+ * @parent ---Message Choices---
+ * @type number
+ * @min 1
  * @desc The maximum amount of rows to display for your choices.
  * Default: 6
  * @default 6
  *
  * @param Choice 1 Show Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is visible to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 2 Show Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is visible to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 3 Show Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is visible to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 4 Show Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is visible to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 5 Show Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is visible to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 6 Show Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is visible to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 7 Show Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is visible to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 8 Show Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is visible to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 9 Show Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is visible to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 10 Show Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is visible to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 11 Show Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is visible to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 12 Show Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is visible to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 13 Show Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is visible to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 14 Show Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is visible to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 15 Show Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is visible to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 16 Show Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is visible to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 17 Show Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is visible to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 18 Show Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is visible to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 19 Show Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is visible to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 20 Show Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is visible to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 1 On Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is enabled to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 2 On Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is enabled to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 3 On Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is enabled to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 4 On Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is enabled to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 5 On Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is enabled to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 6 On Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is enabled to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 7 On Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is enabled to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 8 On Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is enabled to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 9 On Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is enabled to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 10 On Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is enabled to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 11 On Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is enabled to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 12 On Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is enabled to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 13 On Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is enabled to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 14 On Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is enabled to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 15 On Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is enabled to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 16 On Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is enabled to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 17 On Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is enabled to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 18 On Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is enabled to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 19 On Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is enabled to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
  *
  * @param Choice 20 On Switch
+ * @parent ---Message Choices---
+ * @type switch
  * @desc You can tie whether or not a choice is enabled to a switch.
  * Use the switch ID you wish for this choice. 0 to not use.
  * @default 0
@@ -588,6 +709,9 @@ Yanfly.EMP1.version = 1.10;
  * ============================================================================
  * Changelog
  * ============================================================================
+ *
+ * Version 1.11:
+ * - Updated for RPG Maker MV version 1.5.0.
  *
  * Version 1.10a:
  * - Fixed a bug that made auto-messages to not position themselves properly on

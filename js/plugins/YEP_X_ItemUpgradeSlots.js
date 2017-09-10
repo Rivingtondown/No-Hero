@@ -8,18 +8,22 @@ Imported.YEP_X_ItemUpgrades = true;
 
 var Yanfly = Yanfly || {};
 Yanfly.IUS = Yanfly.IUS || {};
+Yanfly.IUS.version = 1.08;
 
 //=============================================================================
  /*:
- * @plugindesc v1.05 (Requires YEP_ItemCore.js) Allows independent items to
+ * @plugindesc v1.08 (Requires YEP_ItemCore.js) Allows independent items to
  * be upgradeable and gain better stats.
  * @author Yanfly Engine Plugins
  *
  * @param Default Slots
+ * @type number
+ * @min 0
  * @desc The default amount of slots items can be upgraded.
  * @default 3
  *
  * @param Slot Variance
+ * @type number
  * @desc The default slot variance for items with slots.
  * @default 1
  *
@@ -29,6 +33,9 @@ Yanfly.IUS = Yanfly.IUS || {};
  * @default Upgrade %1
  *
  * @param Show Only
+ * @type boolean
+ * @on YES
+ * @off NO
  * @desc The Upgrade Command will only show if item is upgradeable.
  * NO - false     YES - true
  * @default true
@@ -39,6 +46,9 @@ Yanfly.IUS = Yanfly.IUS || {};
  * @default Slots Available
  *
  * @param Show Slot Upgrades
+ * @type boolean
+ * @on YES
+ * @off NO
  * @desc Shows what upgrades applied to slots in info window.
  * NO - false     YES - true
  * @default true
@@ -49,6 +59,9 @@ Yanfly.IUS = Yanfly.IUS || {};
  * @default \}Slot%1: %2\{
  *
  * @param Default Sound
+ * @type file
+ * @dir audio/se/
+ * @require 1
  * @desc This is the default sound played when using an
  * item upgrade.
  * @default Heal2
@@ -133,32 +146,34 @@ Yanfly.IUS = Yanfly.IUS || {};
  * The following is a list of effects you can use for the <Upgrade Effects>
  * notetag to have it apply the desired effects to the upgraded item.
  *
- * Effect Text             Upgrade Effect:
- *   Base Name: x          - Changes item's base name to x. *Note2
- *   Boost Count: +x       - Increases Boost Count by x. *Note2
- *   Boost Count: -x       - Decreases Boost Count by x. *Note2
- *   Eval: x               - Runs x as a piece of code. *Note2
- *   Name: x               - Changes item's name to x. *Note2
- *   Icon: x               - Changes item's icon to x. *Note2
- *   Prefix: x             - Changes item's prefix to x. *Note2
- *   Priority Name: x      - Sets priority name to x. *Note2
- *   Random Stat: x        - Increases or decreases 'Stat' by 0 to x. *Note1
- *   Random Stat: +x       - Increases 'Stat' by 0 to x. *Note1
- *   Random Stat: -x       - Decreases 'Stat' by 0 to x. *Note1
- *   Reset Base Name       - Resets the base name to default.
- *   Reset Boost Count     - Resets the Boost Count to 0.
- *   Reset Icon            - Resets the icon back to the default icon.
- *   Reset Prefix          - Resets name prefix to default.
- *   Reset Stat            - Resets 'Stat' back to base stat values. *Note1
- *   Reset Suffix          - Resets name suffix to default.
- *   Reset Full            - Resets every single aspect about item. *Note3
- *   Slots: x              - Changes the slot consumption cost to x. *Note1
- *   Stat: +x              - Increases 'Stat' by x. *Note1
- *   Stat: +x%             - Increases 'Stat' by x% of base stat. *Note1
- *   Stat: -x              - Decreases 'Stat' by x. *Note1
- *   Stat: -x%             - Decreases 'Stat' by x% of base stat. *Note1
- *   Suffix: x             - Changes item's suffix to x. *Note2
- *   Text Color: x         - Changes item's text color to x.
+ * Effect Text               Upgrade Effect:
+ *   Base Name: x            - Changes item's base name to x. *Note2
+ *   Boost Count: +x         - Increases Boost Count by x. *Note2
+ *   Boost Count: -x         - Decreases Boost Count by x. *Note2
+ *   Eval: x                 - Runs x as a piece of code. *Note2
+ *   Name: x                 - Changes item's name to x. *Note2
+ *   Icon: x                 - Changes item's icon to x. *Note2
+ *   Picture Image: filename - Changes item's picture image to filename. *Note4
+ *   Picture Hue: x          - Changes item's picture hue to x. *Note4
+ *   Prefix: x               - Changes item's prefix to x. *Note2
+ *   Priority Name: x        - Sets priority name to x. *Note2
+ *   Random Stat: x          - Increases or decreases 'Stat' by 0 to x. *Note1
+ *   Random Stat: +x         - Increases 'Stat' by 0 to x. *Note1
+ *   Random Stat: -x         - Decreases 'Stat' by 0 to x. *Note1
+ *   Reset Base Name         - Resets the base name to default.
+ *   Reset Boost Count       - Resets the Boost Count to 0.
+ *   Reset Icon              - Resets the icon back to the default icon.
+ *   Reset Prefix            - Resets name prefix to default.
+ *   Reset Stat              - Resets 'Stat' back to base stat values. *Note1
+ *   Reset Suffix            - Resets name suffix to default.
+ *   Reset Full              - Resets every single aspect about item. *Note3
+ *   Slots: x                - Changes the slot consumption cost to x. *Note1
+ *   Stat: +x                - Increases 'Stat' by x. *Note1
+ *   Stat: +x%               - Increases 'Stat' by x% of base stat. *Note1
+ *   Stat: -x                - Decreases 'Stat' by x. *Note1
+ *   Stat: -x%               - Decreases 'Stat' by x% of base stat. *Note1
+ *   Suffix: x               - Changes item's suffix to x. *Note2
+ *   Text Color: x           - Changes item's text color to x.
  *
  * Note1: 'Stat' is to be replaced by 'MaxHP', 'MaxMP', 'ATK', 'DEF', 'MAT',
  * 'MDF', 'AGI', 'LUK', 'SLOTS', 'ALL' or 'CURRENT'. 'ALL' affects all stats.
@@ -171,6 +186,8 @@ Yanfly.IUS = Yanfly.IUS || {};
  * Note3: Because this effect resets absolutely everything about an item, it
  * will send the player away from the upgrade menu to reset the standings of
  * the item.
+ *
+ * Note4: This requires the Item Picture Images plugin.
  *
  * ============================================================================
  * Plugin Commands
@@ -190,6 +207,16 @@ Yanfly.IUS = Yanfly.IUS || {};
  * ============================================================================
  * Changelog
  * ============================================================================
+ *
+ * Version 1.08:
+ * - Updated for RPG Maker MV version 1.5.0.
+ *
+ * Version 1.07:
+ * - Lunatic Mode fail safes added.
+ *
+ * Version 1.06a:
+ * - Fixed a bug that caused an error with the way items upgraded.
+ * - Fixed a bug that didn't connect with the Equip Customize Command plugin.
  *
  * Version 1.05:
  * - Updated for RPG Maker MV version 1.1.0.
@@ -420,6 +447,17 @@ ItemManager.checkIUSEffects = function(mainItem, effectItem) {
 };
 
 ItemManager.processIUSEffect = function(line, mainItem, effectItem) {
+    // Imported.YEP_X_ItemPictureImg
+    if (Imported.YEP_X_ItemPictureImg) {
+      if (line.match(/PICTURE IMAGE:[ ](.*)/i)) {
+        var filename = String(RegExp.$1);
+        return this.effectIUSPictureHue(mainItem, filename, undefined);
+      }
+      if (line.match(/PICTURE HUE:[ ](\d+)/i)) {
+        var hue = parseInt(RegExp.$1).clamp(0, 360);
+        return this.effectIUSPictureHue(mainItem, undefined, hue);
+      }
+    }
     // BASE NAME: X
     if (line.match(/BASE NAME:[ ](.*)/i)) {
       var value = String(RegExp.$1);
@@ -491,6 +529,28 @@ ItemManager.processIUSEffect = function(line, mainItem, effectItem) {
     }
 };
 
+ItemManager.adjustItemTrait = function(mainItem, code, dataId, value, add) {
+    if (add) {
+      this.addTraitToItem(mainItem, code, dataId, value);
+    } else {
+      this.deleteTraitFromItem(mainItem, code, dataId, value);
+    }
+};
+
+ItemManager.addTraitToItem = function(mainItem, code, dataId, value) {
+    var trait = {
+      code: code,
+      dataId: dataId,
+      value: value
+    }
+    mainItem.traits.push(trait);
+};
+
+ItemManager.deleteTraitFromItem = function(mainItem, code, dataId, value) {
+    var index = this.getMatchingTraitIndex(mainItem, code, dataId, value);
+    if (index >= 0) mainItem.traits.splice(index, 1);
+};
+
 ItemManager.effectIUSBaseName = function(item, value) {
     this.setBaseName(item, value);
     this.updateItemName(item);
@@ -499,7 +559,11 @@ ItemManager.effectIUSBaseName = function(item, value) {
 ItemManager.effectIUSEval = function(mainItem, effectItem, code) {
     var item = mainItem;
     var baseItem = DataManager.getBaseItem(item);
-    eval(code);
+    try {
+      eval(code);
+    } catch (e) {
+      Yanfly.Util.displayError(e, code, 'ITEM UPGRADE EFFECT ERROR');
+    }
 };
 
 ItemManager.effectIUSIcon = function(item, value) {
@@ -640,6 +704,9 @@ ItemManager.effectIUSRandomChange2 = function(item, stat, value) {
 };
 
 ItemManager.effectIUSResetStat = function(item, stat) {
+    if (Imported.YEP_X_AttachAugments) {
+      var augments = this.removeAllAugments(item);
+    }
     var baseItem = DataManager.getBaseItem(item);
     switch (stat) {
       case 'HP':
@@ -735,6 +802,9 @@ ItemManager.effectIUSResetStat = function(item, stat) {
         this._fullReset = true;
         this._resetItem = item;
         break;
+    }
+    if (Imported.YEP_X_AttachAugments) {
+      this.installAugments(item, augments);
     }
 };
 
@@ -1107,12 +1177,13 @@ Scene_Item.prototype.onActionUpgrade = function() {
     this._itemActionWindow.deactivate();
     this._upgradeListWindow.show();
     this._upgradeListWindow.activate();
+    this._upgradeItem = this.item();
     this._upgradeListWindow.setItem(this.item());
 };
 
 Scene_Item.prototype.onUpgradeListOk = function() {
     var effectItem = this._upgradeListWindow.item();
-    ItemManager.applyIUSEffects(this.item(), effectItem)
+    ItemManager.applyIUSEffects(this._upgradeItem, effectItem)
     if (ItemManager._fullReset) return this.onUpgradeFullReset();
     this._upgradeListWindow.refresh();
     this._upgradeListWindow.activate();
@@ -1156,6 +1227,17 @@ Yanfly.Util.getRange = function(n, m) {
     var result = [];
     for (var i = n; i <= m; ++i) result.push(i);
     return result;
+};
+
+Yanfly.Util.displayError = function(e, code, message) {
+  console.log(message);
+  console.log(code || 'NON-EXISTENT');
+  console.error(e);
+  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
+    if (!require('nw.gui').Window.get().isDevToolsOpen()) {
+      require('nw.gui').Window.get().showDevTools();
+    }
+  }
 };
 
 //=============================================================================

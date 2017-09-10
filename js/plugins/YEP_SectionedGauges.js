@@ -8,11 +8,11 @@ Imported.YEP_SectionedGauges = true;
 
 var Yanfly = Yanfly || {};
 Yanfly.SecGauge = Yanfly.SecGauge || {};
-Yanfly.SecGauge.version = 1.00;
+Yanfly.SecGauge.version = 1.02;
 
 //=============================================================================
  /*:
- * @plugindesc v1.00 Section up your gauges to make them easier to read.
+ * @plugindesc v1.02 Section up your gauges to make them easier to read.
  * @author Yanfly Engine Plugins + Tigress Collaboration
  *
  * @param ---Sections---
@@ -69,7 +69,9 @@ Yanfly.SecGauge.version = 1.00;
  * This plugin is plug and play, but you can adjust the plugin parameters to
  * fit the settings and needs of your game. Adjust the values found in the
  * plugin's parameters to adjust the mentioned aspect to change up the sections
- * found in a gauge's HP, MP, or TP.
+ * found in a gauge's HP, MP, or TP. Sections are divided up into percentile
+ * parts of the gauge allowing for the player to easily read the percentile
+ * value of an HP, MP, or TP gauge.
  *
  * The Status Menu Core also has compatibility with this plugin to display
  * sectioned gauges for the EXP gauges and the parameter gauges. Like with the
@@ -78,8 +80,33 @@ Yanfly.SecGauge.version = 1.00;
  *
  * This is a collaboration plugin by Tigress and Yanfly to ensure compatibility
  * with the Yanfly Engine Plugins library.
+ *
+ * ============================================================================
+ * Changelog
+ * ============================================================================
+ *
+ * Version 1.02:
+ * - Bug fix: adjusted gauge positioning issues courtesy of Fragrarch.
+ *
+ * Version 1.01:
+ * - Bug fix: Was missing a compatibility check.
+ *
+ * Version 1.00:
+ * - Finished Plugin!
  */
 //=============================================================================
+
+if (Imported.YEP_SegmentedGauges) {
+
+var text = '================================================================\n';
+text += 'You are trying to use YEP_SectionedGauges with YEP_SegmentedGauges.\n';
+text += 'These two plugins cannot be used with each other. Please disable\n';
+text += 'one or the other.\n';
+text += '================================================================\n';
+console.log(text);
+require('nw.gui').Window.get().showDevTools();
+
+} else {
 
 //=============================================================================
 // Parameter Variables
@@ -145,12 +172,12 @@ Window_Base.prototype.drawGauge = function(dx, dy, dw, rate, color1, color2) {
 Window_Base.prototype.drawGaugeSections = function(dx, dy, dw, xB, yB) {
   var sections = this._gaugeSections;
   if (sections) {
-    var gaugeH = this.gaugeHeight();
+    var gaugeH = this.gaugeHeight() - 2;
     var gaugeY = dy + this.lineHeight() - gaugeH - 2 + yB;
     if (this.isGaugeOutline()) {
       dx += 1;
       dw -= 2;
-      gaugeY -= 1;
+      gaugeY -= 2;
     }
     dx += xB;
     var sectionWidth = dw / sections;
@@ -222,6 +249,8 @@ function(dx, dy, dw, rate, color1, color2) {
 // YEP_StatusMenuCore
 //=============================================================================
 
+if (Imported.YEP_StatusMenuCore) {
+
 Yanfly.SecGauge.Window_StatusInfo_drawExpGauge =
   Window_StatusInfo.prototype.drawExpGauge;
 Window_StatusInfo.prototype.drawExpGauge = function(actor, rate, rect) {
@@ -240,6 +269,9 @@ Window_StatusInfo.prototype.drawParamGauge = function(dx, dy, dw, paramId) {
   return rate;
 };
 
+}; // Imported.YEP_StatusMenuCore
+
 //=============================================================================
 // End of File
 //=============================================================================
+}; // Imported.YEP_SegmentedGauges

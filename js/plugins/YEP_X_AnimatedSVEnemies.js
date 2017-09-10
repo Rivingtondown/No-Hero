@@ -8,10 +8,11 @@ Imported.YEP_X_AnimatedSVEnemies = true;
 
 var Yanfly = Yanfly || {};
 Yanfly.SVE = Yanfly.SVE || {};
+Yanfly.SVE.version = 1.18;
 
 //=============================================================================
  /*:
- * @plugindesc v1.07 (Requires YEP_BattleEngineCore.js) This plugin lets
+ * @plugindesc v1.18 (Requires YEP_BattleEngineCore.js) This plugin lets
  * you use Animated Sideview Actors for enemies!
  * @author Yanfly Engine Plugins
  *
@@ -19,41 +20,64 @@ Yanfly.SVE = Yanfly.SVE || {};
  * @default
  *
  * @param Anchor X
+ * @parent ---General---
+ * @type number
+ * @decimals 1
  * @desc Sets the default anchor position of the sprite.
  * Default: 0.5
  * @default 0.5
  *
  * @param Anchor Y
+ * @parent ---General---
+ * @type number
+ * @decimals 1
  * @desc Sets the default anchor position of the sprite.
- * Default: 1
- * @default 1
+ * Default: 1.0
+ * @default 1.0
  *
  * @param Sprite Smoothing
+ * @parent ---General---
+ * @type boolean
+ * @on Enable
+ * @off Disable
  * @desc Enable Sprite Smoothing? This is a global setting.
  * NO - false     YES - true
  * @default true
  *
  * @param Sprite Width
+ * @parent ---General---
  * @desc Sets the minimum width for sideview sprites.
  * Use 'auto' for automatic detection. Default: 64
  * @default auto
  *
  * @param Sprite Height
+ * @parent ---General---
  * @desc Sets the minimum height for sideview sprites.
  * Use 'auto' for automatic detection. Default: 64
  * @default auto
  *
  * @param Collapse
+ * @parent ---General---
+ * @type boolean
+ * @on YES
+ * @off NO
  * @desc When a sprite dies, have it collapse and vanish?
  * NO - false     YES - true
  * @default false
  *
  * @param Frame Speed
+ * @parent ---General---
+ * @type number
+ * @min 0
  * @desc The default frame speed used in between motions.
  * Default: 12
  * @default 12
  *
  * @param Show State Overlay
+ * @parent ---General---
+ * @type boolean
+ * @on Show
+ * @off Hide
  * @desc Show state overlays on sideview enemies?
  * NO - false     YES - true
  * @default true
@@ -62,16 +86,22 @@ Yanfly.SVE = Yanfly.SVE || {};
  * @default
  *
  * @param Show Shadow
+ * @parent ---Shadows---
+ * @type boolean
+ * @on Show
+ * @off Hide
  * @desc Show shadows on sideview enemies?
  * NO - false     YES - true
  * @default false
  *
  * @param Shadow Scale X
+ * @parent ---Shadows---
  * @desc Sets the default horizontal shadow scale.
  * Use 'auto' for automatic detection. Default: 1
  * @default auto
  *
  * @param Shadow Scale Y
+ * @parent ---Shadows---
  * @desc Sets the default vertical shadow scale.
  * Use 'auto' for automatic detection. Default: 1
  * @default auto
@@ -80,26 +110,49 @@ Yanfly.SVE = Yanfly.SVE || {};
  * @default
  *
  * @param Enable Breathing
+ * @parent ---Breathing---
  * @desc Breathing option for enemies.
+ * @type select
+ * @option None
+ * @value 0
+ * @option Static
+ * @value 1
+ * @option Sideview
+ * @value 2
+ * @option Both
+ * @value 3
  * 0 - None, 1 - Static, 2 - Sideview, 3 - Both
  * @default 1
  *
  * @param Breathing Speed
+ * @parent ---Breathing---
+ * @type number
+ * @min 0
  * @desc The default breathing rate for enemies.
  * Lower - Faster     Larger - Slower
  * @default 20
  *
  * @param Breathing X Rate
+ * @parent ---Breathing---
+ * @type number
+ * @decimals 3
  * @desc The default breathing X rate for enemies.
  * Lower - Static     Larger - Dynamic
  * @default 0.001
  *
  * @param Breathing Y Rate
+ * @parent ---Breathing---
+ * @type number
+ * @decimals 3
  * @desc The default breathing Y rate for enemies.
  * Lower - Static     Larger - Dynamic
- * @default 0.02
+ * @default 0.020
  *
  * @param HP Link Breathing
+ * @parent ---Breathing---
+ * @type boolean
+ * @on Link
+ * @off Don't Link
  * @desc Link breathing rate to HP Rate?
  * NO - false     YES - true
  * @default false
@@ -108,74 +161,287 @@ Yanfly.SVE = Yanfly.SVE || {};
  * @default
  *
  * @param Floating Speed
+ * @parent ---Floating---
+ * @type number
+ * @min 0
  * @desc The default floating speed for enemies.
  * Lower - Faster     Larger - Slower
  * @default 20
  *
  * @param Floating Rate
+ * @parent ---Floating---
+ * @type number
+ * @decimals 1
  * @desc The default floating rate for enemies.
  * Lower - Faster     Larger - Slower
  * @default 0.3
  *
  * @param Floating Height
+ * @parent ---Floating---
+ * @type number
+ * @min 0
  * @desc The default minimum floating height for enemies.
  * Lower - Closer to Ground     Larger - Higher Up
  * @default 50
+ *
+ * @param Floating Death
+ * @parent ---Floating---
+ * @type boolean
+ * @on Allow
+ * @off Disallow
+ * @desc Allow enemies to remain floating while dead?
+ * NO - false     YES - true
+ * @default true
  *
  * @param ---Motions---
  * @default
  *
  * @param Attack Motion
+ * @parent ---Motions---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Sets the default attack motion for no weapons.
  * Attack Motion Types: swing     thrust     missile
  * @default thrust
  *
- * @param Weapon Image Index
- * @desc Sets the default weapon image index for the sprite.
- * Use 0 for no image.
- * @default 0
- *
  * @param Idle Motion
+ * @parent ---Motions---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Sets the sprite's idle motion.
  * Default: walk
  * @default walk
  *
  * @param Damage Motion
+ * @parent ---Motions---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Sets the sprite's taking damage motion.
  * Default: damage
  * @default damage
  *
  * @param Evade Motion
+ * @parent ---Motions---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Sets the sprite's evasion motion.
  * Default: evade
  * @default evade
  *
  * @param Escape Motion
+ * @parent ---Motions---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Sets the sprite's escape motion.
  * Default: escape
  * @default escape
  *
  * @param Guard Motion
+ * @parent ---Motions---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Sets the sprite's guard motion.
  * Default: guard
  * @default guard
  *
  * @param Abnormal Motion
+ * @parent ---Motions---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Sets the sprite's abnormal (status afflicted) motion.
  * Default: abnormal
  * @default abnormal
  *
  * @param Sleep Motion
+ * @parent ---Motions---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Sets the sprite's sleeping motion.
  * Default: sleep
  * @default sleep
  *
  * @param Dying Motion
+ * @parent ---Motions---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Sets the sprite's dying (crisis) motion.
  * Default: dying
  * @default dying
  *
  * @param Dead Motion
+ * @parent ---Motions---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Sets the sprite's dead motion.
  * Default: dead
  * @default dead
@@ -184,277 +450,940 @@ Yanfly.SVE = Yanfly.SVE || {};
  * @default
  *
  * @param Weapon Image Index
+ * @parent ---Weapons---
+ * @type number
+ * @min 0
  * @desc Sets the default weapon image index for the sprite.
  * Use 0 for no image.
  * @default 0
  *
  * @param Weapon 1 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 1: Dagger     Motion: swing
  * @default swing
  *
  * @param Weapon 1 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 6
  *
  * @param Weapon 2 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 2: Sword     Motion: swing
  * @default swing
  *
  * @param Weapon 2 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 6
  *
  * @param Weapon 3 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 3: Flail     Motion: swing
  * @default swing
  *
  * @param Weapon 3 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 1
  *
  * @param Weapon 4 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 4: Axe     Motion: swing
  * @default swing
  *
  * @param Weapon 4 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 6
  *
  * @param Weapon 5 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 5: Whip     Motion: swing
  * @default swing
  *
  * @param Weapon 5 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 6
  *
  * @param Weapon 6 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 6: Staff     Motion: swing
  * @default swing
  *
  * @param Weapon 6 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 1
  *
  * @param Weapon 7 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 7: Long Bow     Motion: missile
  * @default missile
  *
  * @param Weapon 7 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 11
  *
  * @param Weapon 8 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 8: Crossbow     Motion: missile
  * @default missile
  *
  * @param Weapon 8 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 11
  *
  * @param Weapon 9 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 9: Gun     Motion: missile
  * @default missile
  *
  * @param Weapon 9 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 111
  *
  * @param Weapon 10 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 10: Claw     Motion: thrust
  * @default thrust
  *
  * @param Weapon 10 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 16
  *
  * @param Weapon 11 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 11: Glove     Motion: thrust
  * @default thrust
  *
  * @param Weapon 11 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 1
  *
  * @param Weapon 12 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 12: Spear     Motion: thrust
  * @default thrust
  *
  * @param Weapon 12 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 11
  *
  * @param Weapon 13 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 13: Mace     Motion: swing
  * @default swing
  *
  * @param Weapon 13 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 1
  *
  * @param Weapon 14 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 14: Rod     Motion: swing
  * @default swing
  *
  * @param Weapon 14 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 1
  *
  * @param Weapon 15 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 15: Club     Motion: swing
  * @default swing
  *
  * @param Weapon 15 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 1
  *
  * @param Weapon 16 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 16: Chain     Motion: swing
  * @default swing
  *
  * @param Weapon 16 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 6
  *
  * @param Weapon 17 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 17: Sword#2     Motion: swing
  * @default swing
  *
  * @param Weapon 17 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 7
  *
  * @param Weapon 18 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 18: Iron Pipe     Motion: swing
  * @default swing
  *
  * @param Weapon 18 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 1
  *
  * @param Weapon 19 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 19: Sling Shot     Motion: missile
  * @default missile
  *
  * @param Weapon 19 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 11
  *
  * @param Weapon 20 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 20: Shotgun     Motion: missile
  * @default missile
  *
  * @param Weapon 20 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 111
  *
  * @param Weapon 21 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 21: Rifle     Motion: missile
  * @default missile
  *
  * @param Weapon 21 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 111
  *
  * @param Weapon 22 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 22: Chainsaw     Motion: thrust
  * @default thrust
  *
  * @param Weapon 22 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 7
  *
  * @param Weapon 23 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 23: Railgun     Motion: missile
  * @default missile
  *
  * @param Weapon 23 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 15
  *
  * @param Weapon 24 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 24: Stun Rod     Motion: thrust
  * @default thrust
  *
  * @param Weapon 24 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 15
  *
  * @param Weapon 25 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 25: Spell Book   Motion: swing
  * @default swing
  *
  * @param Weapon 25 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 1
  *
  * @param Weapon 26 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 26: custom     Motion: thrust
  * @default thrust
  *
  * @param Weapon 26 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 1
  *
  * @param Weapon 27 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 27: custom     Motion: thrust
  * @default thrust
  *
  * @param Weapon 27 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 1
  *
  * @param Weapon 28 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 28: custom     Motion: thrust
  * @default thrust
  *
  * @param Weapon 28 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 1
  *
  * @param Weapon 29 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 29: custom     Motion: thrust
  * @default thrust
  *
  * @param Weapon 29 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 1
  *
  * @param Weapon 30 Motion
+ * @parent ---Weapons---
+ * @type combo
+ * @option swing
+ * @option thrust
+ * @option missile
+ * @option walk
+ * @option wait
+ * @option chant
+ * @option guard
+ * @option damage
+ * @option evade
+ * @option skill
+ * @option spell
+ * @option item
+ * @option escape
+ * @option victory
+ * @option dying
+ * @option abnormal
+ * @option sleep
+ * @option dead
  * @desc Motion used by default for this weapon image.
  * Weapon 30: custom     Motion: thrust
  * @default thrust
  *
  * @param Weapon 30 Animation
+ * @parent ---Weapons---
+ * @type animation
  * @desc Battle animation used by default for this weapon image.
  * @default 1
  *
@@ -522,6 +1451,12 @@ Yanfly.SVE = Yanfly.SVE || {};
  *
  *   <Floating Height: x>
  *   Sets the minimum float height for the enemy to x.
+ *
+ *   <Floating Death>
+ *   <No Floating Death>
+ *   Decide whether or not this particular enemy will float while dead or
+ *   instead, drop to the ground instantly and will bypass the 'Floating Death'
+ *   plugin parameter for the particular enemy.
  *
  *   <Scale Sprite: x%>
  *   This allows you to scale the sprite larger or smaller by x% of the
@@ -713,6 +1648,50 @@ Yanfly.SVE = Yanfly.SVE || {};
  * Changelog
  * ============================================================================
  *
+ * Version 1.18:
+ * - Updated for RPG Maker MV version 1.5.0.
+ *
+ * Verison 1.17:
+ * - Visual graphic update to sync attack animations properly with how actor
+ * animations are now handled in the more updated RPG Maker MV versions.
+ *
+ * Version 1.16:
+ * - Added 'Floating Death' plugin parameter.
+ * - Optimization update.
+ *
+ * Version 1.15:
+ * - Updated for RPG Maker MV version 1.3.2.
+ *
+ * Version 1.14:
+ * - Pixi4 update to fix bug that caused state icons to fly off the screen.
+ * - Fixed a compatibility issue with YEP_X_VisualStateFX regarding state
+ * sprites being disabled and causing crashes.
+ *
+ * Version 1.13:
+ * - Compatibility update with YEP_X_VisualStateFX to disable State Overlays on
+ * enemies properly.
+ *
+ * Version 1.12:
+ * - Fixed a bug that caused the <Sideview Show State Overlay> and 
+ * <Sideview Hide State Overlay> notetags to not work.
+ * - Fixed a bug that caused scaled enemies to have their state icons and
+ * overlays appear in odd places.
+ *
+ * Version 1.11:
+ * - Fixed a bug that caused hidden enemies to appear early on.
+ *
+ * Version 1.10:
+ * - Optimized plugin to use less resources. Animated enemies will no longer
+ * have a static graphic once the game is loaded.
+ *
+ * Version 1.09:
+ * - Added a fix for state icons appearing behind battlers for the users who
+ * aren't using the Action Sequence Packs.
+ *
+ * Version 1.08:
+ * - State Icon and State Overlays will now synch together for floating and
+ * jumping battlers.
+ *
  * Version 1.07:
  * - Updated for RPG Maker MV version 1.1.0.
  *
@@ -749,6 +1728,8 @@ Yanfly.SVE = Yanfly.SVE || {};
 
 if (Imported.YEP_BattleEngineCore) {
 
+if (Yanfly.BEC.version && Yanfly.BEC.version >= 1.42) {
+
 //=============================================================================
 // Parameter Variables
 //=============================================================================
@@ -776,6 +1757,8 @@ Yanfly.Param.SVELinkBreathing = eval(Yanfly.Parameters['HP Link Breathing']);
 Yanfly.Param.SVEFloatSpeed = Number(Yanfly.Parameters['Floating Speed']);
 Yanfly.Param.SVEFloatRate = Number(Yanfly.Parameters['Floating Rate']);
 Yanfly.Param.SVEFloatHeight = Number(Yanfly.Parameters['Floating Height']);
+Yanfly.Param.SVEFloatDeath = String(Yanfly.Parameters['Floating Death']);
+Yanfly.Param.SVEFloatDeath = eval(Yanfly.Param.SVEFloatDeath);
 
 Yanfly.Param.SVEShowShadow = eval(String(Yanfly.Parameters['Show Shadow']));
 Yanfly.Param.SVEShadowScaleX = String(Yanfly.Parameters['Shadow Scale X']);
@@ -797,12 +1780,12 @@ Yanfly.Param.SVEWeaponMotion = {};
 Yanfly.Param.SVEWeaponAnimation = {};
 Yanfly.Param.SVEWeaponMotion[0] = Yanfly.Param.SVEAttackMotion.toLowerCase();
 for (Yanfly.i = 1; Yanfly.i < 31; ++Yanfly.i) {
-	Yanfly.s1 = 'Weapon ' + Yanfly.i + ' Motion';
-	Yanfly.s2 = String(Yanfly.Parameters[Yanfly.s1]);
-	Yanfly.Param.SVEWeaponMotion[Yanfly.i] = Yanfly.s2.toLowerCase();
-	Yanfly.s1 = 'Weapon ' + Yanfly.i + ' Animation';
-	Yanfly.s2 = Number(Yanfly.Parameters[Yanfly.s1]);
-	Yanfly.Param.SVEWeaponAnimation[Yanfly.i] = Yanfly.s2;
+  Yanfly.s1 = 'Weapon ' + Yanfly.i + ' Motion';
+  Yanfly.s2 = String(Yanfly.Parameters[Yanfly.s1]);
+  Yanfly.Param.SVEWeaponMotion[Yanfly.i] = Yanfly.s2.toLowerCase();
+  Yanfly.s1 = 'Weapon ' + Yanfly.i + ' Animation';
+  Yanfly.s2 = Number(Yanfly.Parameters[Yanfly.s1]);
+  Yanfly.Param.SVEWeaponAnimation[Yanfly.i] = Yanfly.s2;
 };
 
 //=============================================================================
@@ -813,18 +1796,18 @@ Yanfly.SVE.DataManager_isDatabaseLoaded = DataManager.isDatabaseLoaded;
 DataManager.isDatabaseLoaded = function() {
   if (!Yanfly.SVE.DataManager_isDatabaseLoaded.call(this)) return false;
   if (!Yanfly._loaded_YEP_X_AnimatedSVEnemies) {
-  	this.processSVENotetags1($dataEnemies);
+    this.processSVENotetags1($dataEnemies);
     this.processSVENotetags2($dataStates);
     Yanfly._loaded_YEP_X_AnimatedSVEnemies = true;
   }
-	return true;
+  return true;
 };
 
 DataManager.processSVENotetags1 = function(group) {
   var noteWeapon = /<(?:SIDEVIEW WEAPON):[ ](\d+),[ ](.*),[ ](\d+)>/i;
-	for (var n = 1; n < group.length; n++) {
-		var obj = group[n];
-		var notedata = obj.note.split(/[\r\n]+/);
+  for (var n = 1; n < group.length; n++) {
+    var obj = group[n];
+    var notedata = obj.note.split(/[\r\n]+/);
 
     obj.sideviewBattler = [];
     obj.sideviewAttackMotion = Yanfly.Param.SVEAttackMotion.toLowerCase();
@@ -858,10 +1841,11 @@ DataManager.processSVENotetags1 = function(group) {
     obj.sideviewFloatSpeed = Yanfly.Param.SVEFloatSpeed;
     obj.sideviewFloatRate = Yanfly.Param.SVEFloatRate;
     obj.sideviewFloatHeight = Yanfly.Param.SVEFloatHeight;
+    obj.sideviewFloatDeath = Yanfly.Param.SVEFloatDeath;
     obj.sideviewStateOverlay = Yanfly.Param.SVEOverlay;
 
-		for (var i = 0; i < notedata.length; i++) {
-			var line = notedata[i];
+    for (var i = 0; i < notedata.length; i++) {
+      var line = notedata[i];
        if (line.match(/<(?:SCALE SPRITE):[ ](\d+)([%％])>/i)) {
         obj.spriteScaleX = parseFloat(RegExp.$1) * 0.01;
         obj.spriteScaleY = obj.spriteScaleX;
@@ -870,33 +1854,33 @@ DataManager.processSVENotetags1 = function(group) {
       } else if (line.match(/<(?:SCALE SPRITE HEIGHT):[ ](\d+)([%％])>/i)) {
         obj.spriteScaleY = parseFloat(RegExp.$1) * 0.01;
       } else if (line.match(/<(?:SIDEVIEW BATTLER):[ ](.*)>/i)) {
-				obj.sideviewBattler.push(String(RegExp.$1));
+        obj.sideviewBattler.push(String(RegExp.$1));
         obj.sideviewBreathing = [2, 3].contains(Yanfly.Param.SVEBreathing);
-			} else if (line.match(/<(?:SIDEVIEW ATTACK MOTION):[ ](.*)>/i)) {
-				obj.sideviewAttackMotion = String(RegExp.$1).toLowerCase();
-			} else if (line.match(/<(?:SIDEVIEW IDLE MOTION):[ ](.*)>/i)) {
-				obj.sideviewIdleMotion.push(String(RegExp.$1).toLowerCase());
-			} else if (line.match(/<(?:SIDEVIEW DAMAGE MOTION):[ ](.*)>/i)) {
-				obj.sideviewDmgMotion = String(RegExp.$1).toLowerCase();
-			} else if (line.match(/<(?:SIDEVIEW EVADE MOTION):[ ](.*)>/i)) {
-				obj.sideviewEvadeMotion = String(RegExp.$1).toLowerCase();
-			} else if (line.match(/<(?:SIDEVIEW ESCAPE MOTION):[ ](.*)>/i)) {
-				obj.sideviewEscMotion = String(RegExp.$1).toLowerCase();
-			} else if (line.match(/<(?:SIDEVIEW GUARD MOTION):[ ](.*)>/i)) {
-				obj.sideviewGuardMotion = String(RegExp.$1).toLowerCase();
-			} else if (line.match(/<(?:SIDEVIEW ABNORMAL MOTION):[ ](.*)>/i)) {
-				obj.sideviewAbnMotion = String(RegExp.$1).toLowerCase();
-			} else if (line.match(/<(?:SIDEVIEW SLEEP MOTION):[ ](.*)>/i)) {
-				obj.sideviewSleepMotion = String(RegExp.$1).toLowerCase();
-			} else if (line.match(/<(?:SIDEVIEW DYING MOTION):[ ](.*)>/i)) {
-				obj.sideviewDyingMotion = String(RegExp.$1).toLowerCase();
-			} else if (line.match(/<(?:SIDEVIEW DEAD MOTION):[ ](.*)>/i)) {
-				obj.sideviewDeadMotion = String(RegExp.$1).toLowerCase();
-			} else if (line.match(/<(?:SIDEVIEW ANCHOR X):[ ](\d+)[.](\d+)>/i)) {
-				obj.sideviewAnchorX = eval(String(RegExp.$1) + '.' + String(RegExp.$2));
-			} else if (line.match(/<(?:SIDEVIEW ANCHOR Y):[ ](\d+)[.](\d+)>/i)) {
-				obj.sideviewAnchorY = eval(String(RegExp.$1) + '.' + String(RegExp.$2));
-			} else if (line.match(/<(?:SIDEVIEW WEAPON):[ ](\d+)>/i)) {
+      } else if (line.match(/<(?:SIDEVIEW ATTACK MOTION):[ ](.*)>/i)) {
+        obj.sideviewAttackMotion = String(RegExp.$1).toLowerCase();
+      } else if (line.match(/<(?:SIDEVIEW IDLE MOTION):[ ](.*)>/i)) {
+        obj.sideviewIdleMotion.push(String(RegExp.$1).toLowerCase());
+      } else if (line.match(/<(?:SIDEVIEW DAMAGE MOTION):[ ](.*)>/i)) {
+        obj.sideviewDmgMotion = String(RegExp.$1).toLowerCase();
+      } else if (line.match(/<(?:SIDEVIEW EVADE MOTION):[ ](.*)>/i)) {
+        obj.sideviewEvadeMotion = String(RegExp.$1).toLowerCase();
+      } else if (line.match(/<(?:SIDEVIEW ESCAPE MOTION):[ ](.*)>/i)) {
+        obj.sideviewEscMotion = String(RegExp.$1).toLowerCase();
+      } else if (line.match(/<(?:SIDEVIEW GUARD MOTION):[ ](.*)>/i)) {
+        obj.sideviewGuardMotion = String(RegExp.$1).toLowerCase();
+      } else if (line.match(/<(?:SIDEVIEW ABNORMAL MOTION):[ ](.*)>/i)) {
+        obj.sideviewAbnMotion = String(RegExp.$1).toLowerCase();
+      } else if (line.match(/<(?:SIDEVIEW SLEEP MOTION):[ ](.*)>/i)) {
+        obj.sideviewSleepMotion = String(RegExp.$1).toLowerCase();
+      } else if (line.match(/<(?:SIDEVIEW DYING MOTION):[ ](.*)>/i)) {
+        obj.sideviewDyingMotion = String(RegExp.$1).toLowerCase();
+      } else if (line.match(/<(?:SIDEVIEW DEAD MOTION):[ ](.*)>/i)) {
+        obj.sideviewDeadMotion = String(RegExp.$1).toLowerCase();
+      } else if (line.match(/<(?:SIDEVIEW ANCHOR X):[ ](\d+)[.](\d+)>/i)) {
+        obj.sideviewAnchorX = eval(String(RegExp.$1) + '.' + String(RegExp.$2));
+      } else if (line.match(/<(?:SIDEVIEW ANCHOR Y):[ ](\d+)[.](\d+)>/i)) {
+        obj.sideviewAnchorY = eval(String(RegExp.$1) + '.' + String(RegExp.$2));
+      } else if (line.match(/<(?:SIDEVIEW WEAPON):[ ](\d+)>/i)) {
         var weaponId = parseInt(RegExp.$1);
         var motionId = Yanfly.Param.SVEWeaponMotion[weaponId].toLowerCase();
         var aniId = Yanfly.Param.SVEWeaponAnimation[weaponId];
@@ -921,10 +1905,10 @@ DataManager.processSVENotetags1 = function(group) {
       } else if (line.match(/<(?:SIDEVIEW HIDE SHADOW)>/i)) {
         obj.sideviewShadowShow = false;
       } else if (line.match(/<(?:SIDEVIEW SHADOW WIDTH):[ ](\d+)([%％])>/i)) {
-				obj.sideviewShadowScaleX = parseFloat(RegExp.$1 * 0.01);
-			} else if (line.match(/<(?:SIDEVIEW SHADOW HEIGHT):[ ](\d+)([%％])>/i)) {
-				obj.sideviewShadowScaleY = parseFloat(RegExp.$1 * 0.01);
-			} else if (line.match(/<(?:SIDEVIEW FRAME SPEED):[ ](\d+)>/i)) {
+        obj.sideviewShadowScaleX = parseFloat(RegExp.$1 * 0.01);
+      } else if (line.match(/<(?:SIDEVIEW SHADOW HEIGHT):[ ](\d+)([%％])>/i)) {
+        obj.sideviewShadowScaleY = parseFloat(RegExp.$1 * 0.01);
+      } else if (line.match(/<(?:SIDEVIEW FRAME SPEED):[ ](\d+)>/i)) {
         obj.sideviewFrameSpeed = parseInt(RegExp.$1);
       } else if (line.match(/<(?:FLOATING|float)>/i)) {
         obj.sideviewFloating = true;
@@ -935,12 +1919,16 @@ DataManager.processSVENotetags1 = function(group) {
         obj.sideviewFloatRate = rate;
       } else if (line.match(/<(?:FLOATING HEIGHT):[ ](\d+)>/i)) {
         obj.sideviewFloatHeight = parseInt(RegExp.$1);
+      } else if (line.match(/<(?:FLOATING DEATH|FLOAT DEATH)>/i)) {
+        obj.sideviewFloatDeath = true;
+      } else if (line.match(/<(?:NO FLOATING DEATH|NO FLOAT DEATH)>/i)) {
+        obj.sideviewFloatDeath = false;
       } else if (line.match(/<SIDEVIEW SHOW STATE OVERLAY>/i)) {
         obj.sideviewStateOverlay = true;
       } else if (line.match(/<SIDEVIEW HIDE STATE OVERLAY>/i)) {
         obj.sideviewStateOverlay = false;
       }
-		}
+    }
     // Breathing
     for (var i = 0; i < notedata.length; i++) {
       var line = notedata[i];
@@ -962,18 +1950,25 @@ DataManager.processSVENotetags1 = function(group) {
         obj.sideviewLinkBreathing = false;
       }
     }
-		// Create Defaults
-		if (obj.sideviewIdleMotion.length <= 0) {
-			obj.sideviewIdleMotion = [Yanfly.Param.SVEIdleMotion.toLowerCase()];
-		}
-		if (obj.sideviewWeaponImage.length <= 0) {
-			var weaponId = Yanfly.Param.SVEWeaponIndex;
-			var motionId = Yanfly.Param.SVEWeaponMotion[weaponId].toLowerCase();
-			var aniId = Yanfly.Param.SVEWeaponAnimation[weaponId];
-			obj.sideviewWeaponImage = [[weaponId, motionId, aniId]];
-		}
+    // Create Defaults
+    if (obj.sideviewIdleMotion.length <= 0) {
+      obj.sideviewIdleMotion = [Yanfly.Param.SVEIdleMotion.toLowerCase()];
+    }
+    if (obj.sideviewWeaponImage.length <= 0) {
+      var weaponId = Yanfly.Param.SVEWeaponIndex;
+      var motionId = Yanfly.Param.SVEWeaponMotion[weaponId].toLowerCase();
+      var aniId = Yanfly.Param.SVEWeaponAnimation[weaponId];
+      obj.sideviewWeaponImage = [[weaponId, motionId, aniId]];
+    }
     obj.sideviewFrameSpeed = Math.max(1, obj.sideviewFrameSpeed);
-	}
+    if (obj.sideviewBattler.length > 0) {
+      if (Imported.YEP_X_BattleSysCTB) {
+        Yanfly.Param.CTBEnemySVBattler = true;
+      }
+      obj.battlerName = '';
+      obj.battlerHue = 0;
+    }
+  }
 };
 
 DataManager.processSVENotetags2 = function(group) {
@@ -1019,7 +2014,7 @@ Game_Battler.prototype.spriteWidth = function() {
     } else {
       var value = Yanfly.SVE.Game_Battler_spriteWidth.call(this);
     }
-    value *= Math.abs(this.spriteScaleX());
+    //value *= Math.abs(this.spriteScaleX());
     return Math.floor(value);
 };
 
@@ -1030,7 +2025,7 @@ Game_Battler.prototype.spriteHeight = function() {
     } else {
       var value = Yanfly.SVE.Game_Battler_spriteHeight.call(this);
     }
-    value *= Math.abs(this.spriteScaleY());
+    //value *= Math.abs(this.spriteScaleY());
     return Math.floor(value);
 };
 
@@ -1068,20 +2063,20 @@ Game_Enemy.prototype.setupSVAttributes = function() {
 };
 
 Yanfly.SVE.Game_Enemy_attackAnimationId =
-		Game_Enemy.prototype.attackAnimationId;
+    Game_Enemy.prototype.attackAnimationId;
 Game_Enemy.prototype.attackAnimationId = function() {
-		if (this.hasSVBattler() && !this.isHideSVWeapon()) {
-			if (this._svAttackAnimationId) return this._svAttackAnimationId;
-			this.setupSVAttributes();
-			return this._svAttackAnimationId;
-		}
+    if (this.hasSVBattler() && !this.isHideSVWeapon()) {
+      if (this._svAttackAnimationId) return this._svAttackAnimationId;
+      this.setupSVAttributes();
+      return this._svAttackAnimationId;
+    }
     return Yanfly.SVE.Game_Enemy_attackAnimationId.call(this);
 };
 
 Game_Enemy.prototype.svBattlerName = function() {
-		if (this._svBattlerName) return this._svBattlerName;
-		var array = this.enemy().sideviewBattler;
-		this._svBattlerName = Yanfly.Util.getRandomElement(array);
+    if (this._svBattlerName) return this._svBattlerName;
+    var array = this.enemy().sideviewBattler;
+    this._svBattlerName = Yanfly.Util.getRandomElement(array);
     return this._svBattlerName;
 };
 
@@ -1091,22 +2086,22 @@ Game_Enemy.prototype.hasSVBattler = function() {
 
 Game_Enemy.prototype.weaponImageId = function() {
     if (this.isHideSVWeapon()) return 0;
-		if (this._svWeaponImageId) return this._svWeaponImageId;
-		this.setupSVAttributes();
+    if (this._svWeaponImageId) return this._svWeaponImageId;
+    this.setupSVAttributes();
     return this._svWeaponImageId;
 };
 
 Game_Enemy.prototype.attackMotion = function() {
     if (this.weaponImageId() === 0) return this.enemy().sideviewAttackMotion;
-		if (this._svAttackMotion) return this._svAttackMotion;
-		this.setupSVAttributes();
+    if (this._svAttackMotion) return this._svAttackMotion;
+    this.setupSVAttributes();
     return this._svAttackMotion;
 };
 
 Game_Enemy.prototype.idleMotion = function() {
-		if (this._svIdleMotion) return this._svIdleMotion;
-		var array = this.enemy().sideviewIdleMotion;
-		this._svIdleMotion = Yanfly.Util.getRandomElement(array);
+    if (this._svIdleMotion) return this._svIdleMotion;
+    var array = this.enemy().sideviewIdleMotion;
+    this._svIdleMotion = Yanfly.Util.getRandomElement(array);
     return this._svIdleMotion;
 };
 
@@ -1272,7 +2267,7 @@ Game_Enemy.prototype.linkBreathing = function() {
 };
 
 Game_Enemy.prototype.isFloating = function() {
-    if (this.isDead()) return false;
+    if (this.isDead() && !this.enemy().sideviewFloatDeath) return false;
     return this.enemy().sideviewFloating;
 };
 
@@ -1301,8 +2296,8 @@ Yanfly.SVE.Game_Enemy_transform = Game_Enemy.prototype.transform;
 Game_Enemy.prototype.transform = function(enemyId) {
     this.clearSVAttributes();
     Yanfly.SVE.Game_Enemy_transform.call(this, enemyId);
-    this.battler().setBattler(this);
     this.battler().setTransform(this);
+    this.battler().setBattler(this);
 };
 
 //=============================================================================
@@ -1323,6 +2318,7 @@ Game_Party.prototype.requestMotionRefresh = function() {
 Yanfly.SVE.Sprite_Enemy_initMembers = Sprite_Enemy.prototype.initMembers;
 Sprite_Enemy.prototype.initMembers = function() {
     Yanfly.SVE.Sprite_Enemy_initMembers.call(this);
+    this._battlerName = null;
     this.initSVSprites();
 };
 
@@ -1345,10 +2341,16 @@ Sprite_Enemy.prototype.setTransform = function(battler) {
     this._weaponSprite.opacity = 0;
     this._mainSprite.opacity = 0;
     this._stateSprite.opacity = 0;
-    this.createShadowSprite();
-    this.createWeaponSprite();
-    this.createMainSprite();
-    this.createStateSprite();
+    if (battler.svBattlerName()) {
+      this.createShadowSprite();
+      this.createWeaponSprite();
+      this.createMainSprite();
+      this.createStateSprite();
+      this._shadowSprite.opacity = 255;
+      this._weaponSprite.opacity = 255;
+      this._mainSprite.opacity = 255;
+      this._stateSprite.opacity = 255;
+    }
 };
 
 Sprite_Enemy.prototype.createMainSprite = function() {
@@ -1374,12 +2376,16 @@ Sprite_Enemy.prototype.createWeaponSprite = function() {
 };
 
 Sprite_Enemy.prototype.createStateSprite = function() {
+    if (Imported.YEP_X_VisualStateFX) {
+      if (!Yanfly.Param.VSFXEnemyOver) return;
+    }
     Sprite_Actor.prototype.createStateSprite.call(this);
 };
 
 Yanfly.SVE.Sprite_Enemy_setBattler = Sprite_Enemy.prototype.setBattler;
 Sprite_Enemy.prototype.setBattler = function(battler) {
     this._svBattlerEnabled = false;
+    this.initSVSprites();
     Yanfly.SVE.Sprite_Enemy_setBattler.call(this, battler);
     this.setSVBattler(battler);
 };
@@ -1395,7 +2401,7 @@ Sprite_Enemy.prototype.setSVBattler = function(battler) {
     this._adjustMainBitmapSettings = false;
     this._actor = this._enemy;
     this._svBattlerEnabled = true;
-    this._stateSprite.setup(battler);
+    if (this._stateSprite) this._stateSprite.setup(battler);
 };
 
 Yanfly.SVE.Sprite_Enemy_update = Sprite_Enemy.prototype.update;
@@ -1403,6 +2409,7 @@ Sprite_Enemy.prototype.update = function() {
     Yanfly.SVE.Sprite_Enemy_update.call(this);
     if (this._svBattlerEnabled) this.updateMotion();
     this.updateBreathing();
+    if (!Imported.YEP_X_ActSeqPack2) this.updateStateIconHeight();
 };
 
 Yanfly.SVE.Sprite_Enemy_updateStateSprite =
@@ -1417,19 +2424,21 @@ Sprite_Enemy.prototype.updateStateSprite = function() {
 };
 
 Sprite_Enemy.prototype.updateSVStateSprite = function() {
+    if (!this._stateSprite) return;
+    this._stateSprite.visible = this._enemy.enemy().sideviewStateOverlay;
+    return;
     var height = this._enemy.spriteHeight() * -1;
     height -= Sprite_StateIcon._iconHeight;
     this._stateIconSprite.y = height;
     this._stateSprite.y = (this._enemy.spriteHeight() - 64) * -1;
-    this._stateSprite.visible = this._enemy.enemy().sideviewStateOverlay;
 };
 
 Sprite_Enemy.prototype.updateFloatingStateSprite = function() {
     if (this._enemy && this._enemy.isFloating()) {
       var heightRate = this.addFloatingHeight();
       var height = this._enemy.spriteHeight();
-      this._stateIconSprite.y += heightRate * height;
-      this._stateSprite.y += heightRate * height;
+      this._stateIconSprite.y += Math.ceil(heightRate * height);
+      this._stateSprite.y += Math.ceil(heightRate * height);
     };
 };
 
@@ -1476,7 +2485,17 @@ Sprite_Battler.prototype.addFloatingHeight = function() {
     return value;
 };
 
-}; // Imported.YEP_X_ActSeqPack2
+} else { // If YEP_X_ActSeqPack2 is NOT installed
+
+Sprite_Enemy.prototype.updateStateIconHeight = function() {
+  if (!this._stateIconSprite) return;
+  var height = this._battler.spriteHeight() * -1;
+  height -= Sprite_StateIcon._iconHeight;
+  height /= this.scale.y;
+  this._stateIconSprite.y = height;
+};
+
+} // Imported.YEP_X_ActSeqPack2
 
 Yanfly.SVE.Sprite_Enemy_updateBitmap = Sprite_Enemy.prototype.updateBitmap;
 Sprite_Enemy.prototype.updateBitmap = function() {
@@ -1498,6 +2517,7 @@ Sprite_Enemy.prototype.updateSVBitmap = function() {
       this.updateScale();
     } else if (this._svBattlerName === '') {
       this._svBattlerName = '';
+      this._svBattlerEnabled = false;
       if (this._createdDummyMainSprite) return;
       this._createdDummyMainSprite = true;
       this._mainSprite = new Sprite_Base();
@@ -1508,13 +2528,19 @@ Sprite_Enemy.prototype.updateSVBitmap = function() {
 
 Sprite_Enemy.prototype.adjustAnchor = function() {
     if (!this._mainSprite) return;
-		this._mainSprite.anchor.x = this._enemy.sideviewAnchorX();
+    this._mainSprite.anchor.x = this._enemy.sideviewAnchorX();
     this._mainSprite.anchor.y = this._enemy.sideviewAnchorY();
 };
 
 Sprite_Enemy.prototype.updateScale = function() {
     this.scale.x = this._enemy.spriteScaleX();
     this.scale.y = this._enemy.spriteScaleY();
+    if (this._stateIconSprite) {
+      var safe = 1 / 100000;
+      var sprite = this._stateIconSprite;
+      sprite.scale.x = 1 / Math.max(safe, Math.abs(this.scale.x));
+      sprite.scale.y = 1 / Math.max(safe, Math.abs(this.scale.y));
+    }
 };
 
 Yanfly.SVE.Sprite_Enemy_updateFrame = Sprite_Enemy.prototype.updateFrame;
@@ -1538,7 +2564,7 @@ Sprite_Enemy.prototype.updateSVFrame = function() {
     if (this._effectType === 'bossCollapse') {
       cdh = ch - this._effectDuration;
     }
-    this.setFrame(cx * cw, cy * ch, cw, ch);
+    // this.setFrame(cx * cw, cy * ch, cw, ch);
     this._mainSprite.setFrame(cx * cw, cy * ch, cw, ch - cdh);
     this.adjustMainBitmapSettings(bitmap);
     this.adjustSVShadowSettings();
@@ -1607,6 +2633,8 @@ Sprite_Enemy.prototype.updateMotionCount = function() {
         this._pattern = (this._pattern + 1) % 4;
       } else if (this._pattern < 2) {
         this._pattern++;
+      } else if (this._pattern >= 2) {
+        this.startMotion(this._enemy.idleMotion());
       } else {
         this.refreshMotion();
       }
@@ -1713,16 +2741,11 @@ Sprite_Enemy.prototype.updateInstantCollapse = function() {
     Yanfly.SVE.Sprite_Enemy_updateInstantCollapse.call(this);
 };
 
-//=============================================================================
-// Sprite_StateIcon
-//=============================================================================
-
-Yanfly.SVE.Sprite_StateIcon_updateMirror =
-    Sprite_StateIcon.prototype.updateMirror;
-Sprite_StateIcon.prototype.updateMirror = function() {
-    this.scale.x = 1 / Math.max(1 / 10000, Math.abs(this.parent.scale.x));
-    this.scale.y = 1 / Math.max(1 / 10000, Math.abs(this.parent.scale.y));
-    Yanfly.SVE.Sprite_StateIcon_updateMirror.call(this);
+Sprite_Enemy.prototype.forceMotion = function(motionType) {
+    var newMotion = Sprite_Actor.MOTIONS[motionType];
+    this._motion = newMotion;
+    this._motionCount = 0;
+    this._pattern = 0;
 };
 
 //=============================================================================
@@ -1739,4 +2762,15 @@ Yanfly.Util.getRandomElement = function(array) {
 //=============================================================================
 // End of File
 //=============================================================================
-};
+} else { // Yanfly.BEC.version
+
+var text = '================================================================\n';
+text += 'YEP_X_AnimatedSVEnemies requires YEP_BattleEngineCore to be at the ';
+text += 'latest version to run properly.\n\nPlease go to www.yanfly.moe and ';
+text += 'update to the latest version for the YEP_BattleEngineCore plugin.\n';
+text += '================================================================\n';
+console.log(text);
+require('nw.gui').Window.get().showDevTools();
+
+} // Yanfly.BEC.version
+}; // YEP_BattleEngineCore

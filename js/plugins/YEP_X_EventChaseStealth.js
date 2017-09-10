@@ -8,10 +8,11 @@ Imported.YEP_X_EventChaseStealth = true;
 
 var Yanfly = Yanfly || {};
 Yanfly.ECS = Yanfly.ECS || {};
+Yanfly.ECS.version = 1.03;
 
 //=============================================================================
  /*:
- * @plugindesc v1.00 (Requires YEP_EventChasePlayer.js) Enables a stealth
+ * @plugindesc v1.03 (Requires YEP_EventChasePlayer.js) Enables a stealth
  * mechanic for the Event Chase Player plugin.
  * @author Yanfly Engine Plugins
  *
@@ -19,15 +20,23 @@ Yanfly.ECS = Yanfly.ECS || {};
  * @default
  *
  * @param Player Transparency
+ * @parent ---General---
  * @desc This is the transparency rate of the player while
  * in stealth mode.
  * @default 0.5
  *
  * @param Disable Dash
+ * @parent ---General---
+ * @type boolean
+ * @on Enable
+ * @off Disable
  * @desc Disable dashing while in Stealth Mode?
  * @default true
  *
  * @param Move Speed
+ * @parent ---General---
+ * @type number
+ * @min 1
  * @desc The move speed while in Stealth Mode.
  * @default 3
  *
@@ -35,6 +44,7 @@ Yanfly.ECS = Yanfly.ECS || {};
  * @default
  *
  * @param Stealth Regions
+ * @parent ---Stealth Regions---
  * @desc These are the Region ID's that make the player unable
  * to be seen by events. Separate ID's with a space.
  * @default 0
@@ -43,48 +53,73 @@ Yanfly.ECS = Yanfly.ECS || {};
  * @default
  *
  * @param Show Gauge
+ * @parent ---Stealth Regions---
+ * @type boolean
+ * @on Show
+ * @off Hide
  * @desc Show the stealth gauge?
  * NO - false     YES - true
  * @default true
  *
  * @param Gauge Opacity
+ * @parent ---Stealth Regions---
+ * @type number
+ * @min 0
+ * @max 255
  * @desc This is the opacity of the gauge.
  * @default 100
  *
  * @param Show Timer
+ * @parent ---Stealth Regions---
+ * @type boolean
+ * @on Show
+ * @off Hide
  * @desc Display Timer while in stealth mode?
  * NO - false     YES - true
  * @default true
  *
  * @param Unlimited Text
+ * @parent ---Stealth Regions---
  * @desc The text to display while in unlimited Stealth Mode.
  * @default ∞
  *
  * @param Gauge X
+ * @parent ---Stealth Regions---
  * @desc The x location of the stealth gauge.
  * This is a formula
  * @default 96
  *
  * @param Gauge Y
+ * @parent ---Stealth Regions---
  * @desc The y location of the stealth gauge.
  * This is a formula
  * @default Graphics.boxHeight - 84
  *
  * @param Gauge Width
+ * @parent ---Stealth Regions---
  * @desc The width of the stealth gauge.
  * This is a formula.
  * @default Graphics.boxWidth - 192
  *
  * @param Gauge Height
+ * @parent ---Stealth Regions---
  * @desc The height of the stealth gauge.
  * This is a formula.
  * @default 36
  *
  * @param Gauge Color 1
+ * @parent ---Stealth Regions---
+ * @type number
+ * @min 0
+ * @max 31
  * @desc This is the text color 1 of the gauge.
  * @default 9
  *
  * @param Gauge Color 2
+ * @parent ---Stealth Regions---
+ * @type number
+ * @min 0
+ * @max 31
  * @desc This is the text color 2 of the gauge.
  * @default 13
  *
@@ -133,7 +168,7 @@ Yanfly.ECS = Yanfly.ECS || {};
  * ============================================================================
  * Instructions - Stealth Mode
  * ============================================================================
- *
+ * 
  * To enter Stealth Mode, you'll have to utilize the plugin commands found in
  * the plugin commands section a bit lower. While in Stealth Mode, if enabled,
  * the Stealth Gauge will appear to alert the player how much longer the player
@@ -174,6 +209,12 @@ Yanfly.ECS = Yanfly.ECS || {};
  *   ShowStealthGauge
  *   - This will show the Stealth Gauge whenever the player is in Stealth Mode.
  *
+ *   EnableDifferentStealthSpeed
+ *   - Sets the player to have a different move speed when in Stealth Mode.
+ *
+ *   DisableDifferentStealthSpeed
+ *   - The player won't have a different move speed when in Stealth Mode.
+ *
  * ============================================================================
  * Lunatic Mode - New JavaScript Functions
  * ============================================================================
@@ -198,6 +239,24 @@ Yanfly.ECS = Yanfly.ECS || {};
  * $gameMap.isStealthRegion(x)
  * - This will check if region x is a Stealth Region. If it is, this will
  * return true. If it isn't, this will return false.
+ *
+ * ============================================================================
+ * Changelog
+ * ============================================================================
+ *
+ * Version 1.03:
+ * - Updated for RPG Maker MV version 1.5.0.
+ *
+ * Version 1.02:
+ * - Fixed a bug where changing the stealth movement speed would affect all
+ * events on the map.
+ *
+ * Version 1.01:
+ * - Added 'EnableDifferentStealthSpeed' and 'DisableDifferentStealthSpeed'
+ * plugin commands to enable different stealth movement speed adjustments.
+ *
+ * Version 1.00:
+ * - Finished Plugin!
  */
 //=============================================================================
 
@@ -217,7 +276,7 @@ Yanfly.Param.ECSMoveSpeed = Number(Yanfly.Parameters['Move Speed']);
 Yanfly.Param.ECSRegions = String(Yanfly.Parameters['Stealth Regions']);
 Yanfly.Param.ECSRegions = Yanfly.Param.ECSRegions.split(' ');
 for (Yanfly.i = 0; Yanfly.i < Yanfly.Param.ECSRegions.length; ++Yanfly.i) {
-  Yanfly.Param.ECSRegions[Yanfly.i] =
+  Yanfly.Param.ECSRegions[Yanfly.i] = 
     parseInt(Yanfly.Param.ECSRegions[Yanfly.i]);
 };
 
@@ -268,6 +327,7 @@ Game_System.prototype.initialize = function() {
 
 Game_System.prototype.initStealthGauge = function() {
     this._showStealthGauge = Yanfly.Param.ECSShowGauge;
+    this._differentStealthSpeed = true;
 };
 
 Game_System.prototype.isShowStealthGauge = function() {
@@ -278,6 +338,16 @@ Game_System.prototype.isShowStealthGauge = function() {
 Game_System.prototype.setShowStealthGauge = function(value) {
     if (this._showStealthGauge === undefined) this.initStealthGauge();
     this._showStealthGauge = value;
+};
+
+Game_System.prototype.isDifferentStealthSpeed = function() {
+    if (this._differentStealthSpeed === undefined) this.initStealthGauge();
+    return this._differentStealthSpeed;
+};
+
+Game_System.prototype.setDifferentStealthSpeed = function(value) {
+    if (this._differentStealthSpeed === undefined) this.initStealthGauge();
+    this._differentStealthSpeed = value;
 };
 
 //=============================================================================
@@ -309,21 +379,21 @@ Game_Map.prototype.isStealthRegion = function(id) {
 Yanfly.ECS.Game_CharacterBase_realMoveSpeed =
     Game_CharacterBase.prototype.realMoveSpeed;
 Game_CharacterBase.prototype.realMoveSpeed = function() {
-    if ($gamePlayer.isStealthMode()) {
-      return this.stealthMoveSpeed() + (this.isDashing() ? 1 : 0);
-    }
-    return Yanfly.ECS.Game_CharacterBase_realMoveSpeed.call(this);
+  if (this.isStealthMode() && $gameSystem.isDifferentStealthSpeed()) {
+    return this.stealthMoveSpeed() + (this.isDashing() ? 1 : 0);
+  }
+  return Yanfly.ECS.Game_CharacterBase_realMoveSpeed.call(this);
 };
 
 Game_CharacterBase.prototype.stealthMoveSpeed = function() {
-    return Yanfly.Param.ECSMoveSpeed;
+  return Yanfly.Param.ECSMoveSpeed;
 };
 
 Yanfly.ECS.Game_CharacterBase_opacity = Game_CharacterBase.prototype.opacity;
 Game_CharacterBase.prototype.opacity = function() {
-    var opacity = Yanfly.ECS.Game_CharacterBase_opacity.call(this);
-    if (this.isStealthMode()) opacity *= this.stealthTransparencyRate();
-    return opacity;
+  var opacity = Yanfly.ECS.Game_CharacterBase_opacity.call(this);
+  if (this.isStealthMode()) opacity *= this.stealthTransparencyRate();
+  return opacity;
 };
 
 Game_CharacterBase.prototype.isStealthMode = function() {
@@ -331,7 +401,7 @@ Game_CharacterBase.prototype.isStealthMode = function() {
 };
 
 Game_CharacterBase.prototype.stealthTransparencyRate = function() {
-    return Yanfly.Param.ECSPlayerTrans;
+  return Yanfly.Param.ECSPlayerTrans;
 };
 
 //=============================================================================
@@ -412,7 +482,7 @@ Game_Player.prototype.getMaxChaseStealthTimer = function() {
 Yanfly.ECS.Game_Player_triggerAction = Game_Player.prototype.triggerAction;
 Game_Player.prototype.triggerAction = function() {
     var value = Yanfly.ECS.Game_Player_triggerAction.call(this);
-    //if (value) this.setStealthMode(false);
+    if (value) this.setStealthMode(false);
     return value;
 };
 
@@ -420,7 +490,7 @@ Yanfly.ECS.Game_Player_triggerButtonAction =
     Game_Player.prototype.triggerButtonAction;
 Game_Player.prototype.triggerButtonAction = function() {
     var value = Yanfly.ECS.Game_Player_triggerButtonAction.call(this);
-    //if (value) this.setStealthMode(false);
+    if (value) this.setStealthMode(false);
     return value;
 };
 
@@ -499,6 +569,10 @@ Game_Interpreter.prototype.pluginCommand = function(command, args) {
     $gameSystem.setShowStealthGauge(false);
   } else if (command === 'ShowStealthGauge') {
     $gameSystem.setShowStealthGauge(true);
+  } else if (command === 'EnableDifferentStealthSpeed') {
+    $gameSystem.setDifferentStealthSpeed(true);
+  } else if (command === 'DisableDifferentStealthSpeed') {
+    $gameSystem.setDifferentStealthSpeed(false);
   }
 };
 

@@ -8,11 +8,11 @@ Imported.YEP_X_BattleSysSTB = true;
 
 var Yanfly = Yanfly || {};
 Yanfly.STB = Yanfly.STB || {};
-Yanfly.STB.version = 1.01;
+Yanfly.STB.version = 1.02;
 
 //=============================================================================
  /*:
- * @plugindesc v1.01 (Requires YEP_BattleEngineCore.js) Add STB (Standard
+ * @plugindesc v1.02 (Requires YEP_BattleEngineCore.js) Add STB (Standard
  * Turn Battle) into your game using this plugin!
  * @author Yanfly Engine Plugins
  *
@@ -143,6 +143,9 @@ Yanfly.STB.version = 1.01;
  * ============================================================================
  * Changelog
  * ============================================================================
+ *
+ * Version 1.02:
+ * - Instant Cast compatibility update.
  *
  * Version 1.01:
  * - Fixed a bug that caused escaping to crash the game if not using STB.
@@ -337,6 +340,12 @@ BattleManager.selectNextCommand = function() {
   }
 };
 
+Yanfly.STB.BattleManager_startAction = BattleManager.startAction;
+BattleManager.startAction = function() {
+  if (Imported.YEP_InstantCast) this.detectStbInstantCast();
+  Yanfly.STB.BattleManager_startAction.call(this);
+};
+
 Yanfly.STB.BattleManager_endAction = BattleManager.endAction;
 BattleManager.endAction = function() {
   if (this.isSTB()) {
@@ -348,6 +357,10 @@ BattleManager.endAction = function() {
 
 BattleManager.endSTBAction = function() {
   this._phase = 'turn';
+  if (this._stbInstantCast) {
+    this._stbInstantCast = false;
+    return Yanfly.BEC.BattleManager_endAction.call(this);
+  }
   if (this._subject) {
     this._performedBattlers.push(this._subject);
     this._subject.spriteStepBack();
@@ -360,6 +373,16 @@ BattleManager.endSTBAction = function() {
   if (this.loadPreForceActionSettings()) return;
   this._subject = null;
   Yanfly.BEC.BattleManager_endAction.call(this);
+};
+
+BattleManager.detectStbInstantCast = function() {
+  this._stbInstantCast = false;
+  if (!this.isSTB()) return;
+  if (!this._subject) return;
+  if (!this._subject.currentAction()) return;
+  if (!this._subject.currentAction().item()) return;
+  var item = this._subject.currentAction().item();
+  this._stbInstantCast = this._subject.isInstantCast(item);
 };
 
 //=============================================================================

@@ -8,10 +8,11 @@ Imported.YEP_BuffsStatesCore = true;
 
 var Yanfly = Yanfly || {};
 Yanfly.BSC = Yanfly.BSC || {};
+Yanfly.BSC.version = 1.14;
 
 //=============================================================================
  /*:
- * @plugindesc v1.11 Alter the basic mechanics behind buffs and states
+ * @plugindesc v1.14 Alter the basic mechanics behind buffs and states
  * that aren't adjustable within the RPG Maker editor.
  * @author Yanfly Engine Plugins
  *
@@ -19,37 +20,63 @@ Yanfly.BSC = Yanfly.BSC || {};
  * @default
  *
  * @param Show Turns
+ * @parent ---Turn Indicator---
+ * @type boolean
+ * @on Show
+ * @off Hide
  * @desc Show turns remaining for buffs and states?
  * NO - false     YES - true
  * @default true
  *
  * @param Font Size
+ * @parent ---Turn Indicator---
+ * @type number
+ * @min 1
  * @desc The default font size used for turn count.
  * Default: 28
  * @default 16
  *
  * @param Turn Alignment
+ * @parent ---Turn Indicator---
+ * @type combo
+ * @option left
+ * @option center
+ * @option right
  * @desc How do you want to align the turns?
  * left     center     right
  * @default right
  *
  * @param Turn Buffer X
+ * @parent ---Turn Indicator---
  * @desc Buffer the x position of the turn by this much.
  * @default -3
  *
  * @param Turn Buffer Y
+ * @parent ---Turn Indicator---
  * @desc Buffer the y position of the turn by this much.
  * @default -6
  *
  * @param State Color
+ * @parent ---Turn Indicator---
+ * @type number
+ * @min 0
+ * @max 31
  * @desc The default text color used for state turns.
  * @default 0
  *
  * @param Buff Color
+ * @parent ---Turn Indicator---
+ * @type number
+ * @min 0
+ * @max 31
  * @desc The default text color used for buffs.
  * @default 24
  *
  * @param Debuff Color
+ * @parent ---Turn Indicator---
+ * @type number
+ * @min 0
+ * @max 31
  * @desc The default text color used for debuffs.
  * @default 2
  *
@@ -57,21 +84,37 @@ Yanfly.BSC = Yanfly.BSC || {};
  * @default
  *
  * @param Show Enemy Icons
+ * @parent ---Enemy Icons---
+ * @type boolean
+ * @on Show
+ * @off Hide
  * @desc Do you wish to show enemy state icons?
  * NO - false     YES - true
  * @default true
  *
  * @param Enemy Buff Turn
+ * @parent ---Enemy Icons---
+ * @type boolean
+ * @on Show
+ * @off Hide
  * @desc Do you wish to show enemy buff turns remaining?
  * NO - false     YES - true
  * @default true
  *
  * @param Enemy State Turn
+ * @parent ---Enemy Icons---
+ * @type boolean
+ * @on Show
+ * @off Hide
  * @desc Do you wish to show enemy state turns remaining?
  * NO - false     YES - true
  * @default true
  *
  * @param Enemy State Counter
+ * @parent ---Enemy Icons---
+ * @type boolean
+ * @on Show
+ * @off Hide
  * @desc Do you wish to show enemy state counters?
  * NO - false     YES - true
  * @default true
@@ -80,20 +123,31 @@ Yanfly.BSC = Yanfly.BSC || {};
  * @default
  *
  * @param Default Limit
+ * @parent ---Buff Settings---
+ * @type number
+ * @min 1
  * @desc The default number of times you can stack buff/debuff.
  * Default: 2
  * @default 4
  *
  * @param Maximum Limit
+ * @parent ---Buff Settings---
+ * @type number
+ * @min 1
  * @desc The maximum number of times you can stack buff/debuff.
  * @default 8
  *
  * @param Buff Formula
+ * @parent ---Buff Settings---
  * @desc The formula used for buff rate calculation.
  * Default: this._buffs[paramId] * 0.25 + 1.0
  * @default this._buffs[paramId] * 0.25 + 1.0
  *
  * @param Show Buff Rate
+ * @parent ---Buff Settings---
+ * @type boolean
+ * @on Show
+ * @off Hide
  * @desc Shows the buff/debuff rate for buffs and debuffs.
  * YES - true     NO - false
  * @default false
@@ -102,11 +156,23 @@ Yanfly.BSC = Yanfly.BSC || {};
  * @default
  *
  * @param Reapply Rules
+ * @parent ---State Settings---
+ * @type select
+ * @option Ignore
+ * @value 0
+ * @option Reset
+ * @value 1
+ * @option Add
+ * @value 2
  * @desc The rules when reapplying an already existing state:
  * 0 - Ignore     1 - Reset     2 - Add
  * @default 1
  *
  * @param Show Enemy Turns
+ * @parent ---State Settings---
+ * @type boolean
+ * @on Show
+ * @off Hide
  * @desc If using Battle Engine Core, show turns in help window?
  * NO - false     YES - true
  * @default true
@@ -115,24 +181,38 @@ Yanfly.BSC = Yanfly.BSC || {};
  * @default
  *
  * @param Counter Font Size
+ * @parent ---Counter Settings---
+ * @type number
+ * @min 1
  * @desc The default font size used for state counters.
  * Default: 28
  * @default 16
  *
  * @param Counter Alignment
+ * @parent ---Counter Settings---
+ * @type combo
+ * @option left
+ * @option center
+ * @option right
  * @desc How do you want to align the counter?
  * left     center     right
  * @default center
  *
  * @param Counter Buffer X
+ * @parent ---Counter Settings---
  * @desc Buffer the x position of the counter by this much.
  * @default 0
  *
  * @param Counter Buffer Y
+ * @parent ---Counter Settings---
  * @desc Buffer the y position of the counter by this much.
  * @default 8
  *
  * @param Counter Color
+ * @parent ---Counter Settings---
+ * @type number
+ * @min 0
+ * @max 31
  * @desc The default text color used for state counters.
  * @default 0
  *
@@ -558,6 +638,16 @@ Yanfly.BSC = Yanfly.BSC || {};
  * ============================================================================
  * Changelog
  * ============================================================================
+ *
+ * Version 1.14:
+ * - Updated for RPG Maker MV version 1.5.0.
+ *
+ * Version 1.13:
+ * - Custom Turn End effects will no longer occur outside of battle.
+ *
+ * Version 1.12a:
+ * - Lunatic Mode fail safes added.
+ * - Optimization update.
  *
  * Version 1.11:
  * - Fixed a bug involving Lunatic state effects not occuring in the right
@@ -1110,7 +1200,7 @@ Game_BattlerBase.prototype.stateTurns = function(stateId) {
 };
 
 Game_BattlerBase.prototype.setStateTurns = function(stateId, turns) {
-    if (Imported.YEP_BattleEngineCore && !eval(Yanfly.Param.BECTimeStates)) {
+    if (Imported.YEP_BattleEngineCore && !Yanfly.Param.BECTimeStates) {
       turns = Math.floor(turns);
     }
     this._stateTurns[stateId] = turns;
@@ -1121,7 +1211,7 @@ Game_BattlerBase.prototype.buffTurns = function(paramId) {
 };
 
 Game_BattlerBase.prototype.setBuffTurns = function(paramId, turns) {
-    if (Imported.YEP_BattleEngineCore && !eval(Yanfly.Param.BECTimeBuffs)) {
+    if (Imported.YEP_BattleEngineCore && !Yanfly.Param.BECTimeBuffs) {
       turns = Math.floor(turns);
     }
     this._buffTurns[paramId] = turns;
@@ -1132,7 +1222,13 @@ Game_BattlerBase.prototype.paramBuffRate = function(paramId) {
     if (this._cacheParamBuffRate[paramId] !== undefined) {
       return this._cacheParamBuffRate[paramId];
     }
-    var rate = eval(Yanfly.Param.BSCBuffFormula);
+    var code = Yanfly.Param.BSCBuffFormula;
+    try {
+      var rate = eval(code);
+    } catch (e) {
+      var rate = 1;
+      Yanfly.Util.displayError(e, code, 'PARAM BUFF RATE FORMULA ERROR');
+    }
     this._cacheParamBuffRate[paramId] = rate;
     return this._cacheParamBuffRate[paramId];
 };
@@ -1255,6 +1351,10 @@ Game_BattlerBase.prototype.statesAndBuffs = function() {
 // Game_Battler
 //=============================================================================
 
+Game_Battler.prototype.hasState = function(stateId) {
+    return this.states().contains($dataStates[stateId]);
+};
+
 Game_Battler.prototype.customEffectEval = function(stateId, type) {
     var state = $dataStates[stateId];
     if (!state) return;
@@ -1265,7 +1365,13 @@ Game_Battler.prototype.customEffectEval = function(stateId, type) {
     var origin = this.stateOrigin(stateId);
     var s = $gameSwitches._data;
     var v = $gameVariables._data;
-    eval(state.customEffectEval[type]);
+    var code = state.customEffectEval[type];
+    try {
+      eval(code);
+    } catch (e) {
+      Yanfly.Util.displayError(e, code, 
+        'CUSTOM STATE ' + stateId + ' CODE ERROR');
+    }
 };
 
 Yanfly.BSC.Game_Battler_addState = Game_Battler.prototype.addState;
@@ -1343,6 +1449,7 @@ Game_Battler.prototype.onTurnEnd = function() {
 };
 
 Game_Battler.prototype.meetTurnEndStateEffectsConditions = function() {
+    if (!$gameParty.inBattle()) return false;
     if (Imported.YEP_BattleEngineCore) {
       if (BattleManager.isTurnBased()) {
         return true;
@@ -1501,6 +1608,7 @@ Game_Unit.prototype.processStateEval = function(type) {
     for (var i = 0; i < length1; ++i) {
       var member = this.allMembers()[i];
       if (!member) return;
+      member.refresh();
       var states = member.states();
       var length2 = states.length;
       for (var j = 0; j < length2; ++j) {
@@ -1560,7 +1668,12 @@ Game_Action.prototype.applyBuffTurnsEval = function(turn, paramId, target) {
     var user = this.subject();
     var s = $gameSwitches._data;
     var v = $gameVariables._data;
-    eval(this.item().modifyTurnBuffEval[paramId]);
+    var code = this.item().modifyTurnBuffEval[paramId];
+    try {
+      eval(code);
+    } catch (e) {
+      Yanfly.Util.displayError(e, code, 'CUSTOM BUFF TURN SET ERROR');
+    }
     return turn;
 };
 
@@ -1586,7 +1699,12 @@ Game_Action.prototype.applyDebuffTurnsEval = function(turn, paramId, target) {
     var user = this.subject();
     var s = $gameSwitches._data;
     var v = $gameVariables._data;
-    eval(this.item().modifyTurnBuffEval[paramId]);
+    var code = this.item().modifyTurnBuffEval[paramId];
+    try {
+      eval(code);
+    } catch (e) {
+      Yanfly.Util.displayError(e, code, 'CUSTOM DEBUFF TURN SET ERROR');
+    }
     return turn;
 };
 
@@ -1624,7 +1742,12 @@ Game_Action.prototype.applyStateTurnsEval = function(turn, stateId, target) {
     var origin = target.stateOrigin(stateId);
     var s = $gameSwitches._data;
     var v = $gameVariables._data;
-    eval(this.item().modifyTurnStateEval[stateId]);
+    var code = this.item().modifyTurnStateEval[stateId];
+    try {
+      eval(code);
+    } catch (e) {
+      Yanfly.Util.displayError(e, code, 'CUSTOM STATE TURN SET ERROR');
+    }
     return turn;
 };
 
@@ -1650,7 +1773,13 @@ function(target, stateId, type, side, value) {
     var origin = side.stateOrigin(stateId);
     var s = $gameSwitches._data;
     var v = $gameVariables._data;
-    eval(state.customEffectEval[type]);
+    var code = state.customEffectEval[type];
+    try {
+      eval(code);
+    } catch (e) {
+      Yanfly.Util.displayError(e, code,
+        'CUSTOM STATE ' + stateId + ' CODE ERROR');
+    }
     return value;
 };
 
@@ -2046,6 +2175,17 @@ if (!Yanfly.Util.toGroup) {
     Yanfly.Util.toGroup = function(inVal) {
         return inVal;
     }
+};
+
+Yanfly.Util.displayError = function(e, code, message) {
+  console.log(message);
+  console.log(code || 'NON-EXISTENT');
+  console.error(e);
+  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
+    if (!require('nw.gui').Window.get().isDevToolsOpen()) {
+      require('nw.gui').Window.get().showDevTools();
+    }
+  }
 };
 
 //=============================================================================
