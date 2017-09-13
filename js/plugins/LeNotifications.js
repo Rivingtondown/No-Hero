@@ -3,7 +3,7 @@
 # Notifications System
 # LeNotifications.js
 # By Lecode
-# Version 1.2
+# Version 1.3
 #-----------------------------------------------------------------------------
 # TERMS OF USE
 #-----------------------------------------------------------------------------
@@ -16,14 +16,22 @@
 # - 1.0 : Initial release
 # - 1.1 : Bugfix
 # - 1.2 : Bugfix ( Enable Command )
+# - 1.3 : The notification visual is now a window,
+#         allowing some escape codes to work:
+#         \v[x], \c[x], \n[x], \p[x], \i[x] and \g
+#         Long text notifications are splited in multiple notifications
+#         when you use a new line or "|"
 #=============================================================================
 */
 var Imported = Imported || {};
 Imported.Lecode_Notifications = true;
+
+var Lecode = Lecode || {};
+Lecode.S_Notifs = Lecode.S_Notifs || {};
 /*:
  * @plugindesc Shows some notifications according to different events in game
  * @author Lecode
- * @version 1.2
+ * @version 1.3
  * 
  * @param Background Color
  * @desc CSS Format
@@ -162,70 +170,55 @@ Imported.Lecode_Notifications = true;
 */
 //#=============================================================================
 
-(function() {
+//(function() {
 /*-------------------------------------------------------------------------
 * Get Parameters
 -------------------------------------------------------------------------*/
-var parameters = PluginManager.parameters('LeNotifications');
-var pBgColor = String(parameters['Background Color'] || '#000000');
-var pTextColor = String(parameters['Text Color'] || '#FFFFFF');
-var pFontSize = Number(parameters['Font Size'] || 18);
-var pFontItalic = ((parameters['Font Italic ?'] || 'false') === 'true');
-var pTextOutlineColor = String(parameters['Text Outline Color'] || '#');
-var pTextOutlineWidth = Number(parameters['Text Outline Width'] || 0);
-var pOpacity = Number(parameters['Opacity'] || 180);
-var pPos = String(parameters['Position'] || 'top-left');
-var pXPadding = Number(parameters['Left-Right Padding'] || 4);
-var pYPadding = Number(parameters['Up-Down Padding'] || 4);
-var pMoveSpeed = Number(parameters['Move Speed'] || 6);
-var pFadeSpeed = Number(parameters['Fade Speed'] || 6);
-var pLifeTime = Number(parameters['Life Time'] || 200);
-var pLifeTimeAuto = ((parameters['Life Time Auto ?'] || 'true') === 'true');
-var pSoundFile = String(parameters['Sound Filename'] || 'Book1');
-var pNotifGainGold = String(parameters['Notif Gain Gold'] || 'Gold: +[value]');
-var pNotifLoseGold = String(parameters['Notif Lose Gold'] || 'Gold: -[value]');
-var pNotifGainItem = String(parameters['Notif Gain Item'] || 'Obtained [name] x[amount]');
-var pNotifLoseItem = String(parameters['Notif Lose Item'] || 'Lost [name] x[amount]');
-var pNotifGainExp = String(parameters['Notif Gain Exp'] || '[name]: +[value] Exp');
-var pNotifLoseExp = String(parameters['Notif Lose Exp'] || '[name]: -[value] Exp');
-var pNotifLevelUp = String(parameters['Notif LevelUp'] || '[name]: level up !');
-var pNotifLevelDown = String(parameters['Notif LevelDown'] || '[name]: level down !');
-var pNotifBgm = String(parameters['Notif BGM'] || "Playing '[name]'");
+Lecode.parameters = PluginManager.parameters('LeNotifications');
+Lecode.S_Notifs.params = {};
 
-
-/*-------------------------------------------------------------------------
-* Notification Item Bitmap <- Bitmap
--------------------------------------------------------------------------*/
-function LeNotifItemBitmap(type,w,h) {
-	Bitmap.call(this,w,h);
-	//- Set bitmap properties according to type
-	this.textColor = pTextColor;
-    this.fontSize = pFontSize;
-    this.fontItalic = pFontItalic;
-    this.outlineColor = pTextOutlineColor;
-    this.OutlineWidth = pTextOutlineWidth;
-}
-
-//- Heritage (Bitmap)
-LeNotifItemBitmap.prototype = Object.create(Bitmap.prototype);
-LeNotifItemBitmap.prototype.constructor = LeNotifItemBitmap;
-
+Lecode.S_Notifs.params.pBgColor = String(Lecode.parameters['Background Color'] || '#000000');
+Lecode.S_Notifs.params.pTextColor = String(Lecode.parameters['Text Color'] || '#FFFFFF');
+Lecode.S_Notifs.params.pFontSize = Number(Lecode.parameters['Font Size'] || 18);
+Lecode.S_Notifs.params.pFontItalic = ((Lecode.parameters['Font Italic ?'] || 'false') === 'true');
+Lecode.S_Notifs.params.pTextOutlineColor = String(Lecode.parameters['Text Outline Color'] || '#');
+Lecode.S_Notifs.params.pTextOutlineWidth = Number(Lecode.parameters['Text Outline Width'] || 0);
+Lecode.S_Notifs.params.pOpacity = Number(Lecode.parameters['Opacity'] || 180);
+Lecode.S_Notifs.params.pPos = String(Lecode.parameters['Position'] || 'top-left');
+Lecode.S_Notifs.params.pXPadding = Number(Lecode.parameters['Left-Right Padding'] || 4);
+Lecode.S_Notifs.params.pYPadding = Number(Lecode.parameters['Up-Down Padding'] || 4);
+Lecode.S_Notifs.params.pMoveSpeed = Number(Lecode.parameters['Move Speed'] || 6);
+Lecode.S_Notifs.params.pFadeSpeed = Number(Lecode.parameters['Fade Speed'] || 6);
+Lecode.S_Notifs.params.pLifeTime = Number(Lecode.parameters['Life Time'] || 200);
+Lecode.S_Notifs.params.pLifeTimeAuto = ((Lecode.parameters['Life Time Auto ?'] || 'true') === 'true');
+Lecode.S_Notifs.params.pSoundFile = String(Lecode.parameters['Sound Filename'] || 'Book1');
+Lecode.S_Notifs.params.pNotifGainGold = String(Lecode.parameters['Notif Gain Gold'] || 'Gold: +[value]');
+Lecode.S_Notifs.params.pNotifLoseGold = String(Lecode.parameters['Notif Lose Gold'] || 'Gold: -[value]');
+Lecode.S_Notifs.params.pNotifGainItem = String(Lecode.parameters['Notif Gain Item'] || 'Obtained [name] x[amount]');
+Lecode.S_Notifs.params.pNotifLoseItem = String(Lecode.parameters['Notif Lose Item'] || 'Lost [name] x[amount]');
+Lecode.S_Notifs.params.pNotifGainExp = String(Lecode.parameters['Notif Gain Exp'] || '[name]: +[value] Exp');
+Lecode.S_Notifs.params.pNotifLoseExp = String(Lecode.parameters['Notif Lose Exp'] || '[name]: -[value] Exp');
+Lecode.S_Notifs.params.pNotifLevelUp = String(Lecode.parameters['Notif LevelUp'] || '[name]: level up !');
+Lecode.S_Notifs.params.pNotifLevelDown = String(Lecode.parameters['Notif LevelDown'] || '[name]: level down !');
+Lecode.S_Notifs.params.pNotifBgm = String(Lecode.parameters['Notif BGM'] || "Playing '[name]'");
+//Lecode.S_Notifs.params.pIconSize = Number(Lecode.parameters['Icon Size'] || 24);
 
 /*-------------------------------------------------------------------------
-* Notification Item <- Sprite
+* Notification Item <- Window
 -------------------------------------------------------------------------*/
 function LeNotifItem(text,type) {
     this.initialize.apply(this, arguments);
 }
 
-//---- Heritage (Sprite)
-LeNotifItem.prototype = Object.create(Sprite.prototype);
+LeNotifItem.prototype = Object.create(Window_Base.prototype);
 LeNotifItem.prototype.constructor = LeNotifItem;
 
 //---- Initialization
-LeNotifItem.prototype.initialize = function(text,type) {
-    Sprite.prototype.initialize.call(this, new LeNotifItemBitmap(type,1,1));
+LeNotifItem.prototype.initialize = function(text,type,parentTxt) {
+    Window_Base.prototype.initialize.call(this, 0, 0, 1, 1);
+    this.hide();
 	this.text = text;
+    this.parentTxt = parentTxt;
     this.type = type;
     this.destX = 0;
     this.destY = 0;
@@ -236,32 +229,85 @@ LeNotifItem.prototype.initialize = function(text,type) {
     this.setLifeTime();
 	this.createBitmap();
     this.iniPosition();
-}
+    this.show();
+};
+
+LeNotifItem.prototype.standardPadding = function() {
+    return 0;
+};
+
+LeNotifItem.prototype.resetFontSettings = function() {
+    this.contents.fontFace = this.standardFontFace();
+    this.contents.fontSize = Lecode.S_Notifs.params.pFontSize;
+    this.contents.fontItalic = Lecode.S_Notifs.params.pFontItalic;
+    this.resetTextColor();
+};
+
+LeNotifItem.prototype.resetTextColor = function() {
+    this.contents.textColor = Lecode.S_Notifs.params.pTextColor;
+    this.contents.outlineColor = Lecode.S_Notifs.params.pTextOutlineColor;
+    this.contents.OutlineWidth = Lecode.S_Notifs.params.pTextOutlineWidth;
+};
+
+LeNotifItem.prototype.removeEscapeCodes = function(text) {
+    while(text.match(/(\\\w\[\d+\])/i))
+        text = text.replace(/(\\\w\[\d+\])/i,"");
+    return text;
+};
+
+LeNotifItem.prototype.drawIcon = function(iconIndex, x, y) {
+    var bitmap = ImageManager.loadSystem('IconSet');
+    var pw = Window_Base._iconWidth;
+    var ph = Window_Base._iconHeight;
+    var sx = iconIndex % 16 * pw;
+    var sy = Math.floor(iconIndex / 16) * ph;
+    this.contents.blt(bitmap, sx, sy, pw, ph, x, y);
+};
 
 //---- Set Life Time
 LeNotifItem.prototype.setLifeTime = function() {
-    if (pLifeTimeAuto) {
-        this.lifeTime = this.text.length*12;
+    var text = (this.parentTxt != undefined) ? this.parentTxt : this.text;
+    text = this.removeEscapeCodes(text);
+    if (Lecode.S_Notifs.params.pLifeTimeAuto) {
+        this.lifeTime = text.length*8;
     } else {
-        this.lifeTime = pLifeTime;
+        this.lifeTime = Lecode.S_Notifs.params.pLifeTime;
     }
 }
 
 //---- Create Bitmap
 LeNotifItem.prototype.createBitmap = function() {
-	var w = this.bitmap.measureTextWidth(this.text);
-    w += pXPadding*2;
-    var h = this.bitmap.fontSize + pYPadding*2;
-    this.bitmap = new LeNotifItemBitmap(this.typpe,w,h);
-    this.bitmap.fillAll(pBgColor);
-    this.opacity = pOpacity;
-    h = this.bitmap.fontSize + 2;
-    this.bitmap.drawText(this.text,pXPadding,pYPadding,w,h);
+    var text = this.removeEscapeCodes(this.text);
+    var w = this.textWidth(text) + Lecode.S_Notifs.params.pXPadding*2;
+    var h = this.contents.fontSize + Lecode.S_Notifs.params.pYPadding*2;
+    var x = Lecode.S_Notifs.params.pXPadding;
+    var y = h/2 - this.contents.fontSize/2;
+    if(this.text.match(/(\\\i\[\d+\])/i)) {
+        if(this.contents.fontSize < 32)
+            h = 32 + 2 + Lecode.S_Notifs.params.pYPadding*2;
+        y = Lecode.S_Notifs.params.pYPadding;
+    }
+    var dummyText = this.text;
+    while(dummyText.match(/(\\\i\[\d+\])/i)) {
+        w += 32 + 4;
+        dummyText = dummyText.replace(/(\\\i\[\d+\])/i,"");
+        if (Lecode.S_Notifs.params.pLifeTimeAuto)
+            this.lifeTime += 16;
+    }
+    //-
+    this.move(0,0,w,h);
+    this.createContents();
+    this.contentsOpacity = Lecode.S_Notifs.params.pOpacity;
+    this.backOpacity = 0;
+    this._windowFrameSprite.opacity = 0;
+    //-
+    this.contents.fillAll(Lecode.S_Notifs.params.pBgColor);
+    this.drawTextEx(this.text,x,y);
 }
 
 //---- Initialize Position
 LeNotifItem.prototype.iniPosition = function() {
-    switch (pPos) {
+    switch (Lecode.S_Notifs.params.pPos) {
         case 'top-left':
             this.x = -this.width;
             this.y = 0;
@@ -291,7 +337,7 @@ LeNotifItem.prototype.iniPosition = function() {
 
 //---- Update
 LeNotifItem.prototype.update = function() {
-    Sprite.prototype.update.call(this);
+    Window_Base.prototype.update.call(this);
     this.updateMove();
     this.updateLifeTime();
     this.updateFade();
@@ -304,18 +350,18 @@ LeNotifItem.prototype.updateMove = function() {
     }
     //- Moving x
     if (this.destX > this.x) {
-        this.x += pMoveSpeed;
+        this.x += Lecode.S_Notifs.params.pMoveSpeed;
         if (this.x > this.destX) this.x = this.destX;
     } else {
-        this.x -= pMoveSpeed;
+        this.x -= Lecode.S_Notifs.params.pMoveSpeed;
         if (this.x < this.destX) this.x = this.destX;
     }
     //- Moving y
     if (this.destY > this.y) {
-        this.y += pMoveSpeed;
+        this.y += Lecode.S_Notifs.params.pMoveSpeed;
         if (this.y > this.destY) this.y = this.destY;
     } else {
-        this.y -= pMoveSpeed;
+        this.y -= Lecode.S_Notifs.params.pMoveSpeed;
         if (this.y < this.destY) this.y = this.destY;
     }
     //- Call onMoveFinished
@@ -326,11 +372,9 @@ LeNotifItem.prototype.updateMove = function() {
 
 //---- Move Finished ?
 LeNotifItem.prototype.moveFinished = function() {
-    if (this.x == this.destX && this.y == this.destY) {
+    if (this.x == this.destX && this.y == this.destY)
         return true;
-    } else {
-        return false;
-    }
+    return false;
 }
 
 //---- When move is finished
@@ -340,13 +384,11 @@ LeNotifItem.prototype.onMoveFinished = function() {
 
 //---- Update life time
 LeNotifItem.prototype.updateLifeTime = function() {
-    if (!this.canDecreaseLifeTime) {
+    if (!this.canDecreaseLifeTime)
         return;
-    }
     this.lifeTime -= 1;
-    if (this.lifeTime <= 0) {
+    if (this.lifeTime <= 0)
         this.onDeath();
-    }
 }
 
 //---- When dead
@@ -357,12 +399,11 @@ LeNotifItem.prototype.onDeath = function() {
 
 //---- Update Fade
 LeNotifItem.prototype.updateFade = function() {
-    if (!this.canFade) {
+    if (!this.canFade)
         return;
-    }
-    this.opacity -= pFadeSpeed;
-    if (this.opacity <= 0) {
-        this.opacity = 0;
+    this.contentsOpacity -= Lecode.S_Notifs.params.pFadeSpeed;
+    if (this.contentsOpacity <= 0) {
+        this.contentsOpacity = 0;
         this.canFade = false;
         this.onFadeFinished();
     }
@@ -391,17 +432,29 @@ LeNotifManager.notifs = [];
 LeNotifManager.enabled = true;
 
 //---- New Notification
-LeNotifManager.add = function(text,type) {
-    if (!this.enabled) {
+LeNotifManager.add = function(text,type,parentTxt) {
+    text = text.replace("|","\n");
+    if(!text.contains("\n"))
+        text = this.autoSplitText(text);
+    //- Split the notifications when there is a new line
+    var textParts = LeUtilities.stringSplit(text,"\n");
+    textParts.reverse();
+    if(text.contains("\n")) {
+        textParts.forEach(function(txt){
+            LeNotifManager.add(txt.replace("\n",""),type,text);
+        }.bind(this));
         return;
     }
+
+    if (!this.enabled)
+        return;
     type = (typeof type !== 'undefined') ? type : "default";
-    notif = new LeNotifItem(text,type);
-    if (pPos == 'top-left' || pPos == 'top-right') {
+    var notif = new LeNotifItem(text,type,parentTxt);
+    if (Lecode.S_Notifs.params.pPos == 'top-left' || Lecode.S_Notifs.params.pPos == 'top-right') {
         this.notifs.forEach(function(n) {
             n.shiftDown(notif.height);
         });
-    } else if (pPos == 'bottom-left' || pPos == 'bottom-right') {
+    } else if (Lecode.S_Notifs.params.pPos == 'bottom-left' || Lecode.S_Notifs.params.pPos == 'bottom-right') {
         var y = 0;
         this.notifs.forEach(function(n) {
             y += n.height;
@@ -409,7 +462,12 @@ LeNotifManager.add = function(text,type) {
         notif.shiftDown(-y);
     }
     this.notifs.push(notif);
-}
+};
+
+LeNotifManager.autoSplitText = function(text) {
+    //- WIP
+    return text;
+};
 
 //---- Update
 LeNotifManager.update = function() {
@@ -428,7 +486,7 @@ LeNotifManager.addNotifsToScene = function() {
             SceneManager._scene.addChild(n);
             //- Play a sound
             var audio = {};
-            audio.name = pSoundFile;
+            audio.name = Lecode.S_Notifs.params.pSoundFile;
             audio.pitch = 100;
             audio.volume = 90;
             audio.pan = 0;
@@ -454,15 +512,15 @@ LeNotifManager.removeDeadNotifs = function() {
     }
 }
 
-//---- Compact notification when some are removed
+//---- Compacts notification when some are removed
 LeNotifManager.compactNotifs = function(index,notif) {
-    if (pPos == 'top-left' || pPos == 'top-right') {
+    if (Lecode.S_Notifs.params.pPos == 'top-left' || Lecode.S_Notifs.params.pPos == 'top-right') {
         this.notifs.forEach(function(n) {
             if (n.y > notif.y) {
                 n.shiftDown(-notif.height);
             }
         });
-    } else if (pPos == 'bottom-left' || pPos == 'bottom-right') {
+    } else if (Lecode.S_Notifs.params.pPos == 'bottom-left' || Lecode.S_Notifs.params.pPos == 'bottom-right') {
         this.notifs.forEach(function(n) {
             if (n.y < notif.y) {
                 n.shiftDown(notif.height);
@@ -484,9 +542,9 @@ LeNotifManager.clear = function() {
 * Game_Map
 -------------------------------------------------------------------------*/
 //---- Update
-var oldUpdateFunc_GM = Game_Map.prototype.update;
+Lecode.S_Notifs.oldUpdateFunc_GM = Game_Map.prototype.update;
 Game_Map.prototype.update = function(sceneActive) {
-    oldUpdateFunc_GM.call(this,sceneActive);
+    Lecode.S_Notifs.oldUpdateFunc_GM.call(this,sceneActive);
     if (sceneActive) {
         LeNotifManager.update();
     }
@@ -497,9 +555,9 @@ Game_Map.prototype.update = function(sceneActive) {
 * Game_Interpreter
 -------------------------------------------------------------------------*/
 //---- Plugin Command
-var old_pluginCommand = Game_Interpreter.prototype.pluginCommand;
+Lecode.S_Notifs.old_pluginCommand = Game_Interpreter.prototype.pluginCommand;
 Game_Interpreter.prototype.pluginCommand = function(command, args) {
-    old_pluginCommand.call(this, command, args);
+    Lecode.S_Notifs.old_pluginCommand.call(this, command, args);
     if (command === 'Notification') {
         switch (args[0]) {
         case 'Clear':
@@ -509,30 +567,30 @@ Game_Interpreter.prototype.pluginCommand = function(command, args) {
             LeNotifManager.enabled = (String(args[1]) === "true");
             break;
         case 'Position':
-            pPos = String(args[1]);
+            Lecode.S_Notifs.params.pPos = String(args[1]);
             break;
         case 'TextColor':
-            pTextColor = String(args[1]);
+            Lecode.S_Notifs.params.pTextColor = String(args[1]);
             break;
         case 'FontSize':
-            pFontSize = Number(args[1]);
+            Lecode.S_Notifs.params.pFontSize = Number(args[1]);
             break;
         case 'FontItalic':
-            pFontItalic = Boolean(args[1]);
+            Lecode.S_Notifs.params.pFontItalic = Boolean(args[1]);
             break;
         case 'OutlineColor':
-            pTextOutlineColor = String(args[1]);
+            Lecode.S_Notifs.params.pTextOutlineColor = String(args[1]);
             break;
         case 'OutlineWidth':
-            pTextOutlineWidth = Number(args[1]);
+            Lecode.S_Notifs.params.pTextOutlineWidth = Number(args[1]);
             break;
         case 'ResetParameters':
-            pPos = String(parameters['Position'] || 'top-left');
-            pTextColor = String(parameters['Text Color'] || '#FFFFFF');
-            pFontSize = Number(parameters['Font Size'] || 18);
-            pFontItalic = Boolean(parameters['Font Italic ?'] || 'false');
-            pTextOutlineColor = String(parameters['Text Outline Color'] || '#');
-            pTextOutlineWidth = Number(parameters['Text Outline Width'] || 0);
+            Lecode.S_Notifs.params.pPos = String(Lecode.parameters['Position'] || 'top-left');
+            Lecode.S_Notifs.params.pTextColor = String(Lecode.parameters['Text Color'] || '#FFFFFF');
+            Lecode.S_Notifs.params.pFontSize = Number(Lecode.parameters['Font Size'] || 18);
+            Lecode.S_Notifs.params.pFontItalic = Boolean(Lecode.parameters['Font Italic ?'] || 'false');
+            Lecode.S_Notifs.params.pTextOutlineColor = String(Lecode.parameters['Text Outline Color'] || '#');
+            Lecode.S_Notifs.params.pTextOutlineWidth = Number(Lecode.parameters['Text Outline Width'] || 0);
             break;
         }
     }
@@ -548,38 +606,37 @@ Game_Interpreter.prototype.newNotif = function(text,type) {
 * Game_Party
 -------------------------------------------------------------------------*/
 //---- Gain/Lose Gold
-var oldGainGold_method = Game_Party.prototype.gainGold;
+Lecode.S_Notifs.oldGainGold_method = Game_Party.prototype.gainGold;
 Game_Party.prototype.gainGold = function(amount) {
-    oldGainGold_method.call(this,amount);
-    var text = '';
+    Lecode.S_Notifs.oldGainGold_method.call(this,amount);
+    if(amount == 0) return;
+    var text = "";
     if (amount > 0) {
-        if (pNotifGainGold === 'false') { return; }
-        text = pNotifGainGold.replace('[value]',String(amount));
-    } else if (amount < 0) {
-        if (pNotifLoseGold === 'false') { return; }
-        text = pNotifLoseGold.replace('[value]',String(-amount));
+        if (Lecode.S_Notifs.params.pNotifGainGold === 'false') return;
+        text = Lecode.S_Notifs.params.pNotifGainGold.replace('[value]',String(amount));
+    } else {
+        if (Lecode.S_Notifs.params.pNotifLoseGold === 'false') return;
+        text = Lecode.S_Notifs.params.pNotifLoseGold.replace('[value]',String(-amount));
     }
     LeNotifManager.add(text,"gold");
 };
 
 //---- Gain/Lose Item
-var oldGainItem_method = Game_Party.prototype.gainItem;
+Lecode.S_Notifs.oldGainItem_method = Game_Party.prototype.gainItem;
 Game_Party.prototype.gainItem = function(item, amount, includeEquip) {
-    oldGainItem_method.call(this,item,amount,includeEquip);
-    if ( item == undefined || item.name == undefined || amount === 0) {
+    Lecode.S_Notifs.oldGainItem_method.call(this,item,amount,includeEquip);
+    if ( item == undefined || item.name == undefined || amount === 0)
         return;
-    }
     var text = '';
     if (amount > 0) {
-        if (pNotifGainItem === 'false') { return; }
-        text = pNotifGainItem.replace('[amount]',String(amount));
-    } else if (amount < 0) {
-        if (pNotifLoseItem === 'false') { return; }
-        text = pNotifLoseItem.replace('[amount]',String(-amount));
+        if (Lecode.S_Notifs.params.pNotifGainItem === 'false') return;
+        text = Lecode.S_Notifs.params.pNotifGainItem.replace('[amount]',String(amount));
+    } else {
+        if (Lecode.S_Notifs.params.pNotifLoseItem === 'false') return;
+        text = Lecode.S_Notifs.params.pNotifLoseItem.replace('[amount]',String(-amount));
     }
     text = text.replace('[name]',item.name);
     LeNotifManager.add(text,"item"); 
-    if (LeNotifManager.enabled == true) { console.log("Mhe"); }
 }
 
 
@@ -587,18 +644,18 @@ Game_Party.prototype.gainItem = function(item, amount, includeEquip) {
 * Game_Interpreter
 -------------------------------------------------------------------------*/
 //---- Change EXP
-var oldCommand315_method = Game_Interpreter.prototype.command315;
+Lecode.S_Notifs.oldCommand315_method = Game_Interpreter.prototype.command315;
 Game_Interpreter.prototype.command315 = function() {
-    oldCommand315_method.call(this);
+    Lecode.S_Notifs.oldCommand315_method.call(this);
     var value = this.operateValue(this._params[2], this._params[3], this._params[4]);
     if(value === 0) return;
     var text = '';
     if (value > 0) {
-        if (pNotifGainExp === 'false') { return true; }
-        text = pNotifGainExp.replace('[value]',String(value));
-    } else if (value < 0) {
-        if (pNotifLoseExp === 'false') { return true; }
-        text = pNotifLoseExp.replace('[value]',String(-value));
+        if (Lecode.S_Notifs.params.pNotifGainExp === 'false') return true;
+        text = Lecode.S_Notifs.params.pNotifGainExp.replace('[value]',String(value));
+    } else {
+        if (Lecode.S_Notifs.params.pNotifLoseExp === 'false') return true;
+        text = Lecode.S_Notifs.params.pNotifLoseExp.replace('[value]',String(-value));
     }
     if(this._params[0] === 0 && this._params[1] === 0) {
         text = text.replace('[name]','Party');
@@ -617,24 +674,22 @@ Game_Interpreter.prototype.command315 = function() {
 * Game_Actor
 -------------------------------------------------------------------------*/
 //---- Level Up
-var oldLevelUp_method = Game_Actor.prototype.levelUp;
+Lecode.S_Notifs.oldLevelUp_method = Game_Actor.prototype.levelUp;
 Game_Actor.prototype.levelUp = function() {
-    oldLevelUp_method.call(this);
-    if (pNotifLevelUp === 'false') {
+    Lecode.S_Notifs.oldLevelUp_method.call(this);
+    if (Lecode.S_Notifs.params.pNotifLevelUp === 'false')
         return;
-    }
-    var text = pNotifLevelUp.replace('[name]',this.name());
+    var text = Lecode.S_Notifs.params.pNotifLevelUp.replace('[name]',this.name());
     LeNotifManager.add(text,"levelup");
 };
 
 //---- Level Down
-var oldLevelDown_method = Game_Actor.prototype.levelDown;
+Lecode.S_Notifs.oldLevelDown_method = Game_Actor.prototype.levelDown;
 Game_Actor.prototype.levelDown = function() {
-    oldLevelDown_method.call(this);
-    if (pNotifLevelDown === 'false') {
+    Lecode.S_Notifs.oldLevelDown_method.call(this);
+    if (Lecode.S_Notifs.params.pNotifLevelDown === 'false')
         return;
-    }
-    var text = pNotifLevelDown.replace('[name]',this.name());
+    var text = Lecode.S_Notifs.params.pNotifLevelDown.replace('[name]',this.name());
     LeNotifManager.add(text,"leveldown");
 };
 
@@ -643,14 +698,13 @@ Game_Actor.prototype.levelDown = function() {
 * AudioManager
 -------------------------------------------------------------------------*/
 //---- Play BGM
-var oldPlayBgm_method = AudioManager.playBgm;
+Lecode.S_Notifs.oldPlayBgm_method = AudioManager.playBgm;
 AudioManager.playBgm = function(bgm, pos) {
-    oldPlayBgm_method.call(this,bgm,pos);
-    if (pNotifBgm === 'false' || bgm == undefined || bgm.name == undefined || bgm.name == '') {
+    Lecode.S_Notifs.oldPlayBgm_method.call(this,bgm,pos);
+    if (Lecode.S_Notifs.params.pNotifBgm === 'false' || bgm == undefined || bgm.name == undefined || bgm.name == '')
         return;
-    }
     if (SceneManager._scene instanceof Scene_Map) {
-        var text = pNotifBgm.replace('[name]',bgm.name);
+        var text = Lecode.S_Notifs.params.pNotifBgm.replace('[name]',bgm.name);
         LeNotifManager.add(text,"bgm");
     }
 };
@@ -660,26 +714,26 @@ AudioManager.playBgm = function(bgm, pos) {
 * Game_Actor
 -------------------------------------------------------------------------*/
 //---- Change Equipment
-var oldChangeEquip_method = Game_Actor.prototype.changeEquip;
+Lecode.S_Notifs.oldChangeEquip_method = Game_Actor.prototype.changeEquip;
 Game_Actor.prototype.changeEquip = function(slotId, item) {
     LeNotifManager.enabled = false;
-    oldChangeEquip_method.call(this,slotId,item);
+    Lecode.S_Notifs.oldChangeEquip_method.call(this,slotId,item);
     LeNotifManager.enabled = true;
 };
 
 //---- Force Change Equipment
-var oldForceChangeEquip_method = Game_Actor.prototype.forceChangeEquip;
+Lecode.S_Notifs.oldForceChangeEquip_method = Game_Actor.prototype.forceChangeEquip;
 Game_Actor.prototype.forceChangeEquip = function(slotId, item) {
     LeNotifManager.enabled = false;
-    oldForceChangeEquip_method.call(this,slotId,item);
+    Lecode.S_Notifs.oldForceChangeEquip_method.call(this,slotId,item);
     LeNotifManager.enabled = true;
 };
 
 //---- Trade Item with Party
-var oldTradewithParty_method = Game_Actor.prototype.tradeItemWithParty;
+Lecode.S_Notifs.oldTradewithParty_method = Game_Actor.prototype.tradeItemWithParty;
 Game_Actor.prototype.tradeItemWithParty = function(newItem, oldItem) {
     LeNotifManager.enabled = false;
-    var bool = oldTradewithParty_method.call(this,newItem,oldItem);
+    var bool = Lecode.S_Notifs.oldTradewithParty_method.call(this,newItem,oldItem);
     LeNotifManager.enabled = true;
     return bool;
 };
@@ -688,20 +742,20 @@ Game_Actor.prototype.tradeItemWithParty = function(newItem, oldItem) {
 
 if (Imported.YEP_ItemCore === true) {
 
-var oldInitIndepenEquips_method = Game_Actor.prototype.initIndependentEquips;
+Lecode.S_Notifs.oldInitIndepenEquips_method = Game_Actor.prototype.initIndependentEquips;
 Game_Actor.prototype.initIndependentEquips = function(equips) {
     LeNotifManager.enabled = false;
-    oldInitIndepenEquips_method.call(this,equips);
+    Lecode.S_Notifs.oldInitIndepenEquips_method.call(this,equips);
     LeNotifManager.enabled = true;
 };
 
-var oldChangeEquipById_method = Game_Actor.prototype.changeEquipById;
+Lecode.S_Notifs.oldChangeEquipById_method = Game_Actor.prototype.changeEquipById;
 Game_Actor.prototype.changeEquipById = function(etypeId, itemId) {
     LeNotifManager.enabled = false;
-    oldChangeEquipById_method.call(this,etypeId,itemId);
+    Lecode.S_Notifs.oldChangeEquipById_method.call(this,etypeId,itemId);
     LeNotifManager.enabled = true;
 };
 
 } //-Yanfly check
 
-})();
+//})();

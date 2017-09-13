@@ -1,7 +1,7 @@
 [
 null,
-{"id":1,"expanded":false,"name":"Cabin","order":2,"parentId":2,"scrollX":1139,"scrollY":641},
-{"id":2,"expanded":true,"name":"Eastern Forest","order":1,"parentId":0,"scrollX":1131,"scrollY":633},
+{"id":1,"expanded":false,"name":"Cabin","order":2,"parentId":2,"scrollX":983,"scrollY":572.5},
+{"id":2,"expanded":true,"name":"Eastern Forest","order":1,"parentId":0,"scrollX":975,"scrollY":864.5},
 {"id":3,"expanded":true,"name":"Edge","order":22,"parentId":0,"scrollX":1129,"scrollY":641},
 {"id":4,"expanded":true,"name":"Village Reference","order":26,"parentId":3,"scrollX":1131,"scrollY":1759},
 {"id":5,"expanded":true,"name":"Cave","order":3,"parentId":0,"scrollX":1139,"scrollY":641},

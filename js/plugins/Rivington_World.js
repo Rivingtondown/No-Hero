@@ -11,29 +11,58 @@ Rivington.World = Rivington.World || {};
 *
 * @param World Name
 * @desc Name of the World
-* Default World Name
-* @default World Name
+* Default Gaia
+* @default Gaia
 *
 * @param Evil Name
 * @desc Name of the Overlord
-* Default Evil Name
-* @default Evil Name
+* Default Konaku
+* @default Konaku
 *
 * @param Kingdom Name
 * @desc Name of the Kingdom
-* Default Kingdom Name
-* @default Kingdom Name
+* Default Anorath
+* @default Anorath
 *
-* @param Ingredients
+* @param ---Recipes---
+* @default
+*
+* @param Vegetables
+* @parent ---Recipes---
 * @desc List of Ingredients
-* Default 1-25
-* @default 1-25
+* @type item[]
+* @default ["1","2","3","4","5","6","7","8","9","10"]
+*
+* @param Fruit
+* @parent ---Recipes---
+* @desc List of Ingredients
+* @type item[]
+* @default ["11","12","13"]
 *
 * @param Meals
-* @desc List of Meals
-* Default 26-40
-* @default 26-40
+* @parent ---Recipes---
+* @text Meals
+* @type struct<Meals>[]
+* @default
 *
+*/
+/*~struct~Meals:
+ * @param Meal
+ * @type item
+ * @default "29"
+ *
+ * @param Recipes
+ * @type struct<Recipes>[]
+ * @default
+ *
+*/
+/*~struct~Recipes:
+ * @param Ingredients
+ * @type item[]
+ * @default ["4","5","6"]
+ *
+*/
+/*
 @help
 
 Rivington_World
@@ -48,33 +77,24 @@ by: RivingtonDown
   Rivington.Param.worldName = Rivington.Parameters['World Name'];
   Rivington.Param.evilName = Rivington.Parameters['Evil Name'];
   Rivington.Param.kingdomName = Rivington.Parameters['Kingdom Name'];
-  Rivington.Param.ingredients = Rivington.Parameters['Ingredients'];
-  Rivington.Param.meals = Rivington.Parameters['Meals'];
-
-  Rivington.World.Ingredients = [];
-  var startIngredients = Number(Rivington.Param.ingredients.split("-")[0]);
-  var EndIngredients = Number(Rivington.Param.ingredients.split("-")[1]);
-  for (var i = startIngredients; i<=EndIngredients; i++) {
-    Rivington.World.Ingredients.push(i);
+  Rivington.Param.Ingredients = Rivington.Parameters['Ingredients'];
+  Rivington.Param.Meals = JSON.parse(Rivington.Parameters['Meals']);
+  for(var m=0;m<Rivington.Param.Meals.length;m++) {
+    Rivington.Param.Meals[m] = JSON.parse(Rivington.Param.Meals[m]);
   }
+  //Rivington.Param.Meals.Meal = JSON.parse(Rivington.Param.Meals[0]);
+  //Rivington.Param.Meals.Meal.Recipes = Rivington.Param.Meals.Meal["Ingredients"].substring(2,Rivington.Param.meals["Items"].length - 2).split("\",\"").map(Number);
 
-  Rivington.World.Meals = [];
-  var startMeals = Number(Rivington.Param.meals.split("-")[0]);
-  var EndMeals = Number(Rivington.Param.meals.split("-")[1]);
-  for (var m = startMeals; m<=EndMeals; m++) {
-    Rivington.World.Meals.push(m);
-  }
-
-  Rivington.World.Recipes = [];
-
-  Rivington.World.DataManager_isDatabaseLoaded = DataManager.isDatabaseLoaded;
-  DataManager.isDatabaseLoaded = function () {
-    if (!Rivington.World.DataManager_isDatabaseLoaded.call(this)) return false;
-      for(var r=Rivington.World.Meals[0]; r<=Rivington.World.Meals.length; r++) {
-        console.log($dataItems[r].id);
-      }
-    return true;
-  };
+  // Rivington.World.DataManager_isDatabaseLoaded = DataManager.isDatabaseLoaded;
+  // DataManager.isDatabaseLoaded = function () {
+  //   if (!Rivington.World.DataManager_isDatabaseLoaded.call(this)) return false;
+  //     Rivington.World.Meals = JSON.parse(Rivington.Param.meals);
+  //     console.log(Rivington.World.Meals["Items"])
+  //     // for(var r=Number(Rivington.World.Meals.Items[0]); r<=Rivington.World.Meals.Items.length; r++) {
+  //     //   console.log($dataItems[r].id);
+  //     // }
+  //   return true;
+  // };
 
   Rivington.World.combine = function(a) {
       var fn = function(n, src, got, all) {
@@ -97,7 +117,14 @@ by: RivingtonDown
       return all;
   }
 
-  Rivington.World.testCombine = function(a) {
+  Rivington.World.hasIngredient = function(a,b) {
+    this.array = a;
+    for(var i=0;i<array.length;i++){
+      return this.array[i].split(",").contains(String(b))
+    }
+  }
+
+  Rivington.World.simpleMix = function(a,b,c) {
     var combinedIng = Rivington.World.combine(a);
     for (var z = 0; z<combinedIng.length; z++) {
       combinedIng[z] = "["+combinedIng[z][0]+","+combinedIng[z][1]+","+combinedIng[z][2]+"]";
