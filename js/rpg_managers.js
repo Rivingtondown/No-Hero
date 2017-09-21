@@ -1,5 +1,5 @@
 //=============================================================================
-// rpg_managers.js v1.5.0 - Yanfly Version Update
+// rpg_managers.js v1.5.1 - Yanfly Desktop Optimized Version Update
 //=============================================================================
 
 //-----------------------------------------------------------------------------
@@ -796,6 +796,10 @@ ImageManager.cache = new CacheMap(ImageManager);
 ImageManager._imageCache = new ImageCache();
 ImageManager._requestQueue = new RequestQueue();
 ImageManager._systemReservationId = Utils.generateRuntimeId();
+
+ImageManager._generateCacheKey = function(path, hue){
+    return  path + ':' + hue;
+};
 
 ImageManager.loadAnimation = function(filename, hue) {
     return this.loadBitmap('img/animations/', filename, hue, true);
@@ -2157,6 +2161,7 @@ BattleManager.initMembers = function() {
     this._escapeRatio = 0;
     this._escaped = false;
     this._rewards = {};
+    this._turnForced = false;
 };
 
 BattleManager.isBattleTest = function() {
@@ -2446,6 +2451,13 @@ BattleManager.endTurn = function() {
         this._logWindow.displayAutoAffectedStatus(battler);
         this._logWindow.displayRegeneration(battler);
     }, this);
+    if (this.isForcedTurn()) {
+        this._turnForced = false;
+    }
+};
+
+BattleManager.isForcedTurn = function () {
+    return this._turnForced;
 };
 
 BattleManager.updateTurnEnd = function() {
@@ -2576,6 +2588,7 @@ BattleManager.forceAction = function(battler) {
 
 BattleManager.processForcedAction = function() {
     if (this._actionForcedBattler) {
+        this._turnForced = true;
         this._subject = this._actionForcedBattler;
         this._actionForcedBattler = null;
         this.startAction();

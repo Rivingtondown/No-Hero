@@ -96,6 +96,32 @@ by: RivingtonDown
   //   return true;
   // };
 
+  Rivington.World.findRecipes = function() {
+    var recipeArray = [];
+    for(var i=0;i<$dataItems.length;i++){
+      if($dataItems[i] && $dataItems[i].meta.Recipe) {
+        recipeArray.push({
+          "recipes" : $dataItems[i].meta.Recipe.trim().split(" ").splice(1),
+          "category" : $dataItems[i].meta.Recipe.trim().split(" ")[0],
+          "id" : i
+        })
+      }
+    }
+    return recipeArray;
+  };
+
+  Rivington.World.buildRecipe = function(gameVar) {
+    var fullRecipeData = Rivington.World.findRecipes();
+    console.log(fullRecipeData)
+    _.forEach(fullRecipeData,function(o){
+      _.forEach(o.recipes,function(z){
+        if(z === String("["+$gameVariables.value(49)+"]")) {
+          $gameVariables.setValue(gameVar,o.id);
+        }
+      })
+    });
+  }
+
   Rivington.World.combine = function(a) {
       var fn = function(n, src, got, all) {
           if (n == 0) {
