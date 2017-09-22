@@ -4,6 +4,7 @@ var Imported = Imported || {};
 Imported.Rivington_World = true;
 
 var Rivington = Rivington || {};
+var RIV = RIV || {};
 Rivington.World = Rivington.World || {};
 /*:
 * @plugindesc World Details.
@@ -24,43 +25,97 @@ Rivington.World = Rivington.World || {};
 * Default Anorath
 * @default Anorath
 *
-* @param ---Recipes---
+* @param ---Crafting---
+* @default
+*
+*
+* @param Resources
+* @parent ---Crafting---
+* @text Resources
+* @type struct<Resources>
+* @default
+*
+* @param Tools
+* @parent ---Crafting---
+* @text List of Tools
+* @type items[]
+* @default ["92","93","94","95","96","97","98","99","100"]
+*
+*/
+/*~struct~Resources:
+*
+* @param ---Cooking---
 * @default
 *
 * @param Vegetables
-* @parent ---Recipes---
-* @desc List of Ingredients
+* @parent ---Cooking---
+* @desc List of Vegetables
 * @type item[]
-* @default ["1","2","3","4","5","6","7","8","9","10"]
+* @default ["1","2","3","4","5","6","7","8","9"]
 *
 * @param Fruit
-* @parent ---Recipes---
-* @desc List of Ingredients
+* @parent ---Cooking---
+* @desc List of Fruit
 * @type item[]
-* @default ["11","12","13"]
+* @default ["10","11","12"]
 *
-* @param Meals
-* @parent ---Recipes---
-* @text Meals
-* @type struct<Meals>[]
+* @param Animal Product
+* @parent ---Cooking---
+* @desc List of Animal Products
+* @type item[]
+* @default ["13","14","15"]
+*
+* @param Grain
+* @parent ---Cooking---
+* @desc List of Grains
+* @type item[]
+* @default ["16","17"]
+*
+* @param Meat
+* @parent ---Cooking---
+* @desc List of Meats
+* @type item[]
+* @default ["18","19","20","21"]
+*
+* @param Liquid
+* @parent ---Cooking---
+* @desc List of Liquids
+* @type item[]
+* @default ["22","23"]
+*
+* @param Additives
+* @parent ---Cooking---
+* @desc List of Additives
+* @type item[]
+* @default ["24","25"]
+*
+* @param ---Blacksmithing---
 * @default
 *
-*/
-/*~struct~Meals:
- * @param Meal
- * @type item
- * @default "29"
- *
- * @param Recipes
- * @type struct<Recipes>[]
- * @default
- *
-*/
-/*~struct~Recipes:
- * @param Ingredients
- * @type item[]
- * @default ["4","5","6"]
- *
+* @param Ores
+* @parent ---Blacksmithing---
+* @desc List of Ores
+* @type item[]
+* @default ["51","52","53"]
+*
+* @param Bars
+* @parent ---Blacksmithing---
+* @desc List of Bars
+* @type item[]
+* @default ["54","55","56"]
+*
+* @param Nuggets
+* @parent ---Blacksmithing---
+* @desc List of Nuggets
+* @type item[]
+* @default ["57","58","59"]
+*
+* @param Gems
+* @parent ---Blacksmithing---
+* @desc List of Nuggets
+* @type item[]
+* @default ["62","63","64","65"]
+*
 */
 /*
 * @help
@@ -92,13 +147,16 @@ Rivington.World = Rivington.World || {};
   Rivington.Param.worldName = Rivington.Parameters['World Name'];
   Rivington.Param.evilName = Rivington.Parameters['Evil Name'];
   Rivington.Param.kingdomName = Rivington.Parameters['Kingdom Name'];
-  Rivington.Param.Ingredients = Rivington.Parameters['Ingredients'];
-  Rivington.Param.Meals = JSON.parse(Rivington.Parameters['Meals']);
-  for(var m=0;m<Rivington.Param.Meals.length;m++) {
-    Rivington.Param.Meals[m] = JSON.parse(Rivington.Param.Meals[m]);
-  }
-  //Rivington.Param.Meals.Meal = JSON.parse(Rivington.Param.Meals[0]);
-  //Rivington.Param.Meals.Meal.Recipes = Rivington.Param.Meals.Meal["Ingredients"].substring(2,Rivington.Param.meals["Items"].length - 2).split("\",\"").map(Number);
+  RIV.Resources = JSON.parse(Rivington.Parameters['Resources']);
+  RIV.Resources.Tools = Rivington.Parameters['Tools'];
+  _.forEach(RIV.Resources,function(value,key){
+    if(value.match(/\[(\S*)\]/)) {
+      RIV.Resources[key] = RIV.Util.mapIntArray(value);
+    }
+    if (value === "" || value === null) {
+      delete RIV.Resources[key];
+    }
+  })
 
   Rivington.World.findRecipes = function() {
     var recipeArray = []; var recipeIndex = 0;
@@ -118,49 +176,24 @@ Rivington.World = Rivington.World || {};
 
   Rivington.World.buildRecipe = function(gameVar) {
     var fullRecipeData = Rivington.World.findRecipes();
-    console.log(fullRecipeData)
     _.forEach(fullRecipeData,function(o){
       _.forEach(o.recipes,function(z){
-        // var resourceReq = _.map(z.split(",").trim(),function(x){
-        //   return x.match(/\[(\S*)\]/) ? x.split(",") : parseInt(x);
-        // })
         if(z === String("["+$gameVariables.value(49)+"]")) {
+          // if(o.id > 0) {
+          //   if(RIV.Util.ArrSharedValue(RIV.Resources.Tools,z)) {
+          //     //$gameParty.gain($dataItems[returnTool],1)
+          //     console.log("Return Tool")
+          //   }
+          // }
           $gameVariables.setValue(gameVar,o.id);
+          $gameVariables.setValue(50,o.yield);
         }
       })
     });
   }
 
-  Rivington.World.combine = function(a) {
-      var fn = function(n, src, got, all) {
-          if (n == 0) {
-              if (got.length > 0) {
-                  all[all.length] = got;
-              }
-              return;
-          }
-          for (var j = 0; j < src.length; j++) {
-              fn(n - 1, src.slice(j + 1), got.concat([src[j]]), all);
-          }
-          return;
-      }
-      var all = [];
-      for (var i = 3; i < 4; i++) {
-          fn(i, a, [], all);
-      }
-      all.push(a);
-      return all;
-  }
-
-  Rivington.World.hasIngredient = function(a,b) {
-    this.array = a;
-    for(var i=0;i<array.length;i++){
-      return this.array[i].split(",").contains(String(b))
-    }
-  }
-
   Rivington.World.simpleMix = function(a,b,c) {
-    var combinedIng = Rivington.World.combine(a);
+    var combinedIng = RIV.Util.ArrContainsAll(a);
     for (var z = 0; z<combinedIng.length; z++) {
       combinedIng[z] = "["+combinedIng[z][0]+","+combinedIng[z][1]+","+combinedIng[z][2]+"]";
     }
