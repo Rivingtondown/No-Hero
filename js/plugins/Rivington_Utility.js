@@ -52,6 +52,13 @@ RIV.Util = RIV.Util || {};
   }
 
   RIV.Util.ArrSharedValue = function (haystack, arr) {
-    return arr.some(function(v) {return haystack.indexOf(v) != -1;});
+      this.sharedIndex = 0;
+      for(var i = 0; i<haystack.length; i++) {
+        if(arr.includes(haystack[i])) {
+          this.sharedIndex = haystack[i];
+          i = haystack.length+1;
+        }
+      }
+      return this.sharedIndex;
   };
 })();
