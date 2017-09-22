@@ -176,19 +176,17 @@ Rivington.World = Rivington.World || {};
 
   Rivington.World.buildRecipe = function(gameVar) {
     var fullRecipeData = Rivington.World.findRecipes();
-    _.forEach(fullRecipeData,function(o){
-      _.forEach(o.recipes,function(z){
-        if(z === String("["+$gameVariables.value(49)+"]")) {
-          // if(o.id > 0) {
-          //   if(RIV.Util.ArrSharedValue(RIV.Resources.Tools,z)) {
-          //     //$gameParty.gain($dataItems[returnTool],1)
-          //     console.log("Return Tool")
-          //   }
-          // }
-          $gameVariables.setValue(gameVar,o.id);
-          $gameVariables.setValue(50,o.yield);
+    _.forEach(fullRecipeData,function(recipeData){
+      _.forEach(o.recipes,function(recipeArr){
+        if(recipeArr === String("["+$gameVariables.value(49)+"]")) {
+          var returnTool = RIV.Util.ArrSharedValue(RIV.Resources.Tools,recipeArr);
+          if(returnTool > 0) {
+              $gameParty.gainItem($dataItems[returnTool],1);
+          }
+          $gameVariables.setValue(gameVar,recipeData.id);
+          $gameVariables.setValue(50,recipeData.yield);
         }
-      })
+      });
     });
   }
 
