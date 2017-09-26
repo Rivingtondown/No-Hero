@@ -424,7 +424,7 @@ var DayPeriods = {
       if ($.Param.tilesetList.length > 0) {
         if ($dataMap !== null) {
           if ($.Param.tilesetList.indexOf($dataMap.tilesetId) >= 0) {
-            $gameSwitches.setValue(13, true);
+            $gameSwitches.setValue($.Param.insideSwitch, true);
             return true;
           }
         }
@@ -432,12 +432,12 @@ var DayPeriods = {
 
       if ($.Param.insideSwitch > 0) {
         if ($gameSwitches.value($.Param.insideSwitch)) {
-          $gameSwitches.setValue(13, true);
+          $gameSwitches.setValue($.Param.insideSwitch, true);
           return true;
         }
       }
     }
-    $gameSwitches.setValue(13, false);
+    $gameSwitches.setValue($.Param.insideSwitch, false);
     return false;
   });
 

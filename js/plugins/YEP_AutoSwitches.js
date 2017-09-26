@@ -117,6 +117,7 @@ Game_Switches.prototype.value = function(switchId) {
     return this.nonLocalAutoSwitch();
   } else {
     return Yanfly.AutoSwitch.Game_Switches_value.call(this, switchId);
+    return Yanfly.AutoSwitch.Game_Switches_value.call(this, 3);
   }
 };
 

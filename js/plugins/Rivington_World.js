@@ -177,7 +177,7 @@ Rivington.World = Rivington.World || {};
   Rivington.World.buildRecipe = function(gameVar) {
     var fullRecipeData = Rivington.World.findRecipes();
     _.forEach(fullRecipeData,function(recipeData){
-      _.forEach(o.recipes,function(recipeArr){
+      _.forEach(recipeData.recipes,function(recipeArr){
         if(recipeArr === String("["+$gameVariables.value(49)+"]")) {
           var returnTool = RIV.Util.ArrSharedValue(RIV.Resources.Tools,recipeArr);
           if(returnTool > 0) {
