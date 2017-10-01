@@ -61,4 +61,33 @@ RIV.Util = RIV.Util || {};
       }
       return this.sharedIndex;
   };
+
+  RIV.Util.enoughTime = function(args) {
+    this.timeUnit = args.charAt(args.length - 1);
+    this.time = parseInt(args.substring(0, args.length - 1));
+    this.extraHour = 0;
+    if (this.timeUnit == "m" && OrangeTimeSystem.minute + this.time >= 60) {
+      this.extraHour += 1;
+    }
+    if ((this.timeUnit == "h" && (OrangeTimeSystem.hour + this.time >=24)) || (this.timeUnit == "m" && (OrangeTimeSystem.hour + this.extraHour >=24))) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  RIV.Util.getRegionTileList = function(regionId) {
+    var tileList = [];
+
+    for (var x = 0; x < $gameMap.width(); x++) {
+      for (var y = 0; y < $gameMap.height(); y++) {
+          if ($gameMap.regionId(x, y) == regionId) {
+            tileList.push({x : x, y : y});
+          }
+      }
+    }
+
+    return tileList;
+  };
+
 })();

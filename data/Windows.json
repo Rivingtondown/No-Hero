@@ -1,1 +1,1 @@
-{"Scene_Menu":{"Window_MenuCommand":{"x":0,"y":0,"opacity":"255","width":"240","rows":"14","cols":"1","lineHeight":"36","align":"left"},"Window_MenuStatus":{"x":240,"y":0,"opacity":"255","width":"576","height":"624","rows":"3","cols":"1"}}}
+{"Scene_Menu":{"Window_MenuCommand":{"x":155,"y":0,"opacity":"255","width":"1045","rows":"3","cols":"5","lineHeight":"36","align":"left"},"Window_MenuStatus":{"x":0,"y":144,"opacity":"255","width":"1200","height":"540","rows":"3","cols":"1"},"Window_Gold":{"x":960,"y":684}}}
