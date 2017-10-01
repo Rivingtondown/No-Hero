@@ -8,11 +8,11 @@ Imported.YEP_X_ItemCategories = true;
 
 var Yanfly = Yanfly || {};
 Yanfly.ItemCat = Yanfly.ItemCat || {};
-Yanfly.ItemCat.version = 1.00;
+Yanfly.ItemCat.version = 1.01;
 
 //=============================================================================
  /*:
- * @plugindesc v1.00 (Requires YEP_ItemCore.js) Assign items to various
+ * @plugindesc v1.01 (Requires YEP_ItemCore.js) Assign items to various
  * categories under the item menu.
  * @author Yanfly Engine Plugins + Sylvester Collaboration
  *
@@ -20,6 +20,7 @@ Yanfly.ItemCat.version = 1.00;
  * @default
  *
  * @param Category Order
+ * @parent ---General---
  * @desc Here is the order of all the categories shown in the item
  * menu. Look in the plugin's help file for more information.
  * @default Items, Weapons, Armors, KeyItems
@@ -28,34 +29,42 @@ Yanfly.ItemCat.version = 1.00;
  * @default
  *
  * @param Hidden Item A
+ * @parent ---Naming---
  * @desc How this category is named in the Item Menu
  * @default Special Items
  *
  * @param Hidden Item B
+ * @parent ---Naming---
  * @desc How this category is named in the Item Menu
  * @default Unique Items
  *
  * @param Consumable
+ * @parent ---Naming---
  * @desc How this category is named in the Item Menu
  * @default Consumable
  *
  * @param Nonconsumable
+ * @parent ---Naming---
  * @desc How this category is named in the Item Menu
  * @default Nonconsumable
  *
  * @param Always Usable
+ * @parent ---Naming---
  * @desc How this category is named in the Item Menu
  * @default Usable
  *
  * @param Battle Usable
+ * @parent ---Naming---
  * @desc How this category is named in the Item Menu
  * @default Battle
  *
  * @param Field Usable
+ * @parent ---Naming---
  * @desc How this category is named in the Item Menu
  * @default Field
  *
  * @param Never Usable
+ * @parent ---Naming---
  * @desc How this category is named in the Item Menu
  * @default Misc
  *
@@ -163,6 +172,16 @@ Yanfly.ItemCat.version = 1.00;
  *   **Note** The notetag does not apply for any of the pre-made categories.
  *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ *
+ * ============================================================================
+ * Changelog
+ * ============================================================================
+ *
+ * Version 1.01:
+ * - Updated for RPG Maker MV version 1.5.0.
+ *
+ * Version 1.00:
+ * - Finished Plugin!
  */
 //=============================================================================
 

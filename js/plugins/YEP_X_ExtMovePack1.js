@@ -10,11 +10,11 @@ Imported.YEP_X_ExtMovePack1 = true;
 
 var Yanfly = Yanfly || {};
 Yanfly.EMvP1 = Yanfly.EMvP1 || {};
-Yanfly.EMvP1.version = 1.00;
+Yanfly.EMvP1.version = 1.01;
 
 //=============================================================================
  /*:
- * @plugindesc v1.00 (Requires YEP_MoveRouteCore.js) Adds extra movement
+ * @plugindesc v1.01 (Requires YEP_MoveRouteCore.js) Adds extra movement
  * options to create specific behaviors in movement patterns.
  * @author Yanfly Engine Plugins
  *
@@ -178,6 +178,16 @@ Yanfly.EMvP1.version = 1.00;
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
  * Example: Opacity: 50%
  * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+ *
+ * ============================================================================
+ * Changelog
+ * ============================================================================
+ *
+ * Version 1.01:
+ * - Updated for RPG Maker MV version 1.5.0.
+ *
+ * Version 1.00:
+ * - Finished Plugin!
  */
 //=============================================================================
 

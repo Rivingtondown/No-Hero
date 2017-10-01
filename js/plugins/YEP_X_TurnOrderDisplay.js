@@ -8,11 +8,11 @@ Imported.YEP_X_TurnOrderDisplay = true;
 
 var Yanfly = Yanfly || {};
 Yanfly.TOD = Yanfly.TOD || {};
-Yanfly.TOD.version = 1.02;
+Yanfly.TOD.version = 1.03;
 
 //=============================================================================
  /*:
- * @plugindesc v1.02 Displays the turn order for turn-based battle systems
+ * @plugindesc v1.03 Displays the turn order for turn-based battle systems
  * and allows for various display options.
  * @author Yanfly Engine Plugins
  *
@@ -20,6 +20,10 @@ Yanfly.TOD.version = 1.02;
  * @default
  *
  * @param Show Turn Order
+ * @parent ---Default---
+ * @type boolean
+ * @on Show
+ * @off Hide
  * @desc Show turn order by default?
  * YES - true    NO - false
  * @default true
@@ -28,25 +32,44 @@ Yanfly.TOD.version = 1.02;
  * @default
  *
  * @param Icon Size
+ * @parent ---Settings---
+ * @type number
+ * @min 0
  * @desc This is the size of the icons displayed for the turn order.
  * Default: 32
  * @default 32
  *
  * @param Position X
+ * @parent ---Settings---
+ * @type combo
+ * @option left
+ * @option center
+ * @option right
  * @desc Which side of the screen should the turn order appear?
  * left     center     right
  * @default right
  *
  * @param Position Y
+ * @parent ---Settings---
+ * @type number
+ * @min 0
  * @desc Where do you want to align the Y turn order?
  * @default 54
  *
  * @param Turn Direction
+ * @parent ---Settings---
+ * @type combo
+ * @option left
+ * @option right
  * @desc Which way do you want the turn icons going?
  * left     right
  * @default left
  *
  * @param Performed Spacing
+ * @parent ---Settings---
+ * @type boolean
+ * @on YES
+ * @off NO
  * @desc Add a space separating battlers that already performed actions?
  * YES - true     NO - false
  * @default true
@@ -55,14 +78,25 @@ Yanfly.TOD.version = 1.02;
  * @default
  *
  * @param Ally Border Color
+ * @parent ---Allies---
+ * @type number
+ * @min 0
+ * @max 31
  * @desc Text Color used for the borders of allies.
  * @default 4
  *
  * @param Ally Back Color
+ * @parent ---Allies---
+ * @type number
+ * @min 0
+ * @max 31
  * @desc Text Color used for the ally background color.
  * @default 22
  *
  * @param Ally Icon
+ * @parent ---Allies---
+ * @type number
+ * @min 0
  * @desc Default icon used for allies. If this value is 0,
  * the icon will be the ally's face graphic instead.
  * @default 0
@@ -71,19 +105,34 @@ Yanfly.TOD.version = 1.02;
  * @default
  *
  * @param Enemy Border Color
+ * @parent ---Enemies---
+ * @type number
+ * @min 0
+ * @max 31
  * @desc Text Color used for the borders of enemies.
  * @default 2
  *
  * @param Enemy Back Color
+ * @parent ---Enemies---
+ * @type number
+ * @min 0
+ * @max 31
  * @desc Text Color used for the ally background color.
  * @default 19
  *
  * @param Enemy Icon
+ * @parent ---Enemies---
+ * @type number
+ * @min 0
  * @desc Default icon used for enemies. If this value is 0,
  * the icon will be the enemy's drawn battler instead.
  * @default 0
  *
  * @param Enemy SV Battlers
+ * @parent ---Enemies---
+ * @type boolean
+ * @on YES
+ * @off NO
  * @desc If using Animated SV Enemies, draw their battlers if no icon
  * is being used? This can become laggy. NO - false  YES - true
  * @default false
@@ -161,6 +210,9 @@ Yanfly.TOD.version = 1.02;
  * ============================================================================
  * Changelog
  * ============================================================================
+ *
+ * Version 1.03:
+ * - Updated for RPG Maker MV version 1.5.0.
  *
  * Version 1.02:
  * - Fixed a bug that caused enemies to endlessly have turns if dynamic actions

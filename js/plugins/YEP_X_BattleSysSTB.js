@@ -8,11 +8,11 @@ Imported.YEP_X_BattleSysSTB = true;
 
 var Yanfly = Yanfly || {};
 Yanfly.STB = Yanfly.STB || {};
-Yanfly.STB.version = 1.02;
+Yanfly.STB.version = 1.03;
 
 //=============================================================================
  /*:
- * @plugindesc v1.02 (Requires YEP_BattleEngineCore.js) Add STB (Standard
+ * @plugindesc v1.03 (Requires YEP_BattleEngineCore.js) Add STB (Standard
  * Turn Battle) into your game using this plugin!
  * @author Yanfly Engine Plugins
  *
@@ -20,11 +20,16 @@ Yanfly.STB.version = 1.02;
  * @default
  *
  * @param Action Speed
+ * @parent ---General---
  * @desc This is the formula used for an action's base speed.
  * Default: agi + Math.randomInt(Math.floor(5 + agi / 4))
  * @default agi
  *
  * @param Delay Status Adjust
+ * @parent ---General---
+ * @type boolean
+ * @on YES
+ * @off NO
  * @desc Delay the time it takes for the Status Window to move towards
  * the center. YES - true     NO - false
  * @default true
@@ -33,11 +38,13 @@ Yanfly.STB.version = 1.02;
  * @default
  *
  * @param Escape Ratio
+ * @parent ---Escape---
  * @desc How STB calculates escape ratios.
  * Default: 0.5 * $gameParty.agility() / $gameTroop.agility()
  * @default 0.125 * $gameParty.agility() / $gameTroop.agility()
  *
  * @param Fail Escape Boost
+ * @parent ---Escape---
  * @desc Each time the player fails escape, increase the success
  * rate by this much. Default: 0.1
  * @default 0.025
@@ -46,39 +53,59 @@ Yanfly.STB.version = 1.02;
  * @default
  *
  * @param Show Turn Window
+ * @parent ---Turn Order---
+ * @type boolean
+ * @on Show
+ * @off Hide
  * @desc Show the turn order window?
  * YES - true     NO - false
  * @default false
  *
  * @param Turn Window X
+ * @parent ---Turn Order---
  * @desc The turn order window's x position.
  * You can use a formula.
  * @default Graphics.boxWidth - width
  *
  * @param Turn Window Y
+ * @parent ---Turn Order---
  * @desc The turn order window's y position.
  * You can use a formula.
  * @default this.fittingHeight(2)
  *
  * @param Turn Window Width
+ * @parent ---Turn Order---
  * @desc The turn order window's width.
  * You can use a formula.
  * @default 200
  *
  * @param Turn Window Height
+ * @parent ---Turn Order---
  * @desc The turn order window's height.
  * You can use a formula.
  * @default Graphics.boxHeight - statusHeight - this.fittingHeight(2)
  *
  * @param Current Battler Color
+ * @parent ---Turn Order---
+ * @type number
+ * @min 0
+ * @max 31
  * @desc The text color used for the current battler.
  * @default 6
  *
  * @param Actor Battler Color
+ * @parent ---Turn Order---
+ * @type number
+ * @min 0
+ * @max 31
  * @desc The text color used for the actors.
  * @default 4
  *
  * @param Enemy Battler Color
+ * @parent ---Turn Order---
+ * @type number
+ * @min 0
+ * @max 31
  * @desc The text color used for the enemies.
  * @default 2
  *
@@ -143,6 +170,9 @@ Yanfly.STB.version = 1.02;
  * ============================================================================
  * Changelog
  * ============================================================================
+ *
+ * Version 1.03:
+ * - Updated for RPG Maker MV version 1.5.0.
  *
  * Version 1.02:
  * - Instant Cast compatibility update.

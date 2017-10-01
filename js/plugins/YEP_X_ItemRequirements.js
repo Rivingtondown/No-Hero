@@ -8,11 +8,11 @@ Imported.YEP_X_ItemRequirements = true;
 
 var Yanfly = Yanfly || {};
 Yanfly.ItemReq = Yanfly.ItemReq || {};
-Yanfly.ItemReq.version = 1.00;
+Yanfly.ItemReq.version = 1.01;
 
 //=============================================================================
  /*:
- * @plugindesc v1.00 (Requires YEP_ItemCore.js) Place requirements on
+ * @plugindesc v1.01 (Requires YEP_ItemCore.js) Place requirements on
  * items before they can be used.
  * @author Yanfly Engine Plugins
  *
@@ -292,6 +292,16 @@ Yanfly.ItemReq.version = 1.00;
  *   the item is disabled and cannot be used. The 'battler' variable will refer
  *   to the battler using the item. The 'item' variable will refer to the item
  *   being checked.
+ *
+ * ============================================================================
+ * Changelog
+ * ============================================================================
+ *
+ * Version 1.01:
+ * - Updated for RPG Maker MV version 1.5.0.
+ *
+ * Version 1.00:
+ * - Finished Plugin!
  */
 //=============================================================================
 

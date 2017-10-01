@@ -8,11 +8,11 @@ Imported.YEP_UtilityCommonEvents = true;
 
 var Yanfly = Yanfly || {};
 Yanfly.UCE = Yanfly.UCE || {};
-Yanfly.UCE.version = 1.00;
+Yanfly.UCE.version = 1.01;
 
 //=============================================================================
  /*:
- * @plugindesc v1.00 Make common events occur at specific gameplay points
+ * @plugindesc v1.01 Make common events occur at specific gameplay points
  * such as on loading, after battles, etc.
  * @author Yanfly Engine Plugins
  *
@@ -20,21 +20,29 @@ Yanfly.UCE.version = 1.00;
  * @default
  *
  * @param Load Game Event
+ * @parent ---General---
+ * @type common_event
  * @desc Run this common event each time the player loads a game.
  * Set as 0 if you do not wish to run a common event.
  * @default 0
  *
  * @param Battle Won Event
+ * @parent ---General---
+ * @type common_event
  * @desc Run this common event each time the player wins a battle.
  * Set as 0 if you do not wish to run a common event.
  * @default 0
  *
  * @param Escape Battle Event
+ * @parent ---General---
+ * @type common_event
  * @desc Run this common event each time the player wins a battle.
  * Set as 0 if you do not wish to run a common event.
  * @default 0
  *
  * @param Close Menu Event
+ * @parent ---General---
+ * @type common_event
  * @desc Run this common event each time the player closes main menu.
  * Set as 0 if you do not wish to run a common event.
  * @default 0
@@ -43,31 +51,43 @@ Yanfly.UCE.version = 1.00;
  * @default
  *
  * @param Boat Enter Event
+ * @parent ---Vehicles---
+ * @type common_event
  * @desc Run this common event each time the player enters a boat.
  * Set as 0 if you do not wish to run a common event.
  * @default 0
  *
  * @param Boat Exit Event
+ * @parent ---Vehicles---
+ * @type common_event
  * @desc Run this common event each time the player exits a boat.
  * Set as 0 if you do not wish to run a common event.
  * @default 0
  *
  * @param Ship Enter Event
+ * @parent ---Vehicles---
+ * @type common_event
  * @desc Run this common event each time the player enters a ship.
  * Set as 0 if you do not wish to run a common event.
  * @default 0
  *
  * @param Ship Exit Event
+ * @parent ---Vehicles---
+ * @type common_event
  * @desc Run this common event each time the player exits a ship.
  * Set as 0 if you do not wish to run a common event.
  * @default 0
  *
  * @param Airship Enter Event
+ * @parent ---Vehicles---
+ * @type common_event
  * @desc Run this common event each time the player enters airship.
  * Set as 0 if you do not wish to run a common event.
  * @default 0
  *
  * @param Airship Exit Event
+ * @parent ---Vehicles---
+ * @type common_event
  * @desc Run this common event each time the player exits airship.
  * Set as 0 if you do not wish to run a common event.
  * @default 0
@@ -115,6 +135,16 @@ Yanfly.UCE.version = 1.00;
  * These events will occur whenever the player will enter/exit the specific
  * vehicle. This can be used to enable/disable certain HUD's while in specific
  * vehicles to give a more immersive feeling.
+ *
+ * ============================================================================
+ * Changelog
+ * ============================================================================
+ *
+ * Version 1.01:
+ * - Updated for RPG Maker MV version 1.5.0.
+ *
+ * Version 1.00:
+ * - Finished Plugin!
  */
 //=============================================================================
 
