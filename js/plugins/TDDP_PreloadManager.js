@@ -131,6 +131,9 @@ TDDP.bootPreloadImages = {
       "subfolder/myOtherFile"
     ]
     */
+    parallax: [
+      "ground2"
+    ]
 }
 /*
 *

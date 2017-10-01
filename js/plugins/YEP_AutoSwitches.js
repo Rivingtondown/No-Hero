@@ -81,7 +81,7 @@ Yanfly.Param.AutoSwitches = {
   mobile: Number(Yanfly.Parameters['Mobile Switch']),
   mobileChrome: Number(Yanfly.Parameters['Mobile Chrome Switch']),
   mobileSafari: Number(Yanfly.Parameters['Mobile Safari Switch']),
-  nonLocal: Number(Yanfly.Parameters['Non-Local Switch'])
+  nonLocal: Number(Yanfly.Parameters['Non-Local Switch']),
 };
 
 //=============================================================================
@@ -116,8 +116,7 @@ Game_Switches.prototype.value = function(switchId) {
   } else if (switchId === Yanfly.Param.AutoSwitches.nonLocal) {
     return this.nonLocalAutoSwitch();
   } else {
-    return Yanfly.AutoSwitch.Game_Switches_value.call(this, switchId);
-    return Yanfly.AutoSwitch.Game_Switches_value.call(this, 3);
+      return Yanfly.AutoSwitch.Game_Switches_value.call(this, switchId);
   }
 };
 

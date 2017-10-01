@@ -1,5 +1,5 @@
 /*=============================================================================
- * Orange - HUD 
+ * Orange - HUD
  * By HUDell - www.hudell.com
  * OrangeHud.js
  * Version: 2.0
@@ -86,10 +86,10 @@
  * ============================================================================
  * Latest Version
  * ============================================================================
- * 
+ *
  * Get the latest version of this script on
  * http://link.hudell.com/hud
- * 
+ *
  *=============================================================================*/
 var Imported = Imported || {};
 
@@ -103,7 +103,7 @@ Window_OrangeHud.prototype = Object.create(Window_Base.prototype);
 Window_OrangeHud.prototype.constructor = Window_OrangeHud;
 
 if (Imported["MVCommons"] === undefined) {
-  (function($){ 
+  (function($){
     $.getParamList = function(partialPluginName) { var list = []; for (var pluginName in PluginManager._parameters) { if (pluginName.search(partialPluginName.toLowerCase()) >= 0) { list.push(PluginManager._parameters[pluginName]); } } return list; };
   })(PluginManager);
 
@@ -313,7 +313,7 @@ if (Imported["MVCommons"] === undefined) {
         });
       }
     }
-    
+
 
     if (shouldRefresh) {
       this.refresh();
@@ -372,6 +372,7 @@ if (Imported["MVCommons"] === undefined) {
 
         if (group.SwitchId !== undefined && group.SwitchId > 0) {
           newWindow.visible = $gameSwitches.value(group.SwitchId);
+
         }
       }
     }
@@ -398,6 +399,7 @@ if (Imported["MVCommons"] === undefined) {
             hudWindow.visible = $gameSwitches.value(hudWindow.group.SwitchId);
           } else {
             hudWindow.visible = true;
+
           }
         }
 
@@ -409,7 +411,7 @@ if (Imported["MVCommons"] === undefined) {
   };
 
   var oldSceneMap_updateScene = Scene_Map.prototype.updateScene;
-  Scene_Map.prototype.updateScene = function() {  
+  Scene_Map.prototype.updateScene = function() {
     oldSceneMap_updateScene.call(this);
     if (SceneManager.isSceneChanging()) {
       if (this._hudWindows === undefined) {
@@ -427,7 +429,7 @@ if (Imported["MVCommons"] === undefined) {
       }
     }
   };
-  
+
   var oldGameMap_requestRefresh = Game_Map.prototype.requestRefresh;
   Game_Map.prototype.requestRefresh = function(mapId) {
     oldGameMap_requestRefresh.call(this, mapId);
