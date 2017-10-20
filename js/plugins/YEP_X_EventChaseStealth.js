@@ -168,7 +168,7 @@ Yanfly.ECS.version = 1.03;
  * ============================================================================
  * Instructions - Stealth Mode
  * ============================================================================
- * 
+ *
  * To enter Stealth Mode, you'll have to utilize the plugin commands found in
  * the plugin commands section a bit lower. While in Stealth Mode, if enabled,
  * the Stealth Gauge will appear to alert the player how much longer the player
@@ -276,7 +276,7 @@ Yanfly.Param.ECSMoveSpeed = Number(Yanfly.Parameters['Move Speed']);
 Yanfly.Param.ECSRegions = String(Yanfly.Parameters['Stealth Regions']);
 Yanfly.Param.ECSRegions = Yanfly.Param.ECSRegions.split(' ');
 for (Yanfly.i = 0; Yanfly.i < Yanfly.Param.ECSRegions.length; ++Yanfly.i) {
-  Yanfly.Param.ECSRegions[Yanfly.i] = 
+  Yanfly.Param.ECSRegions[Yanfly.i] =
     parseInt(Yanfly.Param.ECSRegions[Yanfly.i]);
 };
 
@@ -479,17 +479,18 @@ Game_Player.prototype.getMaxChaseStealthTimer = function() {
     return this._maxChaseStealthTimer || 1;
 };
 
+Yanfly.ECS.Game_Event_canSeePlayer = Game_Event.prototype.canSeePlayer;
+
 Yanfly.ECS.Game_Player_triggerAction = Game_Player.prototype.triggerAction;
 Game_Player.prototype.triggerAction = function() {
-    var value = Yanfly.ECS.Game_Player_triggerAction.call(this);
+    var value = Yanfly.ECS.Game_Player_triggerAction.call(this) && Yanfly.ECS.Game_Event_canSeePlayer.call(this);
     if (value) this.setStealthMode(false);
     return value;
 };
 
-Yanfly.ECS.Game_Player_triggerButtonAction =
-    Game_Player.prototype.triggerButtonAction;
+Yanfly.ECS.Game_Player_triggerButtonAction = Game_Player.prototype.triggerButtonAction;
 Game_Player.prototype.triggerButtonAction = function() {
-    var value = Yanfly.ECS.Game_Player_triggerButtonAction.call(this);
+    var value = Yanfly.ECS.Game_Player_triggerButtonAction.call(this) && Yanfly.ECS.Game_Event_canSeePlayer.call(this);
     if (value) this.setStealthMode(false);
     return value;
 };
@@ -498,7 +499,6 @@ Game_Player.prototype.triggerButtonAction = function() {
 // Game_Event
 //=============================================================================
 
-Yanfly.ECS.Game_Event_canSeePlayer = Game_Event.prototype.canSeePlayer;
 Game_Event.prototype.canSeePlayer = function() {
     if (this.meetStealthModeConditions()) {
       this.stealthClearChaseSettings();

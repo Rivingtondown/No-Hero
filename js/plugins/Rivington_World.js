@@ -10,6 +10,11 @@ Rivington.World = Rivington.World || {};
 * @plugindesc World Details.
 * @author RivingtonDown
 *
+* @param Class Names
+* @desc String of Class Names
+* Default Beggar Merchant Noble
+* @default Beggar Merchant Noble
+*
 * @param World Name
 * @desc Name of the World
 * Default Gaia
@@ -144,6 +149,7 @@ Rivington.World = Rivington.World || {};
   Rivington.Parameters = PluginManager.parameters('Rivington_World');
   Rivington.Param = Rivington.Param || {};
 
+  Rivington.Param.classNames = Rivington.Parameters['Class Names'];
   Rivington.Param.worldName = Rivington.Parameters['World Name'];
   Rivington.Param.evilName = Rivington.Parameters['Evil Name'];
   Rivington.Param.kingdomName = Rivington.Parameters['Kingdom Name'];
@@ -157,6 +163,22 @@ Rivington.World = Rivington.World || {};
       delete RIV.Resources[key];
     }
   })
+
+  Rivington.GameSystem_initialize = Game_System.prototype.initialize;
+  Game_System.prototype.initialize = function () {
+    Rivington.GameSystem_initialize.call(this);
+
+    //Build Profession Name string variables
+    var classNames = Rivington.Param.classNames.split(" ");
+    setTimeout(function(){
+      for(var i = 0; i < classNames.length; i++) {
+          var thisGameVar = i+15;
+          $gameVariables.setValue(thisGameVar, classNames[i]);
+      };
+    },1000)
+
+
+  };
 
   Rivington.World.findRecipes = function() {
     var recipeArray = []; var recipeIndex = 0;

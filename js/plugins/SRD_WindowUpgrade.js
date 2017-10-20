@@ -1424,6 +1424,9 @@ Window_ChoiceMessage.prototype.setupWidth = function(width) {
 };
 
 Window_ChoiceMessage.prototype.parseData = function(data) {
+	for (var i=0; i< this._choices.length; i++) {
+		this._choices[i] = this.drawTextEx(this._choices[i], 0, this.contents.height);
+	}
 	data = data || {};
 	this._columns = data.cols || this._choices.length;
 	this._rows = data.rows || 1;

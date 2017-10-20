@@ -763,6 +763,10 @@ Window_Base.prototype.convertExtraEscapeCharacters = function(text) {
     text = text.replace(/\x1bNE\[(\d+)\]/gi, function() {
         return $dataEnemies[parseInt(arguments[1])].name;
     }.bind(this));
+    // \PG
+    text = text.replace(/\x1bPG/gi, function() {
+        return $gameParty.gold();
+    }.bind(this));
     // \NS[n]
     text = text.replace(/\x1bNS\[(\d+)\]/gi, function() {
         return $dataSkills[parseInt(arguments[1])].name;
